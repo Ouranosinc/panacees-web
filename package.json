@@ -7,10 +7,13 @@
     "@types/node": "12.7.5",
     "@types/react": "16.9.2",
     "@types/react-dom": "16.9.0",
+    "bootstrap": "^4.3.1",
+    "history": "^4.10.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-scripts": "3.1.1",
-    "typescript": "3.6.3"
+    "typescript": "3.6.3",
+    "url-pattern": "^1.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -32,5 +35,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/history": "^4.7.3"
   }
 }
