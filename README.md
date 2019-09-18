@@ -1,4 +1,4 @@
-# PANECEES
+# PANACEES
 
 ## Requirements
 
