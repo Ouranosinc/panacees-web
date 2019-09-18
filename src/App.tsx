@@ -61,11 +61,11 @@ const Navbar = (props: { location: Location }) => {
             <NavLink pattern="/" url="/" location={props.location}>
               Accueil
             </NavLink>
-            <NavLink pattern="/projet" url="/projet" location={props.location}>
-              Le projet
-            </NavLink>
             <NavLink pattern="/panacees" url="/panacees" location={props.location}>
               PANACÉES
+            </NavLink>
+            <NavLink pattern="/apropos" url="/apropos" location={props.location}>
+              À propos
             </NavLink>
             <NavLink pattern="/adaptation" url="/adaptation" location={props.location}>
               Vers l'adaptation
