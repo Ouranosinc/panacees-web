@@ -3,11 +3,7 @@ import './App.css';
 import { createHashHistory, Location } from 'history';
 import UrlPattern from 'url-pattern'
 import MarkdownPage from './MarkdownPage';
-
-const acceilMd = require('./markdown/acceuil.md')
-const projetMd = require('./markdown/projet.md')
-
-console.log(acceilMd)
+import Maps from './Maps';
 
 const history = createHashHistory()
 
@@ -28,11 +24,15 @@ const App = () => {
     const match = (pattern: string) => new UrlPattern(pattern).match(location.pathname)
 
     if (match("/")) {
-      return <MarkdownPage path={acceilMd}/>
+      return <MarkdownPage path="markdown/acceuil.md"/>
     }
 
     if (match("/projet")) {
-      return <MarkdownPage path={projetMd}/>
+      return <MarkdownPage path="markdown/apropos.md"/>
+    }
+
+    if (match("/maps")) {
+      return <Maps/>
     }
 
     return <div>Page non trouvée</div>
