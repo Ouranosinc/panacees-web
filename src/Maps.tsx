@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import 'rc-slider/assets/index.css'
 import Slider from 'rc-slider'
 import { GeoJsonMap, GeoLayerSpec } from "./GeoJsonMap"
+import calculateCost from "./calculateCost"
 
 const Maps = () => {
   const [submersion, setSubmersion] = useState(1)
@@ -88,6 +89,12 @@ const Maps = () => {
   if (souslaligne) {
     layers.push({ url: "static/souslaligne_deMetissurMer-4326.geojson", styleFunction: () => ({}) })
   }
+
+  // const handleCalculate = () => {
+  //   calculateCost()
+  // }
+
+  //calculateCost()
 
   const renderToggles = () => {
     return <div>

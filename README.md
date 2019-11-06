@@ -31,3 +31,18 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+
+```
+rsync --info=progress2 -r build/* root@165.227.42.230:/var/www/html/
+
+ogr2ogr -f GeoJSON submersion_sa_deMetissurMer_0a1m-4326.geojson -t_srs "EPSG:4326" submersion_sa_deMetissurMer_0a1m.geojson
+ogr2ogr -f GeoJSON submersion_sa_deMetissurMer_0a2m-4326.geojson -t_srs "EPSG:4326" submersion_sa_deMetissurMer_0a2m.geojson
+ogr2ogr -f GeoJSON submersion_sa_deMetissurMer_0a3m-4326.geojson -t_srs "EPSG:4326" submersion_sa_deMetissurMer_0a3m.geojson
+ogr2ogr -f GeoJSON submersion_sa_deMetissurMer_0a4m-4326.geojson -t_srs "EPSG:4326" submersion_sa_deMetissurMer_0a4m.geojson
+ogr2ogr -f GeoJSON submersion_sa_deMetissurMer_0a5m-4326.geojson -t_srs "EPSG:4326" submersion_sa_deMetissurMer_0a5m.geojson
+ogr2ogr -f GeoJSON submersion_sa_deMetissurMer_0a6m-4326.geojson -t_srs "EPSG:4326" submersion_sa_deMetissurMer_0a6m.geojson
+ogr2ogr -f GeoJSON submersion_sa_deMetissurMer_0a7m-4326.geojson -t_srs "EPSG:4326" submersion_sa_deMetissurMer_0a7m.geojson
+ogr2ogr -f GeoJSON submersion_sa_deMetissurMer_0a8m-4326.geojson -t_srs "EPSG:4326" submersion_sa_deMetissurMer_0a8m.geojson
+ogr2ogr -f GeoJSON submersion_sa_deMetissurMer_0a9m-4326.geojson -t_srs "EPSG:4326" submersion_sa_deMetissurMer_0a9m.geojson
+ogr2ogr -f GeoJSON submersion_sa_deMetissurMer_0a10m-4326.geojson -t_srs "EPSG:4326" submersion_sa_deMetissurMer_0a10m.geojson
+```
