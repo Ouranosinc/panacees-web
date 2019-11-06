@@ -1,7 +1,10 @@
 import { default as pointInPolygon } from '@turf/boolean-point-in-polygon'
+import { FeatureCollection } from 'geojson'
+import { GeoLayerSpec } from './GeoJsonMap'
+import L from 'leaflet'
 
 // 3400ms submersion, 128ms erosion
-const calculateCost = async () => {
+export const calculateCost = async () => {
   const submersion = await fetch("submersion/submersion_sa_deMetissurMer_0a9m-4326.geojson").then(f => f.json())
   const buildings = await fetch("static/batiments_deMetissurMer-4326.geojson").then(f => f.json())
   const erosion = await fetch("erosion/high_erosion_sa_deMetissurMer_2100-4326.geojson").then(f => f.json())
@@ -32,4 +35,29 @@ const calculateCost = async () => {
   console.log(`Erosion: ${erosionTotal}`)
 }
 
-export default calculateCost
+export const createErosionDamageLayer = async (erosion: string, year: string): Promise<{ layer: GeoLayerSpec, cost: number }> => {
+  const buildings = await fetch("static/batiments_deMetissurMer-4326.geojson").then(f => f.json())
+  const erosionGeoJson = await fetch(`erosion/${erosion}_erosion_sa_deMetissurMer_${year}-4326.geojson`).then(f => f.json())
+
+  const features: FeatureCollection = { type: "FeatureCollection", features: [] }
+
+  let erosionTotal = 0
+  for (const building of buildings.features) {
+    if (pointInPolygon(building.geometry.coordinates[0], erosionGeoJson.features[0].geometry)) {
+      features.features.push({ type: "Feature", properties: {}, geometry: building.geometry })
+      erosionTotal += building.properties.valeur_tot
+    }
+  }
+  
+  const layer = {
+    data: features,
+    styleFunction: () => ({}),
+    pointToLayer: (p: any) => { 
+      const coords = [p.geometry.coordinates[0][1], p.geometry.coordinates[0][0]]
+      return L.marker(coords as any, {
+        icon: L.icon({ iconUrl: "house_red.png", iconAnchor: [14, 41] })
+      })
+    }
+  }
+  return { layer: layer, cost: erosionTotal }
+}

@@ -1,8 +1,9 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import 'rc-slider/assets/index.css'
 import Slider from 'rc-slider'
 import { GeoJsonMap, GeoLayerSpec } from "./GeoJsonMap"
-import calculateCost from "./calculateCost"
+import { calculateCost, createErosionDamageLayer } from "./calculateCost"
+import L from 'leaflet'
 
 const Maps = () => {
   const [submersion, setSubmersion] = useState(1)
@@ -16,6 +17,9 @@ const Maps = () => {
   const [lignedecote, setLignedecote] = useState(false)
   const [municipalites, setMunicipalites] = useState(false)
   const [souslaligne, setSouslaligne] = useState(false)
+
+  const [erosionDamageLayer, setErosionDamageLayer] = useState<GeoLayerSpec>()
+  const [erosionCost, setErosionCost] = useState<number>()
 
   const yearMarks: { [value: number]: string } = {}
   for (let y = 2030 ; y <= 2100 ; y+=10) {
@@ -63,7 +67,14 @@ const Maps = () => {
 
 
   if (batiments) {
-    layers.push({ url: "static/batiments_deMetissurMer-4326.geojson", styleFunction: () => ({}) })
+    layers.push({ 
+      url: "static/batiments_deMetissurMer-4326.geojson", 
+      styleFunction: () => ({}),
+      pointToLayer: (p: any) => { 
+        const coords = [p.geometry.coordinates[0][1], p.geometry.coordinates[0][0]]
+        return L.circleMarker(coords as any, { radius: 1, color: "yellow", opacity: 0.7 })
+      }
+    })
   }
     
   if (cellule) {
@@ -90,8 +101,22 @@ const Maps = () => {
     layers.push({ url: "static/souslaligne_deMetissurMer-4326.geojson", styleFunction: () => ({}) })
   }
 
-  // const handleCalculate = () => {
-  //   calculateCost()
+  if (erosionDamageLayer) {
+    layers.push(erosionDamageLayer)
+  }
+
+  const handleCalculate = async () => {
+    const damageLayer = await createErosionDamageLayer(erosionKeys[erosion], year + "")
+    setErosionDamageLayer(damageLayer.layer)
+    setErosionCost(damageLayer.cost)
+  }
+
+  useEffect(() => {
+    handleCalculate()
+  }, [erosion, year])
+  //   const damageLayer = await createErosionDamageLayer(erosionKeys[erosion], year + "")
+  //   setErosionDamageLayer(damageLayer.layer)
+  //   setErosionCost(damageLayer.cost)
   // }
 
   //calculateCost()
@@ -161,8 +186,14 @@ const Maps = () => {
         marks={{ 1: "1", 2: "2", 3: "3", 4: "4", 5: "5", 6: "6", 7: "7", 8: "8", 9: "9", 10: "10" }}
         />
     </div>
+    { erosionCost ?
+      <div style={{ float: "right", fontSize: 30, fontWeight: "bold" }}>
+        Erosion: { erosionCost.toLocaleString("en", { currency: "USD", style: "currency"})}
+      </div>
+    : null}
     {renderToggles()}
     <GeoJsonMap layers={layers}/>
+    {/* <button type="button" className="btn btn-link btn-xs" onClick={handleCalculate}>Calculate</button> */}
   </div>
 }
 

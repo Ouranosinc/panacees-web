@@ -3,17 +3,19 @@ import { useCallback, useRef, useEffect, useState } from 'react'
 import React from 'react'
 import 'leaflet/dist/leaflet.css'
 import BingLayer from './BingLayer'
-import { GeoJsonObject } from 'geojson'
+import { GeoJsonObject, Feature, Point } from 'geojson'
 
 /** Specification for a layer to display */
 export interface GeoLayerSpec {
-  url: string
+  url?: string
+  data?: GeoJsonObject
   styleFunction: StyleFunction
+  pointToLayer?: (geoJsonPoint: Feature<Point, any>, latlng: L.LatLng) => L.Layer
 }
 
 /** Single layer of map */
 interface GeoLayer {
-  url: string
+  url?: string
   data?: GeoJsonObject
   layer: L.GeoJSON
 
@@ -23,49 +25,59 @@ interface GeoLayer {
 
 const loadLayer = (map: L.Map, spec: GeoLayerSpec, existingLayer: GeoLayer | undefined, onUpdate: () => void): GeoLayer => {
   // Reuse if possible
-  if (existingLayer && existingLayer.url == spec.url) {
+  if (existingLayer && existingLayer.url == spec.url && (!spec.data || spec.data == existingLayer.data)) {
     return existingLayer
   }
 
-  let geoLayer: GeoLayer
   if (existingLayer) {
     // Cancel existing request
     if (existingLayer.abortController) {
       existingLayer.abortController.abort()
       delete existingLayer.abortController
     }
-
-    geoLayer = { url: spec.url, layer: existingLayer.layer }
   }
-  else {
-    geoLayer = { url: spec.url, layer: L.geoJSON(undefined, { 
-      pointToLayer: (p: any) => { 
-        const coords = [p.geometry.coordinates[0][1], p.geometry.coordinates[0][0]]
-        return L.circleMarker(coords as any, { radius: 2, color: "yellow", opacity: 0.7 })
+
+  const geoLayer: GeoLayer = { url: spec.url, layer: L.geoJSON(undefined, { 
+    pointToLayer: spec.pointToLayer
+  })}
+
+  // Handle URL case
+  if (spec.url) {
+    // Add abort controller
+    geoLayer.abortController = new AbortController()
+
+    fetch(spec.url, { signal: geoLayer.abortController.signal }).then(r => r.json()).then((geojson: any) => {
+      geoLayer.layer.addData(geojson)
+      geoLayer.layer.setStyle(spec.styleFunction)
+      geoLayer.data = geojson
+      delete geoLayer.abortController
+
+      if (existingLayer) { 
+        existingLayer.layer.remove()
       }
-    }) }
-    map.addLayer(geoLayer.layer)
+      map.addLayer(geoLayer.layer)
+
+      // Trigger onUpdate to indicate that something has changed
+      onUpdate()
+    }).catch((err) => {
+      // Ignore errors
+      delete geoLayer.abortController 
+
+      // Trigger onUpdate to indicate that something has changed
+      onUpdate()
+    })
   }
-
-  // Add abort controller
-  geoLayer.abortController = new AbortController()
-
-  fetch(spec.url, { signal: geoLayer.abortController.signal }).then(r => r.json()).then((geojson: any) => {
+  else if (spec.data) {
     geoLayer.layer.clearLayers()
-    geoLayer.layer.addData(geojson)
+    geoLayer.layer.addData(spec.data!)
     geoLayer.layer.setStyle(spec.styleFunction)
-    geoLayer.data = geojson
-    delete geoLayer.abortController
+    geoLayer.data = spec.data
 
-    // Trigger onUpdate to indicate that something has changed
-    onUpdate()
-  }).catch((err) => {
-    // Ignore errors
-    delete geoLayer.abortController 
-
-    // Trigger onUpdate to indicate that something has changed
-    onUpdate()
-  })
+    if (existingLayer) { 
+      existingLayer.layer.remove()
+    }
+    map.addLayer(geoLayer.layer)
+}
   return geoLayer
 }
 
