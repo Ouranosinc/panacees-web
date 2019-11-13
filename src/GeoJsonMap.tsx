@@ -105,7 +105,7 @@ export const GeoJsonMap = (props: { layers: GeoLayerSpec[] }) => {
     //   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
     // }).addTo(map)
 
-    const baseLayer = new BingLayer("Ao26dWY2IC8PjorsJKFaoR85EPXCnCohrJdisCWXIULAXFo0JAXquGauppTMQbyU", {type: "AerialWithLabels"})
+    const baseLayer = new BingLayer("Al2zNGh4W-oD93D-Gfz3AQcOz8jNgnrn1mHALMpCzcVS0odDc_d0g68A7lLOSzq6", {type: "AerialWithLabels"})
     baseLayer.addTo(mapObj)
 
     mapObj.setView([48.6754118321, -68.0089967189], 13)
