@@ -94,13 +94,17 @@ export const GeoJsonMap = (props: {
       // Remove old layer
       if (mapLayersRef.current[index]) {
         mapLayersRef.current[index].remove()
+        delete mapLayersRef.current[index]
       }
+
       map.addLayer(mapLayer)
       mapLayersRef.current[index] = mapLayer
 
       // Re-order layers
       for (const mapLayer of mapLayersRef.current) {
-        mapLayer.bringToFront()
+        if (mapLayer) {
+          mapLayer.bringToFront()
+        }
       }
     }
 
@@ -111,7 +115,7 @@ export const GeoJsonMap = (props: {
       onUpdate: onUpdate, 
       setMapLayer: setMapLayer.bind(null, index)
     }))
-    
+
     onUpdate()
   }, [props.layers, map])
 
@@ -158,10 +162,11 @@ const loadLayer = (options: {
 
   const geoLayer: GeoLayer = { spec: spec }
 
-  const replaceLayer = (data: GeoJsonObject) => {
+  const replaceLayer = (data: GeoJsonObject | undefined) => {
     const mapLayer = L.geoJSON(data, { 
       pointToLayer: spec.pointToLayer,
-      style: spec.styleFunction
+      style: spec.styleFunction,
+      filter: spec.filter
     })
 
     geoLayer.data = data
@@ -199,10 +204,27 @@ const loadLayer = (options: {
       onUpdate()
     })
   }
-  else if (spec.data) {
+  else {
     replaceLayer(spec.data)
   }
 
   return geoLayer
 }
 
+// Hack fix for https://github.com/Leaflet/Leaflet/issues/3575#issuecomment-543138318
+(function () {
+  if (!L || !L.GridLayer || !L.GridLayer.prototype) return;
+
+  var originalInitTile = (L.GridLayer.prototype as any)._initTile;
+
+  L.GridLayer.include({
+    _initTile: function (tile: any) {
+      originalInitTile.call(this, tile);
+
+      var tileSize = this.getTileSize();
+
+      tile.style.width = tileSize.x + 1 + 'px';
+      tile.style.height = tileSize.y + 1 + 'px';
+    }
+  });
+})();

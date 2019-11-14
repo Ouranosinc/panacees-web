@@ -1,6 +1,8 @@
 import { GeoLayerSpec, GeoJsonMap } from "./GeoJsonMap"
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import bbox from '@turf/bbox'
+import L from "leaflet"
+import { Feature } from "geojson"
 
 export const CellMap = (props: {
   /** ID of cell */
@@ -31,17 +33,24 @@ export const CellMap = (props: {
     // TODO errors?
   }, [props.cell])  
 
+  const buildingFilter = useCallback((feature: Feature) => {
+    // Look up key
+    const key = props.erosion.replace("ery", "") + "_" + props.adaptation
+    const value = feature.properties![key]
+    return (value != "NA" && parseInt(value) <= parseInt(props.year))
+  }, [props.cell, props.adaptation, props.year, props.erosion])
+
   const layers: GeoLayerSpec[] = [
-    // {
-    //   url: `submersion/submersion_sa_deMetissurMer_0a${props.submersion}m-4326.geojson`,
-    //   styleFunction: (feature) => {
-    //     return {
-    //       stroke: false,
-    //       fillColor: "#38F",
-    //       fillOpacity: 0.5
-    //     }
-    //   }
-    // },
+    {
+      url: props.submersion !== "0" ? `submersion/${props.cell}/submersion_${props.adaptation}_${props.cell}_0a${props.submersion}m.geojson` : undefined,
+      styleFunction: (feature) => {
+        return {
+          stroke: false,
+          fillColor: "#38F",
+          fillOpacity: 0.5
+        }
+      }
+    },
     {
       url: `erosion/${props.cell}/${props.erosion}_erosion_${props.adaptation}_${props.cell}_${props.year}.geojson`,
       styleFunction: (feature) => {
@@ -51,6 +60,18 @@ export const CellMap = (props: {
           fillOpacity: 0.5
         }
       }
+    },
+    {
+      url: `statiques/${props.cell}/batiments_${props.cell}.geojson`,
+      styleFunction: () => ({}),
+      pointToLayer: (p: any) => { 
+        const coords = [p.geometry.coordinates[1], p.geometry.coordinates[0]]
+        return L.marker(coords as any, {
+          icon: L.icon({ iconUrl: "house_red.png", iconAnchor: [14, 41] })
+        })
+        // return L.circleMarker(coords as any, { radius: 1, color: "yellow", opacity: 0.7 })
+      },
+      filter: buildingFilter
     },
   ]
 
