@@ -4,6 +4,7 @@ import { createHashHistory, Location } from 'history';
 import UrlPattern from 'url-pattern'
 import MarkdownPage from './MarkdownPage';
 import Maps from './Maps';
+import { DataPage } from './DataPage';
 
 const history = createHashHistory()
 
@@ -31,8 +32,8 @@ const App = () => {
       return <MarkdownPage path="markdown/apropos.md"/>
     }
 
-    if (match("/maps")) {
-      return <Maps/>
+    if (match("/data")) {
+      return <DataPage/>
     }
 
     return <div>Page non trouvée</div>

@@ -24,4 +24,5 @@ yarn-error.log*
 
 public/erosion
 public/submersion
-public/static
+public/statiques
+public/indicateurs
