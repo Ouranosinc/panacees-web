@@ -2,12 +2,14 @@ import React, { useState } from "react"
 import { CellMap } from "./CellMap"
 import 'rc-slider/assets/index.css'
 import Slider from "rc-slider"
+import { NetCostsChart } from "./indicator/netCosts"
 
 /** Page that displays all data, including maps and indicators. Main page of app portion */
 export const DataPage = (props: {}) => {
   const [year, setYear] = useState(2030)
   const [erosion, setErosion] = useState("med")
   const [submersion, setSubmersion] = useState(0)
+  const [cell, setCell] = useState("deMetissurMer")
 
   const [yearMarks] = useState<{ [value: number]: string }>(() => {
     const marks: { [value: number]: string } = {}
@@ -52,9 +54,18 @@ export const DataPage = (props: {}) => {
       </select>
     </div>
 
+    <NetCostsChart
+      adaptations={[
+        { id: "sansadapt", name: "Sans Adaptation" },
+        { id: "statuquo", name: "Statu Quo" }
+      ]}
+      cell={cell}
+      erosion={erosion}
+      year={year + ""}
+    />
     <CellMap
       adaptation="sansadapt"  
-      cell="deMetissurMer"
+      cell={cell}
       erosion={erosion}
       submersion={submersion + ""}
       year={year + ""}

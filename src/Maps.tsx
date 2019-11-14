@@ -4,7 +4,6 @@ import Slider from 'rc-slider'
 import { GeoJsonMap, GeoLayerSpec } from "./GeoJsonMap"
 import { calculateCost, createErosionDamageLayer } from "./calculateCost"
 import L from 'leaflet'
-import { SimpleChart } from "./indicator/netCosts"
 
 const Maps = () => {
   const [submersion, setSubmersion] = useState(1)
@@ -193,7 +192,7 @@ const Maps = () => {
       </div>
     : null}
     {renderToggles()}
-    <SimpleChart/>
+    {/* <SimpleChart/> */}
     {/* <GeoJsonMap layers={layers}/> */}
     {/* <button type="button" className="btn btn-link btn-xs" onClick={handleCalculate}>Calculate</button> */}
   </div>
