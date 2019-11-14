@@ -18,7 +18,9 @@ export interface GeoLayerSpec {
 interface GeoLayer {
   spec: GeoLayerSpec
   data?: GeoJsonObject
-  layer: L.GeoJSON
+
+  /** True if has been cancelled and data should not be added */
+  cancelled?: boolean
 
   /** Allow cancelling an existing load */
   abortController?: AbortController
@@ -32,7 +34,8 @@ export const GeoJsonMap = (props: {
   const [map, setMap] = useState<L.Map>()
   const mapRef = useRef<L.Map>()
   const [loading, setLoading] = useState(false)
-  const layersRef = useRef<GeoLayer[]>()
+  const geoLayersRef = useRef<GeoLayer[]>()
+  const mapLayersRef = useRef<L.GeoJSON[]>([])
 
   const mapNode = useCallback(node => {
     if (!node) {
@@ -72,29 +75,43 @@ export const GeoJsonMap = (props: {
     }
 
     // Remove extra layers to keep needed layers and actual layers equal length
-    if (layersRef.current) {
-      for (var i = props.layers.length ; i < layersRef.current.length ; i++) {
-        layersRef.current[i].layer.remove()
-      }
+    for (var i = props.layers.length ; i < mapLayersRef.current.length ; i++) {
+      mapLayersRef.current[i].remove()
     }
 
+    /** Update the loading status */
     const onUpdate = () => {
       // Set loading state
-      if (!layersRef.current) {
+      if (!geoLayersRef.current) {
         setLoading(true)
         return
       }
-      setLoading(layersRef.current.some(l => l.abortController))
+      setLoading(geoLayersRef.current.some(l => l.abortController))
+    }
+
+    /** Set the map layer, replacing the existing layer if present */
+    const setMapLayer = (index: number, mapLayer: L.GeoJSON) => {
+      // Remove old layer
+      if (mapLayersRef.current[index]) {
+        mapLayersRef.current[index].remove()
+      }
+      map.addLayer(mapLayer)
+      mapLayersRef.current[index] = mapLayer
 
       // Re-order layers
-      for (const layer of layersRef.current) {
-        layer.layer.bringToFront()
+      for (const mapLayer of mapLayersRef.current) {
+        mapLayer.bringToFront()
       }
     }
 
     // Create new layers
-    const layers = props.layers.map((layer, index) => loadLayer(map, layer, layersRef.current ? layersRef.current[index] : undefined, onUpdate))
-    layersRef.current = layers
+    geoLayersRef.current = props.layers.map((layer, index) => loadLayer({
+      spec: layer, 
+      existingLayer: geoLayersRef.current ? geoLayersRef.current[index] : undefined, 
+      onUpdate: onUpdate, 
+      setMapLayer: setMapLayer.bind(null, index)
+    }))
+    
     onUpdate()
   }, [props.layers, map])
 
@@ -111,7 +128,14 @@ export const GeoJsonMap = (props: {
 }
 
 /** Load a single layer into the map, deleting the existing layer if present and if not identical */
-const loadLayer = (map: L.Map, spec: GeoLayerSpec, existingLayer: GeoLayer | undefined, onUpdate: () => void): GeoLayer => {
+const loadLayer = (options: {
+  spec: GeoLayerSpec, 
+  existingLayer: GeoLayer | undefined, 
+  onUpdate: () => void,
+  setMapLayer: (mapLayer: L.GeoJSON) => void
+}): GeoLayer => {
+  const { spec, existingLayer, onUpdate, setMapLayer } = options
+
   // Reuse if possible
   if (existingLayer 
     && existingLayer.spec.data === spec.data
@@ -123,6 +147,8 @@ const loadLayer = (map: L.Map, spec: GeoLayerSpec, existingLayer: GeoLayer | und
   }
 
   if (existingLayer) {
+    existingLayer.cancelled = true
+
     // Cancel existing request
     if (existingLayer.abortController) {
       existingLayer.abortController.abort()
@@ -130,25 +156,24 @@ const loadLayer = (map: L.Map, spec: GeoLayerSpec, existingLayer: GeoLayer | und
     }
   }
 
-  const geoLayer: GeoLayer = { spec: spec, layer: L.geoJSON(undefined, { 
-    pointToLayer: spec.pointToLayer,
-    style: spec.styleFunction
-  })}
+  const geoLayer: GeoLayer = { spec: spec }
 
   const replaceLayer = (data: GeoJsonObject) => {
-    geoLayer.layer.addData(data)
+    const mapLayer = L.geoJSON(data, { 
+      pointToLayer: spec.pointToLayer,
+      style: spec.styleFunction
+    })
+
     geoLayer.data = data
     delete geoLayer.abortController
 
-    if (existingLayer) { 
-      existingLayer.layer.remove()
-    }
-    map.addLayer(geoLayer.layer)
+    setMapLayer(mapLayer)
   }
 
   // Handle case of same url and existing data (data can be reused)
   if (existingLayer && existingLayer.data && spec.url && existingLayer.spec.url === spec.url) {
     replaceLayer(existingLayer.data)
+    return geoLayer
   }
 
   // Handle URL case
@@ -157,6 +182,11 @@ const loadLayer = (map: L.Map, spec: GeoLayerSpec, existingLayer: GeoLayer | und
     geoLayer.abortController = new AbortController()
 
     fetch(spec.url, { signal: geoLayer.abortController.signal }).then(r => r.json()).then((geojson: any) => {
+      // If cancelled, ignore
+      if (geoLayer.cancelled) {
+        return
+      }
+
       replaceLayer(geojson)
 
       // Trigger onUpdate to indicate that something has changed
