@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, ReactNode } from "react"
 import { CellMap } from "./CellMap"
 import 'rc-slider/assets/index.css'
 import { NetCostsChart } from "./indicator/netCosts"
@@ -77,8 +77,8 @@ export const CellPage = (props: {
         />
       <hr/>
       <NavSelector options={[
-        { id: "map", name: "Carte" },
-        { id: "netcosts", name: "Coûts Nets Actualisés" }
+        { id: "map", name: [<i className="fa fa-map fa-fw"/>," Carte"]},
+        { id: "netcosts", name: [<i className="fa fa-bar-chart fa-fw"/>," Coûts Nets Actualisés"]} 
       ]} value={mode} onChange={setMode}/>
     </div>
     <div className="cell-contents">
@@ -89,7 +89,7 @@ export const CellPage = (props: {
 
 
 const NavSelector = (props: { 
-  options: { id: string, name: string }[],
+  options: { id: string, name: ReactNode }[],
   value: string,
   onChange: (value: string) => void
 }) => {

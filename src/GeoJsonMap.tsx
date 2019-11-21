@@ -41,6 +41,7 @@ export const GeoJsonMap = (props: {
 }) => {
   const [map, setMap] = useState<L.Map>()
   const mapRef = useRef<L.Map>()
+  const baseLayerRef = useRef<L.TileLayer>()
   const [loading, setLoading] = useState(false)
   const geoLayersRef = useRef<GeoLayer[]>()
   const mapLayersRef = useRef<L.GeoJSON[]>([])
@@ -69,21 +70,24 @@ export const GeoJsonMap = (props: {
       return
     }
 
-    let layer: L.TileLayer
+    if (baseLayerRef.current) {
+      baseLayerRef.current.remove()
+    }
+
     if (props.baseLayer === "positron") {
-      layer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+      baseLayerRef.current = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
       })
     }
     else if (props.baseLayer === "bing_satellite") {
-      layer = new BingLayer("Al2zNGh4W-oD93D-Gfz3AQcOz8jNgnrn1mHALMpCzcVS0odDc_d0g68A7lLOSzq6", {type: "AerialWithLabels"})
+      baseLayerRef.current = new BingLayer("Al2zNGh4W-oD93D-Gfz3AQcOz8jNgnrn1mHALMpCzcVS0odDc_d0g68A7lLOSzq6", {type: "AerialWithLabels"})
     }
     else {
       throw new Error("Unknown layer type")
     }
 
-    layer.addTo(map)
-    layer.bringToBack()
+    baseLayerRef.current.addTo(map)
+    baseLayerRef.current.bringToBack()
   }, [map, props.baseLayer])
 
   // Keep bounds up to date

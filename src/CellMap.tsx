@@ -1,5 +1,5 @@
 import { GeoLayerSpec, GeoJsonMap } from "./GeoJsonMap"
-import React, { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback, ReactNode } from "react"
 import bbox from '@turf/bbox'
 import L from "leaflet"
 import { Feature } from "geojson"
@@ -24,6 +24,7 @@ export const CellMap = (props: {
   height: number
 }) => {
   const [bounds, setBounds] = useState<L.LatLngBoundsExpression>()
+  const [mode, setMode] = useState<"satellite" | "environment">("satellite")
 
   // Load initial bounds
   useEffect(() => {
@@ -88,6 +89,24 @@ export const CellMap = (props: {
     },
   ]
 
+  if (mode == "environment") {
+    layers.unshift({
+      url: `statiques/${props.cell}/environnement_${props.cell}.geojson`,
+      styleFunction: (feature) => {
+        return {
+          weight: 0.5,
+          color: "green",
+          opacity: 0.6,
+          fillColor: "green",
+          fillOpacity: 0.2
+        }
+      },
+      onEachFeature: (feature, layer) => {
+        layer.bindTooltip(feature.properties!.name)
+      }
+    })
+  }
+
   // if (batiments) {
   //   layers.push({ 
   //     url: "static/batiments_deMetissurMer-4326.geojson", 
@@ -105,10 +124,36 @@ export const CellMap = (props: {
     </div>
   }
 
-  return <GeoJsonMap 
-    layers={layers} 
-    bounds={bounds} 
-    baseLayer="bing_satellite" 
-    height={props.height}/>
+  return <div style={{ position: "relative" }}>
+    <div style={{ position: "absolute", right: 20, top: 20, zIndex: 1000 }}>
+      <Toggle 
+        options={[
+          { value: "satellite", label: "Satellite" },
+          { value: "environment", label: "Environment" },
+        ]}
+        value={mode}
+        onChange={(value) => { setMode(value) }}
+        />
+    </div>
+    <GeoJsonMap 
+      layers={layers} 
+      bounds={bounds} 
+      baseLayer={ mode == "satellite" ? "bing_satellite" : "positron" }
+      height={props.height}/>
+    </div>
+}
 
+const Toggle = (props: {
+  options: { value: any, label: ReactNode }[],
+  value: any,
+  onChange: (value: any) => void
+}) => {
+  return <div className="btn-group">
+    {props.options.map(option => {
+      return <button 
+        type="button" 
+        className={ props.value == option.value ? "btn btn-primary btn-sm" : "btn btn-light btn-sm" }
+        onClick={() => props.onChange(option.value)}>{option.label}</button>
+    })}
+  </div>
 }
