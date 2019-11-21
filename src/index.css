@@ -48,3 +48,9 @@
   font-weight: bold;
   font-size: 14pt;
 }
+
+/* Remove glow around buttons TODO Doesn't work
+.btn-noglow:focus,.btn-noglow:active:focus,.btn-noglow.active:focus,
+.btn-noglow.focus,.btn-noglow:active.focus,.btn-noglow.active.focus {
+   outline: none;
+} */

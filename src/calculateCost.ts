@@ -1,7 +1,8 @@
 import { default as pointInPolygon } from '@turf/boolean-point-in-polygon'
-import { FeatureCollection } from 'geojson'
+import { FeatureCollection, GeoJsonObject } from 'geojson'
 import { GeoLayerSpec } from './GeoJsonMap'
 import L from 'leaflet'
+import { useState, useEffect } from 'react'
 
 // 3400ms submersion, 128ms erosion
 export const calculateCost = async () => {
@@ -60,4 +61,32 @@ export const createErosionDamageLayer = async (erosion: string, year: string): P
     }
   }
   return { layer: layer, cost: erosionTotal }
+}
+
+/** Get the erosion damage for a cell */
+export const useGetErosionDamage = (cell: string, erosion: string, year: number, adaptation: string): number | null => {
+  const [buildings, setBuildings] = useState<FeatureCollection>() 
+  
+  useEffect(() => {
+    fetch(`statiques/${cell}/batiments_${cell}.geojson`).then(f => f.json()).then(b => setBuildings(b)).catch(() => {
+      // TODO
+    })
+  }, [cell])
+
+  if (!buildings) {
+    return null
+  }
+
+  let cost = 0
+
+  for (const feature of buildings.features) {
+    // Look up key
+    const key = erosion.replace("ery", "") + "_" + adaptation
+    const value = feature.properties![key]
+    if (value != "NA" && parseInt(value) <= year) {
+      cost += feature.properties!.valeur_tot
+    }
+  }
+
+  return cost
 }

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback, ReactNode } from "react"
 import bbox from '@turf/bbox'
 import L from "leaflet"
 import { Feature } from "geojson"
+import { useGetErosionDamage } from "./calculateCost"
 
 export const CellMap = (props: {
   /** ID of cell */
@@ -25,6 +26,9 @@ export const CellMap = (props: {
 }) => {
   const [bounds, setBounds] = useState<L.LatLngBoundsExpression>()
   const [mode, setMode] = useState<"satellite" | "environment">("satellite")
+
+  // Get erosion damage
+  const erosionDamage = useGetErosionDamage(props.cell, props.erosion, props.year, props.adaptation)
 
   // Load initial bounds
   useEffect(() => {
@@ -135,6 +139,13 @@ export const CellMap = (props: {
         onChange={(value) => { setMode(value) }}
         />
     </div>
+    { erosionDamage != null ? 
+      <div style={{ position: "absolute", textAlign: "center", width: "100%", top: 20, zIndex: 1000, pointerEvents: "none" }}>
+        <div style={{ display: "inline-block", backgroundColor: "white", padding: 10, borderRadius: 8, fontSize: 14, opacity: 0.9 }}>
+          <span className="text-muted">Coût de l'érosion:</span> { erosionDamage.toLocaleString("fr", { style: "currency", currency: "CAD" }).replace("CA", "").replace(",00", "") }
+        </div>
+      </div>
+    : null }
     <GeoJsonMap 
       layers={layers} 
       bounds={bounds} 
