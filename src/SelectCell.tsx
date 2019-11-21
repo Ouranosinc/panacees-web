@@ -11,6 +11,9 @@ export const SelectCell = (props: {
 }) => {
   const [search, setSearch] = useState("")
 
+  // Currently hovered cell
+  const [hover, setHover] = useState<string>()
+
   const matchingCells = cells.filter(cell => {
     return !search || cell.name.toLowerCase().includes(search.toLowerCase())
   })
@@ -21,48 +24,72 @@ export const SelectCell = (props: {
       return {
         weight: 1,
         fillColor: "#38F",
-        fillOpacity: 0.5
+        fillOpacity: hover == cell.id ? 0.8 : 0.5
       }
     },
     onEachFeature: (feature, layer: L.GeoJSON) => {
       layer.bindTooltip(cell.name)
       // Open tooltip if only one
-      if (matchingCells.length == 1) {
+      if (hover == cell.id) {
         setTimeout(() => layer.openTooltip(), 0)
       }
-      console.log(feature.properties!.Cellule)
       layer.on("click", () => {
         props.history.push(`/panacees/${cell.id}`)
       })
       layer.on("mouseover", () => {
-        layer.openTooltip()
-        layer.setStyle({
-          fillOpacity: 0.8
-        })
+        setHover(cell.id)
       })
       layer.on("mouseout", () => {
-        layer.closeTooltip()
-        layer.setStyle({
-          fillOpacity: 0.5
-        })
+        setHover(undefined)
       })
     }
   } as GeoLayerSpec))
 
-  return <div>
-    <div style={{ textAlign: "center", fontWeight: "bold", color: "#888", fontSize: 20}}>Sélectionner la cellule</div>
-    
-    <SearchControl value={search} onChange={setSearch} ref={node => { if (node) { node.focus() }}}/>
-    <FillHeight>
+  const renderCells = () => {
+    return <FillHeight>
       {(height) => (
-        <GeoJsonMap 
-          layers={layers} 
-          bounds={bounds}
-          baseLayer="positron"
-          height={height}
-        />)
-      }
+        <div className="list-group" style={{height: height, overflowY: "auto"}}>
+          { matchingCells.map(cell => {
+            return <a 
+              style={{ cursor: "pointer" }}
+              className="list-group-item list-group-item-action"
+              onMouseEnter={() => { setHover(cell.id) }}
+              onMouseLeave={() => { setHover(undefined) }}
+              onClick={() => { props.history.push(`/panacees/${cell.id}`) }}>{cell.name}</a>
+          })}
+        </div>
+      )}
     </FillHeight>
+  }
+
+  return <div className="container-fluid">
+    <div className="row">
+      <div className="col">
+        <div style={{ textAlign: "left", color: "#666", fontSize: 18, padding: 5 }}>Sélectionner une cellule:</div>
+        <SearchControl 
+          value={search} 
+          onChange={setSearch} 
+          placeholder="Chercher..."
+          ref={node => { if (node) { node.focus() }}}
+          />
+        { renderCells() }
+      </div>
+      <div className="col-8">
+        <FillHeight>
+          {(height) => (
+            <div style={{ margin: 10, border: "solid 1px #DDD" }}>
+              <GeoJsonMap 
+                layers={layers} 
+                bounds={bounds}
+                baseLayer="positron"
+                height={height - 20}
+              />
+            </div>
+            )
+          }
+        </FillHeight>
+      </div>
+    </div>
   </div>
 }
 
