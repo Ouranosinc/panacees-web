@@ -1,11 +1,12 @@
 import React, { useState, ReactNode } from "react"
 import { CellMap } from "./CellMap"
 import 'rc-slider/assets/index.css'
-import { NetCostsChart } from "./indicator/netCosts"
+import { NetCostsByTypeChart } from "./indicator/netCostsByType"
 import { cells } from "./config"
 import { CellControls } from "./CellControls"
 import { History } from "history"
 import { FillHeight } from "./FillHeight"
+import { NetCostsByYearChart } from "./indicator/netCostsByYear"
 
 /** Page that displays all data about a cell, including maps and indicators. */
 export const CellPage = (props: {
@@ -44,16 +45,30 @@ export const CellPage = (props: {
         )}
       </FillHeight>
     }
-    if (mode == "netcosts") {
-      return <NetCostsChart
-        adaptations={[
-          { id: "sansadapt", name: "Sans Adaptation" },
-          { id: "statuquo", name: "Statu Quo" }
-        ]}
-        cell={props.cellId}
-        erosion={erosion}
-        year={year + ""}
-      />
+    if (mode == "netCostsByType") {
+      return <div>
+        <NetCostsByTypeChart
+          adaptations={[
+            { id: "sansadapt", name: "Sans Adaptation" },
+            { id: "statuquo", name: "Statu Quo" }
+          ]}
+          cell={props.cellId}
+          erosion={erosion}
+          year={year + ""}
+        />
+      </div>
+    }
+    if (mode == "netCostsByYear") {
+      return <div>
+        <NetCostsByYearChart
+          adaptations={[
+            { id: "sansadapt", name: "Sans Adaptation" },
+            { id: "statuquo", name: "Statu Quo" }
+          ]}
+          cell={props.cellId}
+          erosion={erosion}
+        />
+      </div>
     }
     return null
   }
@@ -64,8 +79,11 @@ export const CellPage = (props: {
     case "map":
       disabled = []
       break
-    case "netcosts":
+    case "netCostsByType":
       disabled = ["adaptation", "submersion"]
+      break
+    case "netCostsByYear":
+      disabled = ["year", "submersion", "adaptation"]
       break
   }
 
@@ -90,7 +108,8 @@ export const CellPage = (props: {
       <hr/>
       <NavSelector options={[
         { id: "map", name: [<i className="fa fa-map fa-fw"/>," Carte"]},
-        { id: "netcosts", name: [<i className="fa fa-bar-chart fa-fw"/>," Coûts Nets Actualisés"]} 
+        { id: "netCostsByType", name: [<i className="fa fa-bar-chart fa-fw"/>," Coûts Nets Actualisés par Type"]},
+        { id: "netCostsByYear", name: [<i className="fa fa-line-chart fa-fw"/>," Coûts Nets Actualisés par Année"]} 
       ]} value={mode} onChange={setMode}/>
     </div>
     <div className="cell-contents">

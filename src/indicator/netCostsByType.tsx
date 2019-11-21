@@ -5,7 +5,7 @@ import { Highchart } from "./Highchart"
 import { Adaptation } from "../params"
 import { csv } from 'd3-fetch'
 
-export const NetCostsChart = (props: {
+export const NetCostsByTypeChart = (props: {
   adaptations: Adaptation[]
   cell: string
   year: string
@@ -62,22 +62,9 @@ export const NetCostsChart = (props: {
         text: "Coûts"
       }
     },
-    series: [
-      {
-        name: "Impacts économiques",
-        data: [1, 4],
-        stacking: "stream"
-      },
-      {
-        name: "Impacts environnementaux",
-        data: [1, 4],
-        stacking: "stream"
-      }
-    ] as SeriesBarOptions[]
+    series: [] as SeriesBarOptions[]
   }
 
-  console.log(chartOptions.series)
-  console.log(series)
   chartOptions.series = series
 
   return <Highchart chartOptions={chartOptions} />
