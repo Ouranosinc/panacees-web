@@ -50,7 +50,8 @@ export const SelectCell = (props: {
   } as GeoLayerSpec))
 
   return <div>
-    <h4>Sélectionner la cellule</h4>
+    <div style={{ textAlign: "center", fontWeight: "bold", color: "#888", fontSize: 20}}>Sélectionner la cellule</div>
+    
     <SearchControl value={search} onChange={setSearch} ref={node => { if (node) { node.focus() }}}/>
     <FillHeight>
       {(height) => (

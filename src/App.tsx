@@ -1,5 +1,4 @@
 import React, { useEffect, useState, FC } from 'react';
-import './App.css';
 import { createHashHistory, Location } from 'history';
 import UrlPattern from 'url-pattern'
 import MarkdownPage from './MarkdownPage';
@@ -48,7 +47,7 @@ const App = () => {
   return (
     <div>
       <Navbar location={location}/>
-      <div className="container-fluid" style={{paddingTop: 60}}>
+      <div style={{paddingTop: 56}}>
         {renderContents()}
       </div>
     </div>

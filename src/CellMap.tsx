@@ -20,6 +20,8 @@ export const CellMap = (props: {
   /** Year e.g. 2040 */
   year: number
 
+  /** Height of the map */
+  height: number
 }) => {
   const [bounds, setBounds] = useState<L.LatLngBoundsExpression>()
 
@@ -103,6 +105,10 @@ export const CellMap = (props: {
     </div>
   }
 
-  return <GeoJsonMap layers={layers} bounds={bounds} baseLayer="bing_satellite" height={500}/>
+  return <GeoJsonMap 
+    layers={layers} 
+    bounds={bounds} 
+    baseLayer="bing_satellite" 
+    height={props.height}/>
 
 }
