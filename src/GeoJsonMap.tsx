@@ -34,6 +34,9 @@ export const GeoJsonMap = (props: {
   /** Initial bounds of map */
   bounds: L.LatLngBoundsExpression
 
+  /** Height of the map */
+  height: number
+
   baseLayer: "bing_satellite" | "positron"
 }) => {
   const [map, setMap] = useState<L.Map>()
@@ -140,9 +143,16 @@ export const GeoJsonMap = (props: {
     onUpdate()
   }, [props.layers, map])
 
+  // Update if height changes
+  useEffect(() => {
+    if (map) {
+      map.invalidateSize()
+    }
+  }, [props.height])
+
   return (
     <div style={{position: "relative" }}>
-      <div ref={mapNode} style={{height: 800}} />
+      <div ref={mapNode} style={{height: props.height}} />
       { loading ? 
         <div style={{ position: "absolute", right: 10, top: 10, backgroundColor: "white", zIndex: 10000, opacity: 0.8, borderRadius: 4, padding: 5 }}>
           <i className="fa fa-spinner fa-spin fa-fw"/>

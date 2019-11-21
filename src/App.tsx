@@ -39,7 +39,7 @@ const App = () => {
     
     result = match("/panacees/:id")
     if (result) {
-      return <CellPage cellId={result.id}/>
+      return <CellPage history={history} cellId={result.id}/>
     }
 
     return <div>Page non trouvée</div>
@@ -48,7 +48,7 @@ const App = () => {
   return (
     <div>
       <Navbar location={location}/>
-      <div className="container" style={{paddingTop: 60}}>
+      <div className="container-fluid" style={{paddingTop: 60}}>
         {renderContents()}
       </div>
     </div>
@@ -61,7 +61,7 @@ export default App;
 const Navbar = (props: { location: Location }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-      <div className="container">
+      <div className="container-fluid">
         <a className="navbar-brand" href="#">Ouranos</a>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">

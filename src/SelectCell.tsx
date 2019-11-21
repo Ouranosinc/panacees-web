@@ -3,6 +3,7 @@ import React, { useState } from "react"
 import { History } from "history"
 import { bounds, cells } from "./config"
 import { SearchControl } from "./SearchControl"
+import { FillHeight } from "./FillHeight"
 
 /** Selects a particular cell */
 export const SelectCell = (props: {
@@ -25,10 +26,11 @@ export const SelectCell = (props: {
     },
     onEachFeature: (feature, layer: L.GeoJSON) => {
       layer.bindTooltip(cell.name)
-      // Open if only one
+      // Open tooltip if only one
       if (matchingCells.length == 1) {
         setTimeout(() => layer.openTooltip(), 0)
       }
+      console.log(feature.properties!.Cellule)
       layer.on("click", () => {
         props.history.push(`/panacees/${cell.id}`)
       })
@@ -48,13 +50,18 @@ export const SelectCell = (props: {
   } as GeoLayerSpec))
 
   return <div>
-    <h2>Sélectionner la cellule</h2>
+    <h4>Sélectionner la cellule</h4>
     <SearchControl value={search} onChange={setSearch} ref={node => { if (node) { node.focus() }}}/>
-    <GeoJsonMap 
-      layers={layers} 
-      bounds={bounds}
-      baseLayer="positron"
-      />
+    <FillHeight>
+      {(height) => (
+        <GeoJsonMap 
+          layers={layers} 
+          bounds={bounds}
+          baseLayer="positron"
+          height={height}
+        />)
+      }
+    </FillHeight>
   </div>
 }
 

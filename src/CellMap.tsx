@@ -14,11 +14,11 @@ export const CellMap = (props: {
   /** Adaptation measure ("statuquo", "sansadap") */
   adaptation: string
 
-  /** Submersion level "0", "1", ... */
-  submersion: string
+  /** Submersion level 0, 1, ... */
+  submersion: number
 
   /** Year e.g. 2040 */
-  year: string
+  year: number
 
 }) => {
   const [bounds, setBounds] = useState<L.LatLngBoundsExpression>()
@@ -37,7 +37,7 @@ export const CellMap = (props: {
     // Look up key
     const key = props.erosion.replace("ery", "") + "_" + props.adaptation
     const value = feature.properties![key]
-    return (value != "NA" && parseInt(value) <= parseInt(props.year))
+    return (value != "NA" && parseInt(value) <= props.year)
   }, [props.cell, props.adaptation, props.year, props.erosion])
 
   const layers: GeoLayerSpec[] = [
@@ -53,7 +53,7 @@ export const CellMap = (props: {
       }
     },
     {
-      url: props.submersion !== "0" ? `submersion/${props.cell}/submersion_${props.adaptation}_${props.cell}_0a${props.submersion}m.geojson` : undefined,
+      url: props.submersion > 0 ? `submersion/${props.cell}/submersion_${props.adaptation}_${props.cell}_0a${props.submersion}m.geojson` : undefined,
       styleFunction: (feature) => {
         return {
           stroke: false,
@@ -103,6 +103,6 @@ export const CellMap = (props: {
     </div>
   }
 
-  return <GeoJsonMap layers={layers} bounds={bounds} baseLayer="bing_satellite"/>
+  return <GeoJsonMap layers={layers} bounds={bounds} baseLayer="bing_satellite" height={500}/>
 
 }
