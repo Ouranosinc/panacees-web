@@ -66,5 +66,5 @@ export const NetCostsByYearChart = (props: {
 
   chartOptions.series = series
 
-  return <Highchart chartOptions={chartOptions} />
+  return <Highchart chartOptions={chartOptions} style={{height: 600}} />
 }
