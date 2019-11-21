@@ -42,6 +42,17 @@ export const CellMap = (props: {
 
   const layers: GeoLayerSpec[] = [
     {
+      url: `statiques/${props.cell}/cellule_${props.cell}.geojson`,
+      styleFunction: (feature) => {
+        return {
+          fill: false,
+          weight: 1,
+          color: "#38F",
+          opacity: 0.8
+        }
+      }
+    },
+    {
       url: props.submersion !== "0" ? `submersion/${props.cell}/submersion_${props.adaptation}_${props.cell}_0a${props.submersion}m.geojson` : undefined,
       styleFunction: (feature) => {
         return {

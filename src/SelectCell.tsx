@@ -18,9 +18,22 @@ export const SelectCell = (props: {
         fillOpacity: 0.5
       }
     },
-    onEachFeature: (feature, layer) => {
+    onEachFeature: (feature, layer: L.GeoJSON) => {
+      layer.bindTooltip(cell.name)
       layer.on("click", () => {
         props.history.push(`/panacees/${cell.id}`)
+      })
+      layer.on("mouseover", () => {
+        layer.openTooltip()
+        layer.setStyle({
+          fillOpacity: 0.8
+        })
+      })
+      layer.on("mouseout", () => {
+        layer.closeTooltip()
+        layer.setStyle({
+          fillOpacity: 0.5
+        })
       })
     }
   } as GeoLayerSpec))
