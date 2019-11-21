@@ -1,15 +1,20 @@
 import { GeoJsonMap, GeoLayerSpec } from "./GeoJsonMap"
-import React from "react"
+import React, { useState } from "react"
 import { History } from "history"
 import { bounds, cells } from "./config"
+import { SearchControl } from "./SearchControl"
 
 /** Selects a particular cell */
 export const SelectCell = (props: {
   history: History
 }) => {
+  const [search, setSearch] = useState("")
 
+  const matchingCells = cells.filter(cell => {
+    return !search || cell.name.toLowerCase().includes(search.toLowerCase())
+  })
 
-  const layers: GeoLayerSpec[] = cells.map(cell => ({
+  const layers: GeoLayerSpec[] = matchingCells.map(cell => ({
     url: `statiques/${cell.id}/cellule_${cell.id}.geojson`,
     styleFunction: (feature) => {
       return {
@@ -20,6 +25,10 @@ export const SelectCell = (props: {
     },
     onEachFeature: (feature, layer: L.GeoJSON) => {
       layer.bindTooltip(cell.name)
+      // Open if only one
+      if (matchingCells.length == 1) {
+        setTimeout(() => layer.openTooltip(), 0)
+      }
       layer.on("click", () => {
         props.history.push(`/panacees/${cell.id}`)
       })
@@ -40,6 +49,7 @@ export const SelectCell = (props: {
 
   return <div>
     <h2>Sélectionner la cellule</h2>
+    <SearchControl value={search} onChange={setSearch} ref={node => { if (node) { node.focus() }}}/>
     <GeoJsonMap 
       layers={layers} 
       bounds={bounds}
@@ -47,3 +57,4 @@ export const SelectCell = (props: {
       />
   </div>
 }
+
