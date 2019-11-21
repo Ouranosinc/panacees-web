@@ -3,13 +3,15 @@ import { CellMap } from "./CellMap"
 import 'rc-slider/assets/index.css'
 import Slider from "rc-slider"
 import { NetCostsChart } from "./indicator/netCosts"
+import { cells } from "./config"
 
-/** Page that displays all data, including maps and indicators. Main page of app portion */
-export const DataPage = (props: {}) => {
+/** Page that displays all data about a cell, including maps and indicators. */
+export const CellPage = (props: {
+  cellId: string
+}) => {
   const [year, setYear] = useState(2030)
   const [erosion, setErosion] = useState("med")
   const [submersion, setSubmersion] = useState(0)
-  const [cell, setCell] = useState("deMetissurMer")
 
   const [yearMarks] = useState<{ [value: number]: string }>(() => {
     const marks: { [value: number]: string } = {}
@@ -19,7 +21,14 @@ export const DataPage = (props: {}) => {
     return marks
   })
 
+  // Get cell
+  const cell = cells.find(c => c.id == props.cellId)
+  if (!cell) {
+    return <div className="alert alert-danger">Cellule non trouvée</div>
+  }
+
   return <div>
+    <h2>{cell.name}</h2>
     <div style={{ padding: 10, paddingBottom: 40 }}>
       <div className="text-muted">Année</div>
       <Slider 
@@ -59,13 +68,13 @@ export const DataPage = (props: {}) => {
         { id: "sansadapt", name: "Sans Adaptation" },
         { id: "statuquo", name: "Statu Quo" }
       ]}
-      cell={cell}
+      cell={props.cellId}
       erosion={erosion}
       year={year + ""}
     />
     <CellMap
       adaptation="sansadapt"  
-      cell={cell}
+      cell={props.cellId}
       erosion={erosion}
       submersion={submersion + ""}
       year={year + ""}

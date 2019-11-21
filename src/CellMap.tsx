@@ -92,6 +92,6 @@ export const CellMap = (props: {
     </div>
   }
 
-  return <GeoJsonMap layers={layers} bounds={bounds}/>
+  return <GeoJsonMap layers={layers} bounds={bounds} baseLayer="bing_satellite"/>
 
 }

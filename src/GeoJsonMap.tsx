@@ -12,6 +12,8 @@ export interface GeoLayerSpec {
   styleFunction: StyleFunction
   pointToLayer?: (geoJsonPoint: Feature<Point, any>, latlng: L.LatLng) => L.Layer
   filter?: (feature: Feature) => boolean
+  /** Optionally style each feature */
+  onEachFeature?: (feature: Feature, layer: L.Layer) => void
 }
 
 /** Single layer of map */
@@ -28,8 +30,11 @@ interface GeoLayer {
 
 export const GeoJsonMap = (props: { 
   layers: GeoLayerSpec[] 
+
   /** Initial bounds of map */
   bounds: L.LatLngBoundsExpression
+
+  baseLayer: "bing_satellite" | "positron"
 }) => {
   const [map, setMap] = useState<L.Map>()
   const mapRef = useRef<L.Map>()
@@ -52,15 +57,31 @@ export const GeoJsonMap = (props: {
       // scrollWheelZoom: false
     })
     
-    // L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
-    //   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
-    // }).addTo(map)
-
-    const baseLayer = new BingLayer("Al2zNGh4W-oD93D-Gfz3AQcOz8jNgnrn1mHALMpCzcVS0odDc_d0g68A7lLOSzq6", {type: "AerialWithLabels"})
-    baseLayer.addTo(mapObj)
     mapRef.current = mapObj
     setMap(mapObj)
   }, [])
+
+  useEffect(() => {
+    if (!map) {
+      return
+    }
+
+    let layer: L.TileLayer
+    if (props.baseLayer === "positron") {
+      layer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
+      })
+    }
+    else if (props.baseLayer === "bing_satellite") {
+      layer = new BingLayer("Al2zNGh4W-oD93D-Gfz3AQcOz8jNgnrn1mHALMpCzcVS0odDc_d0g68A7lLOSzq6", {type: "AerialWithLabels"})
+    }
+    else {
+      throw new Error("Unknown layer type")
+    }
+
+    layer.addTo(map)
+    layer.bringToBack()
+  }, [map, props.baseLayer])
 
   // Keep bounds up to date
   useEffect(() => {
@@ -146,6 +167,7 @@ const loadLayer = (options: {
     && existingLayer.spec.url === spec.url
     && existingLayer.spec.pointToLayer === spec.pointToLayer
     && existingLayer.spec.styleFunction === spec.styleFunction
+    && existingLayer.spec.onEachFeature === spec.onEachFeature
     && existingLayer.spec.filter === spec.filter) {
       return existingLayer
   }
@@ -166,7 +188,8 @@ const loadLayer = (options: {
     const mapLayer = L.geoJSON(data, { 
       pointToLayer: spec.pointToLayer,
       style: spec.styleFunction,
-      filter: spec.filter
+      filter: spec.filter,
+      onEachFeature: spec.onEachFeature
     })
 
     geoLayer.data = data

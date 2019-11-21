@@ -3,8 +3,8 @@ import './App.css';
 import { createHashHistory, Location } from 'history';
 import UrlPattern from 'url-pattern'
 import MarkdownPage from './MarkdownPage';
-import Maps from './Maps';
-import { DataPage } from './DataPage';
+import { CellPage } from './CellPage';
+import { SelectCell } from './SelectCell';
 
 const history = createHashHistory()
 
@@ -23,6 +23,7 @@ const App = () => {
   const renderContents = () => {
     // Check for match
     const match = (pattern: string) => new UrlPattern(pattern).match(location.pathname)
+    let result
 
     if (match("/")) {
       return <MarkdownPage path="markdown/acceuil.md"/>
@@ -32,8 +33,13 @@ const App = () => {
       return <MarkdownPage path="markdown/apropos.md"/>
     }
 
-    if (match("/data")) {
-      return <DataPage/>
+    if (match("/panacees")) {
+      return <SelectCell history={history}/>
+    }
+    
+    result = match("/panacees/:id")
+    if (result) {
+      return <CellPage cellId={result.id}/>
     }
 
     return <div>Page non trouvée</div>
@@ -62,7 +68,7 @@ const Navbar = (props: { location: Location }) => {
             <NavLink pattern="/" url="/" location={props.location}>
               Accueil
             </NavLink>
-            <NavLink pattern="/panacees" url="/panacees" location={props.location}>
+            <NavLink pattern="/panacees*" url="/panacees" location={props.location}>
               PANACÉES
             </NavLink>
             <NavLink pattern="/apropos" url="/apropos" location={props.location}>
