@@ -60,7 +60,9 @@ export const CellMap = (props: {
       }
     },
     {
-      url: props.submersion > 0 ? `submersion/${props.cell}/submersion_${props.adaptation}_${props.cell}_0a${props.submersion}m.geojson` : undefined,
+      // TODO doesn't use adaptation as not present
+      url: props.submersion > 0 ? `submersion/${props.cell}/submersion_sansadapt_${props.cell}_0a${props.submersion}m.geojson` : undefined,
+      // url: props.submersion > 0 ? `submersion/${props.cell}/submersion_${props.adaptation}_${props.cell}_0a${props.submersion}m.geojson` : undefined,
       styleFunction: (feature) => {
         return {
           stroke: false,

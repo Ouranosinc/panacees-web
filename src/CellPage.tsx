@@ -58,6 +58,17 @@ export const CellPage = (props: {
     return null
   }
 
+  // Which controls are disabled
+  let disabled: ("year" | "submersion" | "erosion" | "adaptation")[] = []
+  switch (mode) {
+    case "map":
+      disabled = []
+      break
+    case "netcosts":
+      disabled = ["adaptation", "submersion"]
+      break
+  }
+
   return <div>
     <div className="cell-sidebar">
       <div className="cell-sidebar-title">
@@ -74,6 +85,7 @@ export const CellPage = (props: {
         setSubmersion={setSubmersion} 
         adaptation={adaptation}
         setAdaptation={setAdaptation}
+        disabled={disabled}
         />
       <hr/>
       <NavSelector options={[

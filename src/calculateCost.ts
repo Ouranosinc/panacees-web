@@ -1,5 +1,5 @@
 import { default as pointInPolygon } from '@turf/boolean-point-in-polygon'
-import { FeatureCollection, GeoJsonObject } from 'geojson'
+import { FeatureCollection } from 'geojson'
 import { GeoLayerSpec } from './GeoJsonMap'
 import L from 'leaflet'
 import { useState, useEffect } from 'react'
