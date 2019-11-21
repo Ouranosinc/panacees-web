@@ -2,7 +2,7 @@ import { GeoLayerSpec, GeoJsonMap } from "./GeoJsonMap"
 import React, { useState, useEffect, useCallback, ReactNode } from "react"
 import bbox from '@turf/bbox'
 import L from "leaflet"
-import { Feature } from "geojson"
+import { Feature, Point } from "geojson"
 import { useGetErosionDamage } from "./calculateCost"
 
 export const CellMap = (props: {
@@ -67,7 +67,7 @@ export const CellMap = (props: {
         return {
           stroke: false,
           fillColor: "#38F",
-          fillOpacity: 0.5
+          fillOpacity: 0.6
         }
       }
     },
@@ -84,11 +84,20 @@ export const CellMap = (props: {
     {
       url: `statiques/${props.cell}/batiments_${props.cell}.geojson`,
       styleFunction: () => ({}),
-      pointToLayer: (p: any) => { 
+      pointToLayer: (p: Feature<Point>) => { 
         const coords = [p.geometry.coordinates[1], p.geometry.coordinates[0]]
-        return L.marker(coords as any, {
-          icon: L.icon({ iconUrl: "house_red.png", iconAnchor: [14, 41] })
+        const marker = L.marker(coords as any, {
+          icon: L.icon({ iconUrl: "house_red_128.png", iconAnchor: [9, 21], iconSize: [18, 21], popupAnchor: [0, -21] })
         })
+        // TODO escape HTML
+        // TODO format currency
+        marker.bindPopup(`
+          <p>${p.properties!.description}</p>
+          <div>Valeur du bâtiment: ${(p.properties!.valeur_tot || 0)}</div>
+          <div>Valeur du terrain: ${(p.properties!.valeur_ter || 0)}</div>
+          <div>Valeur totale: ${(p.properties!.valeur_tot || 0)}</div>
+          `, { })
+        return marker
         // return L.circleMarker(coords as any, { radius: 1, color: "yellow", opacity: 0.7 })
       },
       filter: buildingFilter

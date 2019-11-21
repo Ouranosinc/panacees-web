@@ -25,11 +25,15 @@ const App = () => {
     let result
 
     if (match("/")) {
-      return <MarkdownPage path="markdown/acceuil.md"/>
+      return <div className="container">
+        <MarkdownPage path="markdown/acceuil.md"/>
+      </div>
     }
 
     if (match("/projet")) {
-      return <MarkdownPage path="markdown/apropos.md"/>
+      return <div className="container">
+        <MarkdownPage path="markdown/apropos.md"/>
+      </div>
     }
 
     if (match("/panacees")) {
