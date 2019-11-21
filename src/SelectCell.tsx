@@ -31,7 +31,7 @@ export const SelectCell = (props: {
       layer.bindTooltip(cell.name)
       // Open tooltip if only one
       if (hover == cell.id) {
-        setTimeout(() => layer.openTooltip(), 0)
+        setTimeout(() => layer.openTooltip(), 100)
       }
       layer.on("click", () => {
         props.history.push(`/panacees/${cell.id}`)
