@@ -25,6 +25,10 @@ export const NetCostsByTypeChart = (props: {
     return null
   }
 
+  // Calculate absolute max so axis doesn't change
+  const groups = _.groupBy(data, d => d.scenario + ":" + d.year + ":" + d.mesure)
+  const max = _.max(_.values(groups).map(group => _.sum(group.map(d => parseFloat(d.value)))))
+
   // Filter data by year + erosion
   // TODO ery
   let filtered = data.filter(d => d.scenario == props.erosion.replace("ery", "") && d.year == props.year)
@@ -61,7 +65,8 @@ export const NetCostsByTypeChart = (props: {
     yAxis: {
       title: {
         text: "Coûts"
-      }
+      },
+      max: max
     },
     series: [] as SeriesBarOptions[]
   }
