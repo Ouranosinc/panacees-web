@@ -17,8 +17,8 @@
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
    sodipodi:docname="house.svg"
    inkscape:export-filename="/home/clayton/dev/ouranos/panacees/public/house_128.png"
-   inkscape:export-xdpi="75.790001"
-   inkscape:export-ydpi="75.790001">
+   inkscape:export-xdpi="123.14"
+   inkscape:export-ydpi="123.14">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -29,8 +29,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="27.521503"
-     inkscape:cy="781.05539"
+     inkscape:cx="299.00015"
+     inkscape:cy="817.07071"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -55,13 +55,6 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <ellipse
-       style="opacity:1;fill:#fffeff;fill-opacity:1;stroke:none;stroke-width:1.08990097;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="path824"
-       cx="75.689728"
-       cy="64.072174"
-       rx="20.788689"
-       ry="21.450148" />
     <path
        id="path893"
        d="m 87.159431,64.449563 v 9.877467 q 0,0.535029 -0.39099,0.926012 -0.39098,0.390983 -0.92601,0.390983 h -7.90197 v -7.901972 h -5.267979 v 7.901972 h -7.90197 q -0.535029,0 -0.926011,-0.390983 -0.390983,-0.390983 -0.390983,-0.926012 v -9.877467 q 0,-0.02057 0.01028,-0.06173 0.01028,-0.04114 0.01028,-0.06173 l 11.832383,-9.753999 11.83237,9.753999 q 0.0206,0.04114 0.0206,0.123465 z m 4.5889,-1.419884 -1.27584,1.522773 q -0.16462,0.185205 -0.43214,0.226361 h -0.0617 q -0.26752,0 -0.43214,-0.144045 l -14.24,-11.873535 -14.240021,11.873535 q -0.246936,0.164623 -0.493872,0.144045 -0.267511,-0.04116 -0.432139,-0.226361 L 58.864642,63.029679 Q 58.700014,62.8239 58.720595,62.546092 58.741165,62.26829 58.94695,62.103668 L 73.74257,49.777413 q 0.6585,-0.535029 1.563941,-0.535029 0.90542,0 1.56392,0.535029 l 5.02105,4.197924 v -4.01272 q 0,-0.288093 0.1852,-0.473297 0.1852,-0.185203 0.47329,-0.185203 h 3.95099 q 0.28809,0 0.4733,0.185203 0.1852,0.185204 0.1852,0.473297 v 8.395842 l 4.50659,3.745209 q 0.20578,0.164622 0.22636,0.442424 0.0206,0.277808 -0.14405,0.483587 z"
