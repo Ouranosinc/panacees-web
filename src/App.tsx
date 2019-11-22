@@ -65,7 +65,9 @@ const Navbar = (props: { location: Location }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div className="container-fluid">
-        <a className="navbar-brand" href="#">Ouranos</a>
+        <a className="navbar-brand" href="#">
+          <img src="ouranos.png" alt="Ouranos" style={{ position: "relative", display: "inline-block", top: -2, height: 27, left: -14, cursor: "pointer" }} />
+        </a>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
             <NavLink pattern="/" url="/" location={props.location}>

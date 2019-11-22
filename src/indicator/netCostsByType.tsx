@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react"
 import { Highchart } from "./Highchart"
 import { Adaptation } from "../params"
 import { csv } from 'd3-fetch'
+import { FillHeight } from '../FillHeight'
 
 export const NetCostsByTypeChart = (props: {
   adaptations: Adaptation[]
@@ -67,5 +68,7 @@ export const NetCostsByTypeChart = (props: {
 
   chartOptions.series = series
 
-  return <Highchart chartOptions={chartOptions} style={{height: 600}}/>
+  return <FillHeight>
+    {(height) => <Highchart chartOptions={chartOptions} style={{height: height, padding: 40}}/>}
+  </FillHeight>
 }

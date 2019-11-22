@@ -20,7 +20,7 @@ export const CellControls = (props: {
 }) => {
   const yearMarks = useMemo<{ [value: number]: string }>(() => {
     const marks: { [value: number]: string } = {}
-    for (let y = 2030 ; y <= 2100 ; y+=10) {
+    for (let y = 2020 ; y <= 2100 ; y+=10) {
       marks[y] = "" + y
     }
     return marks
@@ -32,7 +32,7 @@ export const CellControls = (props: {
       type="slider"
       disabled={props.disabled.includes("year")}>
         <Slider 
-          min={2030} 
+          min={2020} 
           step={10}
           max={2100} 
           value={props.year} 

@@ -72,7 +72,7 @@ export const CellMap = (props: {
       }
     },
     {
-      url: `erosion/${props.cell}/${props.erosion}_erosion_${props.adaptation}_${props.cell}_${props.year}.geojson`,
+      url: props.year > 2020 ? `erosion/${props.cell}/${props.erosion}_erosion_${props.adaptation}_${props.cell}_${props.year}.geojson` : undefined,
       styleFunction: (feature) => {
         return {
           stroke: false,
