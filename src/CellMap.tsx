@@ -105,6 +105,30 @@ export const CellMap = (props: {
   ]
 
   if (mode == "environment") {
+    // Add buildings
+    layers.unshift({
+      url: `statiques/${props.cell}/batiments_${props.cell}.geojson`,
+      styleFunction: () => ({}),
+      pointToLayer: (p: Feature<Point>) => { 
+        const coords = [p.geometry.coordinates[1], p.geometry.coordinates[0]]
+        // const marker = L.marker(coords as any, {
+        //   icon: L.icon({ iconUrl: "house_128.png", iconAnchor: [10, 8], iconSize: [20, 16], popupAnchor: [0, -8] })
+        // })
+        // // TODO escape HTML
+        // // TODO format currency
+        // marker.bindPopup(`
+        //   <p>${p.properties!.description}</p>
+        //   <div>Valeur du bâtiment: ${(p.properties!.valeur_tot || 0)}</div>
+        //   <div>Valeur du terrain: ${(p.properties!.valeur_ter || 0)}</div>
+        //   <div>Valeur totale: ${(p.properties!.valeur_tot || 0)}</div>
+        //   `, { })
+        // return marker
+        const marker = L.circleMarker(coords as any, { radius: 1, color: "#c89c34ff", opacity: 0.8 })
+        marker.bindTooltip(p.properties!.description)
+        return marker
+      }
+    })
+  
     layers.unshift({
       url: `statiques/${props.cell}/environnement_${props.cell}.geojson`,
       styleFunction: (feature) => {

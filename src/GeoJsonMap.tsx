@@ -158,7 +158,7 @@ export const GeoJsonMap = (props: {
     <div style={{position: "relative" }}>
       <div ref={mapNode} style={{height: props.height}} />
       { loading ? 
-        <div style={{ position: "absolute", right: 10, top: 10, backgroundColor: "white", zIndex: 10000, opacity: 0.8, borderRadius: 4, padding: 5 }}>
+        <div style={{ position: "absolute", left: 50, top: 12, backgroundColor: "white", zIndex: 10000, borderRadius: 4, padding: 5 }}>
           <i className="fa fa-spinner fa-spin fa-fw"/>
         </div>
       : null }

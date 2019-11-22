@@ -13,7 +13,7 @@ export const CellPage = (props: {
   history: History
   cellId: string
 }) => {
-  const [year, setYear] = useState(2020)
+  const [year, setYear] = useState(2050)
   const [erosion, setErosion] = useState("med")
   const [submersion, setSubmersion] = useState(0)
   const [adaptation, setAdaptation] = useState("sansadapt")
