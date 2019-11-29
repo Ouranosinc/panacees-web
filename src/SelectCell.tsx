@@ -55,7 +55,7 @@ export const SelectCell = (props: {
       })
     })
 
-    return <div>
+    return <div className="list-municipalities">
       { visibleMunicipalities.map(municipality => {
         return <div key={municipality.name} className="list-municipality">
           <div className="list-municipality-header">{municipality.name}</div>
@@ -83,7 +83,7 @@ export const SelectCell = (props: {
   return <div className="container-fluid">
     <div className="row">
       <div className="col">
-        <div style={{ textAlign: "left", color: "#666", fontSize: 18, padding: 5 }}>Sélectionner une cellule:</div>
+        <div style={{ textAlign: "left", color: "#666", fontSize: 18, padding: 5 }}>Sélectionner une cellule</div>
         <SearchControl 
           value={search} 
           onChange={setSearch} 

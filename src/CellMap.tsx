@@ -1,5 +1,5 @@
 import { GeoLayerSpec, GeoJsonMap } from "./GeoJsonMap"
-import React, { useState, useEffect, useCallback, ReactNode } from "react"
+import React, { useState, useEffect, useCallback, ReactNode, FC, Children } from "react"
 import bbox from '@turf/bbox'
 import L from "leaflet"
 import { Feature, Point } from "geojson"
@@ -25,7 +25,9 @@ export const CellMap = (props: {
   height: number
 }) => {
   const [bounds, setBounds] = useState<L.LatLngBoundsExpression>()
-  const [mode, setMode] = useState<"satellite" | "environment">("satellite")
+  const [satellite, setSatellite] = useState(true)
+  const [environment, setEnvironment] = useState(false)
+  const [damages, setDamages] = useState(true)
 
   // Get damages
   const { erosionDamage, submersionDamage } = useGetDamages(props.cell, props.erosion, props.year, props.adaptation, props.submersion)
@@ -84,9 +86,12 @@ export const CellMap = (props: {
           fillOpacity: 0.5
         }
       }
-    },
+    }
+  ]
+
+  if (damages) {
     // Layer to display red icon for eroded houses
-    {
+    layers.push({
       url: `statiques/${props.cell}/batiments_${props.cell}.geojson`,
       styleFunction: () => ({}),
       pointToLayer: (p: Feature<Point>) => { 
@@ -106,9 +111,10 @@ export const CellMap = (props: {
         // return L.circleMarker(coords as any, { radius: 1, color: "yellow", opacity: 0.7 })
       },
       filter: erosionBuildingFilter
-    },
+    })
+
     // Layer to display blue icon for submerged houses
-    {
+    layers.push({
       url: `statiques/${props.cell}/batiments_${props.cell}.geojson`,
       styleFunction: () => ({}),
       pointToLayer: (p: Feature<Point>) => { 
@@ -127,10 +133,10 @@ export const CellMap = (props: {
         return marker
       },
       filter: submersionBuildingFilter
-    },
-  ]
+    })
+  }
 
-  if (mode == "environment") {
+  if (environment) {
     // Add buildings
     layers.unshift({
       url: `statiques/${props.cell}/batiments_${props.cell}.geojson`,
@@ -160,9 +166,9 @@ export const CellMap = (props: {
       styleFunction: (feature) => {
         return {
           weight: 0.5,
-          color: "green",
+          color: "purple",
           opacity: 0.6,
-          fillColor: "green",
+          fillColor: "purple",
           fillOpacity: 0.2
         }
       },
@@ -190,49 +196,66 @@ export const CellMap = (props: {
   }
 
   return <div style={{ position: "relative" }}>
-    <div style={{ position: "absolute", right: 20, top: 20, zIndex: 1000 }}>
-      <Toggle 
-        options={[
-          { value: "satellite", label: "Satellite" },
-          { value: "environment", label: "Environment" },
-        ]}
-        value={mode}
-        onChange={(value) => { setMode(value) }}
-        />
+    <div style={{ position: "absolute", right: 20, top: 20, zIndex: 1000, backgroundColor: "white", padding: 10, opacity: 0.8, borderRadius: 5 }}>
+      <Checkbox value={satellite} onChange={setSatellite}>Satellite</Checkbox>
+      <Checkbox value={environment} onChange={setEnvironment}>Plan</Checkbox>
+      <Checkbox value={damages} onChange={setDamages}>Dommages</Checkbox>
     </div>
     <div style={{ position: "absolute", textAlign: "center", width: "100%", top: 20, zIndex: 1000, pointerEvents: "none" }}>
       <div style={{ display: "inline-block", backgroundColor: "white", padding: 10, borderRadius: 8, fontSize: 14, opacity: 0.9 }}>
-        { erosionDamage != null ?
-        <div>
-          <span className="text-muted">Coût de l'érosion:</span> { erosionDamage.toLocaleString("fr", { style: "currency", currency: "CAD" }).replace("CA", "").replace(",00", "") }
-        </div>
-        : null }
-        { submersionDamage != null ?
-        <div>
-          <span className="text-muted">Coût de la submersion:</span> { submersionDamage.toLocaleString("fr", { style: "currency", currency: "CAD" }).replace("CA", "").replace(",00", "") }
-        </div>
-        : null }
+        <table>
+          <tbody>
+            <tr>
+              <td style={{textAlign: "left"}}><span className="text-muted">Coût de l'érosion:</span></td>
+              <td style={{textAlign: "right"}}>{ (erosionDamage || 0).toLocaleString("fr", { style: "currency", currency: "CAD" }).replace("CA", "").replace(",00", "") }</td>
+            </tr>
+            <tr>
+              <td style={{textAlign: "left"}}><span className="text-muted">Coût de la submersion:</span></td>
+              <td style={{textAlign: "right", minWidth: 90}}>{ (submersionDamage || 0).toLocaleString("fr", { style: "currency", currency: "CAD" }).replace("CA", "").replace(",00", "") }</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
     <GeoJsonMap 
       layers={layers} 
       bounds={bounds} 
-      baseLayer={ mode == "satellite" ? "bing_satellite" : "positron" }
+      baseLayer={ satellite ? "bing_satellite" : "positron" }
       height={props.height}/>
     </div>
 }
 
-const Toggle = (props: {
-  options: { value: any, label: ReactNode }[],
-  value: any,
-  onChange: (value: any) => void
-}) => {
-  return <div className="btn-group">
-    {props.options.map(option => {
-      return <button 
-        type="button" 
-        className={ props.value == option.value ? "btn btn-primary btn-sm" : "btn btn-light btn-sm" }
-        onClick={() => props.onChange(option.value)}>{option.label}</button>
-    })}
+const Checkbox: FC<{ value: boolean, onChange: (value: boolean) => void }> = (props) => {
+  return <div onClick={() => { props.onChange(!props.value) }} style={{ cursor: "pointer" }}>
+    { props.value ?
+      <i className="text-primary fa fa-fw fa-check-square"/>
+    : <i className="text-muted fa fa-fw fa-square"/>
+    }
+    &nbsp;
+    {props.children}
   </div>
 }
+
+// const Toggle = (props: {
+//   options: { value: any, label: ReactNode }[],
+//   value: any,
+//   onChange: (value: any) => void
+// }) => {
+//   return <div className="btn-group">
+//     {props.options.map(option => {
+//       return <button 
+//         type="button" 
+//         className={ props.value == option.value ? "btn btn-primary btn-sm" : "btn btn-light btn-sm" }
+//         onClick={() => props.onChange(option.value)}>{option.label}</button>
+//     })}
+//   </div>
+// }
+
+// <Toggle 
+// options={[
+//   { value: "satellite", label: "Satellite" },
+//   { value: "environment", label: "Environment" },
+// ]}
+// value={mode}
+// onChange={(value) => { setMode(value) }}
+// />
