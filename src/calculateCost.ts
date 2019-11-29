@@ -63,8 +63,8 @@ export const createErosionDamageLayer = async (erosion: string, year: string): P
   return { layer: layer, cost: erosionTotal }
 }
 
-/** Get the erosion damage for a cell */
-export const useGetErosionDamage = (cell: string, erosion: string, year: number, adaptation: string): number | null => {
+/** Get the erosion and submersion damages for a cell */
+export const useGetDamages = (cell: string, erosion: string, year: number, adaptation: string, submersion: number): { erosionDamage: number | null, submersionDamage: number | null } => {
   const [buildings, setBuildings] = useState<FeatureCollection>() 
   
   useEffect(() => {
@@ -74,19 +74,24 @@ export const useGetErosionDamage = (cell: string, erosion: string, year: number,
   }, [cell])
 
   if (!buildings) {
-    return null
+    return { erosionDamage: null, submersionDamage: null }
   }
 
-  let cost = 0
+  let erosionDamage = 0
+  let submersionDamage = 0
 
   for (const feature of buildings.features) {
     // Look up key
     const key = erosion.replace("ery", "") + "_" + adaptation
     const value = feature.properties![key]
     if (value != "NA" && parseInt(value) <= year) {
-      cost += feature.properties!.valeur_tot
+      erosionDamage += feature.properties!.valeur_tot
+    }
+
+    if (feature.properties!.submersion_depth && feature.properties!.submersion_depth <= submersion) {
+      submersionDamage += feature.properties!.valeur_tot
     }
   }
 
-  return cost
+  return { erosionDamage, submersionDamage }
 }

@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, ReactNode } from "react"
 import bbox from '@turf/bbox'
 import L from "leaflet"
 import { Feature, Point } from "geojson"
-import { useGetErosionDamage } from "./calculateCost"
+import { useGetDamages } from "./calculateCost"
 
 export const CellMap = (props: {
   /** ID of cell */
@@ -27,8 +27,8 @@ export const CellMap = (props: {
   const [bounds, setBounds] = useState<L.LatLngBoundsExpression>()
   const [mode, setMode] = useState<"satellite" | "environment">("satellite")
 
-  // Get erosion damage
-  const erosionDamage = useGetErosionDamage(props.cell, props.erosion, props.year, props.adaptation)
+  // Get damages
+  const { erosionDamage, submersionDamage } = useGetDamages(props.cell, props.erosion, props.year, props.adaptation, props.submersion)
 
   // Load initial bounds
   useEffect(() => {
@@ -40,12 +40,16 @@ export const CellMap = (props: {
     // TODO errors?
   }, [props.cell])  
 
-  const buildingFilter = useCallback((feature: Feature) => {
+  const erosionBuildingFilter = useCallback((feature: Feature) => {
     // Look up key
     const key = props.erosion.replace("ery", "") + "_" + props.adaptation
     const value = feature.properties![key]
     return (value != "NA" && parseInt(value) <= props.year)
   }, [props.cell, props.adaptation, props.year, props.erosion])
+
+  const submersionBuildingFilter = useCallback((feature: Feature) => {
+    return feature.properties!.submersion_depth && feature.properties!.submersion_depth <= props.submersion
+  }, [props.cell, props.adaptation, props.submersion])
 
   const layers: GeoLayerSpec[] = [
     {
@@ -81,6 +85,7 @@ export const CellMap = (props: {
         }
       }
     },
+    // Layer to display red icon for eroded houses
     {
       url: `statiques/${props.cell}/batiments_${props.cell}.geojson`,
       styleFunction: () => ({}),
@@ -100,7 +105,28 @@ export const CellMap = (props: {
         return marker
         // return L.circleMarker(coords as any, { radius: 1, color: "yellow", opacity: 0.7 })
       },
-      filter: buildingFilter
+      filter: erosionBuildingFilter
+    },
+    // Layer to display blue icon for submerged houses
+    {
+      url: `statiques/${props.cell}/batiments_${props.cell}.geojson`,
+      styleFunction: () => ({}),
+      pointToLayer: (p: Feature<Point>) => { 
+        const coords = [p.geometry.coordinates[1], p.geometry.coordinates[0]]
+        const marker = L.marker(coords as any, {
+          icon: L.icon({ iconUrl: "house_blue_128.png", iconAnchor: [9, 21], iconSize: [18, 21], popupAnchor: [0, -21] })
+        })
+        // TODO escape HTML
+        // TODO format currency
+        marker.bindPopup(`
+          <p>${p.properties!.description}</p>
+          <div>Valeur du bâtiment: ${(p.properties!.valeur_tot || 0)}</div>
+          <div>Valeur du terrain: ${(p.properties!.valeur_ter || 0)}</div>
+          <div>Valeur totale: ${(p.properties!.valeur_tot || 0)}</div>
+          `, { })
+        return marker
+      },
+      filter: submersionBuildingFilter
     },
   ]
 
@@ -174,13 +200,20 @@ export const CellMap = (props: {
         onChange={(value) => { setMode(value) }}
         />
     </div>
-    { erosionDamage != null ? 
-      <div style={{ position: "absolute", textAlign: "center", width: "100%", top: 20, zIndex: 1000, pointerEvents: "none" }}>
-        <div style={{ display: "inline-block", backgroundColor: "white", padding: 10, borderRadius: 8, fontSize: 14, opacity: 0.9 }}>
+    <div style={{ position: "absolute", textAlign: "center", width: "100%", top: 20, zIndex: 1000, pointerEvents: "none" }}>
+      <div style={{ display: "inline-block", backgroundColor: "white", padding: 10, borderRadius: 8, fontSize: 14, opacity: 0.9 }}>
+        { erosionDamage != null ?
+        <div>
           <span className="text-muted">Coût de l'érosion:</span> { erosionDamage.toLocaleString("fr", { style: "currency", currency: "CAD" }).replace("CA", "").replace(",00", "") }
         </div>
+        : null }
+        { submersionDamage != null ?
+        <div>
+          <span className="text-muted">Coût de la submersion:</span> { submersionDamage.toLocaleString("fr", { style: "currency", currency: "CAD" }).replace("CA", "").replace(",00", "") }
+        </div>
+        : null }
       </div>
-    : null }
+    </div>
     <GeoJsonMap 
       layers={layers} 
       bounds={bounds} 
