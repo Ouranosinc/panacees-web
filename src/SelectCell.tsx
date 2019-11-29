@@ -1,7 +1,7 @@
 import { GeoJsonMap, GeoLayerSpec } from "./GeoJsonMap"
 import React, { useState } from "react"
 import { History } from "history"
-import { bounds, cells } from "./config"
+import { bounds, cells, municipalities } from "./config"
 import { SearchControl } from "./SearchControl"
 import { FillHeight } from "./FillHeight"
 
@@ -14,11 +14,12 @@ export const SelectCell = (props: {
   // Currently hovered cell
   const [hover, setHover] = useState<string>()
 
-  const matchingCells = cells.filter(cell => {
-    return !search || cell.name.toLowerCase().includes(search.toLowerCase())
-  })
+  // Check if matches search string
+  const matches = (str: string) => {
+    return !search || str.toLowerCase().includes(search.toLowerCase())
+  }
 
-  const layers: GeoLayerSpec[] = matchingCells.map(cell => ({
+  const layers: GeoLayerSpec[] = cells.map(cell => ({
     url: `statiques/${cell.id}/cellule_${cell.id}.geojson`,
     styleFunction: (feature) => {
       return {
@@ -45,21 +46,38 @@ export const SelectCell = (props: {
     }
   } as GeoLayerSpec))
 
-  const renderCells = () => {
-    return <FillHeight>
-      {(height) => (
-        <div className="list-group" style={{height: height, overflowY: "auto"}}>
-          { matchingCells.map(cell => {
-            return <a 
-              style={{ cursor: "pointer" }}
-              className="list-group-item list-group-item-action"
-              onMouseEnter={() => { setHover(cell.id) }}
-              onMouseLeave={() => { setHover(undefined) }}
-              onClick={() => { props.history.push(`/panacees/${cell.id}`) }}>{cell.name}</a>
-          })}
+  const renderList = () => {
+    // Municipality is visible if it or any cell matches
+    const visibleMunicipalities = municipalities.filter(municipality => {
+      return matches(municipality.name) || municipality.cells.some(cellId => {
+        const cell = cells.find(c => c.id == cellId)!
+        return matches(cell.name)
+      })
+    })
+
+    return <div>
+      { visibleMunicipalities.map(municipality => {
+        return <div key={municipality.name} className="list-municipality">
+          <div className="list-municipality-header">{municipality.name}</div>
+          <div className="list-cells">
+            { municipality.cells.map(cellId => {
+              const cell = cells.find(c => c.id == cellId)!
+
+              // Only display if cell or municipality matches
+              if (!matches(municipality.name) && !matches(cell.name)) {
+                return null
+              }
+
+              return <div key={cell.id}
+                className="list-cell"
+                onMouseEnter={() => { setHover(cell.id) }}
+                onMouseLeave={() => { setHover(undefined) }}
+                onClick={() => { props.history.push(`/panacees/${cell.id}`) }}>{cell.name}</div>
+            })}
+          </div>
         </div>
-      )}
-    </FillHeight>
+      })}
+    </div>
   }
 
   return <div className="container-fluid">
@@ -72,7 +90,13 @@ export const SelectCell = (props: {
           placeholder="Chercher..."
           ref={node => { if (node) { node.focus() }}}
           />
-        { renderCells() }
+        <FillHeight>
+          {(height) => (
+            <div style={{height: height, overflowY: "auto"}}>
+              {renderList()}
+            </div>
+          )}
+        </FillHeight>
       </div>
       <div className="col-8">
         <FillHeight>

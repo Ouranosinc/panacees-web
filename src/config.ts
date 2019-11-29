@@ -14,3 +14,12 @@ export const cells = [
   { id: "duCassePierre", name: "Cellule du Casse-Pierre" },
   { id: "deMetissurMer", name: "Cellule de Metis-sur-Mer" },
 ] as { id: string, name: string }[]
+
+export const municipalities = [
+  { name: "Grand-Métis", cells: ["delabaieMitis"] },
+  { name: "Métis-sur-Mer", cells: ["duCassePierre", "deMetissurMer", "delabaieMitis"] },
+  { name: "Notre-Dame-du-Portage", cells: ["deSaintPatrice", "deRivieredesCaps"] },
+  { name: "Rivière-du-Loup", cells: ["deSaintPatrice", "delAnseauPersil"] },
+  { name: "Sainte-Flavie", cells: ["deSainteFlavie", "delAnseauxCoques", "delabaieMitis"] },
+  { name: "Sainte-Luce", cells: ["delAnseauxCoques", "delAnseauLard"] },
+]

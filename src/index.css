@@ -53,6 +53,32 @@
   font-size: 14pt;
 }
 
+.list-municipality-header {
+  font-size: 16px;
+  background-color: #EEE;
+  padding: 5px;
+  padding-left: 10px;
+  border-bottom: solid 1px #DDD;
+}
+
+.list-municipality {
+  margin-bottom: 10px;
+  border: solid 1px #DDD;
+}
+
+.list-cell {
+  font-size: 14px;
+  color: #333;
+  padding: 5px;
+  border: solid 1px #EEE;
+  padding-left: 10px;  
+  cursor: pointer;
+}
+
+.list-cell:hover {
+  background-color: #f8f8f8;
+}
+
 /* Remove glow around buttons TODO Doesn't work
 .btn-noglow:focus,.btn-noglow:active:focus,.btn-noglow.active:focus,
 .btn-noglow.focus,.btn-noglow:active.focus,.btn-noglow.active.focus {
