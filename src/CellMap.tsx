@@ -167,7 +167,7 @@ export const CellMap = (props: {
         return {
           weight: 0.5,
           color: "purple",
-          opacity: 0.6,
+          opacity: 0.7,
           fillColor: "purple",
           fillOpacity: 0.2
         }
