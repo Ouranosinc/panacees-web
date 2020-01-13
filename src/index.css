@@ -1,3 +1,11 @@
+/* Remove annoying Bootstrap 4 button outlines */
+.btn:focus, .btn:active:focus, .btn.active:focus { 
+  outline: none !important; 
+  outline-style: none !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
 .cell-sidebar {
   position: fixed;
   height: 100%;
@@ -21,6 +29,7 @@
   border-radius: 4px;
   background-color: white;
   margin-bottom: 10px;
+  padding-bottom: 5px;
 }
 
 .cell-control.disabled {
@@ -32,6 +41,10 @@
   padding-left: 10px;
   padding-top: 10px;
   display: inline-block;
+}
+
+.cell-control-content {
+  padding: 5px;
 }
 
 .cell-control-content-inline {
@@ -82,9 +95,3 @@
 .list-cell:hover {
   background-color: #f8f8f8;
 }
-
-/* Remove glow around buttons TODO Doesn't work
-.btn-noglow:focus,.btn-noglow:active:focus,.btn-noglow.active:focus,
-.btn-noglow.focus,.btn-noglow:active.focus,.btn-noglow.active.focus {
-   outline: none;
-} */

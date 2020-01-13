@@ -7,12 +7,24 @@ import { CellControls } from "./CellControls"
 import { History } from "history"
 import { FillHeight } from "./FillHeight"
 import { NetCostsByYearChart } from "./indicator/netCostsByYear"
+import { CellDisplayParams } from "./CellDisplayParams"
 
 /** Page that displays all data about a cell, including maps and indicators. */
 export const CellPage = (props: {
   history: History
   cellId: string
 }) => {
+  const [params, setParams] = useState<CellDisplayParams>({
+    year: 2050,
+    adaptation: "sansadapt",
+    erosion: "med",
+    submersionMode: "frequency",
+    submersionEventLevel: 0,
+    submersion2YLevel: 3,
+    submersion20YLevel: 4,
+    submersion100YLevel: 5
+  })
+
   const [year, setYear] = useState(2050)
   const [erosion, setErosion] = useState("med")
   const [submersion, setSubmersion] = useState(0)
@@ -95,14 +107,11 @@ export const CellPage = (props: {
         </a> {cell.name}
       </div>
       <CellControls 
-        year={year}
-        setYear={setYear}
-        erosion={erosion}
-        setErosion={setErosion}
-        submersion={submersion}
-        setSubmersion={setSubmersion} 
-        adaptation={adaptation}
-        setAdaptation={setAdaptation}
+        params={params}
+        onChange={setParams}
+        submersion2YLevels={[2, 3, 4]}
+        submersion20YLevels={[3, 4, 5]}
+        submersion100YLevels={[4, 5, 6, 7]}
         disabled={disabled}
         />
       <hr/>
