@@ -102,6 +102,11 @@ export const CellPage = (props: {
           <i className="fa fa-fw fa-arrow-left"/>
         </a> {cell.name}
       </div>
+      <NavSelector2 options={[
+        { value: "map", label: [<i className="fa fa-map fa-fw faded-icon"/>," Carte"]},
+        { value: "netCostsByType", label: [<i className="fa fa-bar-chart fa-fw faded-icon"/>," Coûts Nets Actualisés par Type"]},
+        { value: "netCostsByYear", label: [<i className="fa fa-line-chart fa-fw faded-icon"/>," Coûts Nets Actualisés par Année"]} 
+      ]} value={mode} onChange={setMode}/>
       <CellControls 
         params={params}
         onChange={setParams}
@@ -110,12 +115,6 @@ export const CellPage = (props: {
         submersion100YLevels={[4, 5, 6, 7]}
         disabled={disabled}
         />
-      <hr/>
-      <NavSelector options={[
-        { id: "map", name: [<i className="fa fa-map fa-fw"/>," Carte"]},
-        { id: "netCostsByType", name: [<i className="fa fa-bar-chart fa-fw"/>," Coûts Nets Actualisés par Type"]},
-        { id: "netCostsByYear", name: [<i className="fa fa-line-chart fa-fw"/>," Coûts Nets Actualisés par Année"]} 
-      ]} value={mode} onChange={setMode}/>
     </div>
     <div className="cell-contents">
       { renderContents() }
@@ -125,42 +124,36 @@ export const CellPage = (props: {
 
 
 const NavSelector = (props: { 
-  options: { id: string, name: ReactNode }[],
+  options: { value: string, label: ReactNode }[],
   value: string,
   onChange: (value: string) => void
 }) => {
   return <div className="nav flex-column nav-pills">
     { props.options.map(option => {
       return <a 
-        className={option.id == props.value ? "nav-link active" : "nav-link"}
-        onClick={() => props.onChange(option.id)}
-        style={{ cursor: "pointer" }}>{option.name}</a>
+        className={option.value == props.value ? "nav-link active" : "nav-link"}
+        onClick={() => props.onChange(option.value)}
+        style={{ cursor: "pointer" }}>{option.label}</a>
     })}
   </div>      
 }
 
-/* <div className="cell-contents">
-<div className="cell-section">Carte</div>
-<FillHeight>
-  {(height) => (
-    <CellMap
-      adaptation="sansadapt"  
-      cell={props.cellId}
-      erosion={erosion}
-      submersion={submersion}
-      year={year}
-      height={height - 100}
-      />
-  )}
-</FillHeight>
-<div className="cell-section">Coûts Nets Actualisés</div>
-<NetCostsChart
-  adaptations={[
-    { id: "sansadapt", name: "Sans Adaptation" },
-    { id: "statuquo", name: "Statu Quo" }
-  ]}
-  cell={props.cellId}
-  erosion={erosion}
-  year={year + ""}
-/>
-</div> */
+const NavSelector2 = (props: { 
+  options: { value: string, label: ReactNode }[],
+  value: string,
+  onChange: (value: string) => void
+}) => {
+  // Find active option
+  const active = props.options.find(o => o.value == props.value)!
+
+  return <div className="dropdown" style={{ marginTop: 5, marginBottom: 10 }}>
+    <button className="btn btn-primary btn-block dropdown-toggle" type="button" data-toggle="dropdown" style={{ textAlign: "left" }}>
+      { active.label }
+    </button>
+    <div className="dropdown-menu">
+      { props.options.map(option => (
+        <a className="dropdown-item" onClick={() => props.onChange(option.value)}>{option.label}</a>
+      ))}
+    </div>
+  </div>
+}

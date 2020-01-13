@@ -9,4 +9,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 // Use font awesome
 import 'font-awesome/css/font-awesome.min.css'
 
+// https://github.com/parcel-bundler/parcel/issues/2724
+import("jquery").then(async (jquery) => {
+  (window as any).$ = jquery.default;
+  (window as any).jQuery = jquery.default;
+  await import('bootstrap');
+})
+
 ReactDOM.render(<App />, document.getElementById('root'));

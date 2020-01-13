@@ -6,6 +6,10 @@
   box-shadow: none !important;
 }
 
+.faded-icon {
+  opacity: 0.5;
+}
+
 .cell-sidebar {
   position: fixed;
   height: 100%;
