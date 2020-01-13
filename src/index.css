@@ -47,16 +47,11 @@
   padding: 5px;
 }
 
-.cell-control-content-inline {
-  padding: 5px;
+.submersion-freq-title {
   display: inline-block;
-}
-
-.cell-control-content-slider {
-  padding-top: 5px;
-  padding-bottom: 25px;
-  padding-left: 20px;
-  padding-right: 20px;
+  width: 80px;
+  color: #666;
+  padding-right: 5px;
 }
 
 .cell-section {

@@ -107,7 +107,7 @@ export const CellControls = (props: {
         : 
           <div style={{ paddingLeft: 20, paddingTop: 10 }}>
             <div style={{ paddingBottom: 5 }}>
-              <span className="text-muted">2 ans:</span> &nbsp;
+              <div className="submersion-freq-title">2 ans:</div>
               <Toggle 
                 options={props.submersion2YLevels.map(l => ({ value: l, label: `${l}m` }))}
                 value={params.submersion2YLevel} 
@@ -115,7 +115,7 @@ export const CellControls = (props: {
               />
             </div>
             <div style={{ paddingBottom: 5 }}>
-              <span className="text-muted">20 ans:</span> &nbsp;
+              <div className="submersion-freq-title">20 ans:</div>
               <Toggle 
                 options={props.submersion20YLevels.map(l => ({ value: l, label: `${l}m` }))}
                 value={params.submersion20YLevel} 
@@ -123,7 +123,7 @@ export const CellControls = (props: {
               />
             </div>
             <div style={{ paddingBottom: 5 }}>
-              <span className="text-muted">100 ans:</span> &nbsp;
+              <div className="submersion-freq-title">100 ans:</div>
               <Toggle 
                 options={props.submersion100YLevels.map(l => ({ value: l, label: `${l}m` }))}
                 value={params.submersion100YLevel} 
