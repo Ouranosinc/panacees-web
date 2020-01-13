@@ -24,13 +24,9 @@ export const CellPage = (props: {
     submersion20YLevel: 4,
     submersion100YLevel: 5
   })
-
-  const [year, setYear] = useState(2050)
-  const [erosion, setErosion] = useState("med")
-  const [submersion, setSubmersion] = useState(0)
-  const [adaptation, setAdaptation] = useState("sansadapt")
-
   const [mode, setMode] = useState("map")
+
+  const { year, adaptation, erosion, submersionEventLevel } = params
 
   // Get cell
   const cell = cells.find(c => c.id == props.cellId)
@@ -50,7 +46,7 @@ export const CellPage = (props: {
             adaptation={adaptation}
             cell={props.cellId}
             erosion={erosion}
-            submersion={submersion}
+            submersion={submersionEventLevel}
             year={year}
             height={height}
             />

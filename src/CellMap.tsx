@@ -65,28 +65,28 @@ export const CellMap = (props: {
         }
       }
     },
-    {
-      // TODO doesn't use adaptation as not present
-      url: props.submersion > 0 ? `submersion/${props.cell}/submersion_sansadapt_${props.cell}_0a${props.submersion}m.geojson` : undefined,
-      // url: props.submersion > 0 ? `submersion/${props.cell}/submersion_${props.adaptation}_${props.cell}_0a${props.submersion}m.geojson` : undefined,
-      styleFunction: (feature) => {
-        return {
-          stroke: false,
-          fillColor: "#38F",
-          fillOpacity: 0.6
-        }
-      }
-    },
-    {
-      url: props.year > 2020 ? `erosion/${props.cell}/${props.erosion}_erosion_${props.adaptation}_${props.cell}_${props.year}.geojson` : undefined,
-      styleFunction: (feature) => {
-        return {
-          stroke: false,
-          fillColor: "red",
-          fillOpacity: 0.5
-        }
-      }
-    }
+    // {
+    //   // TODO doesn't use adaptation as not present
+    //   url: props.submersion > 0 ? `submersion/${props.cell}/submersion_sansadapt_${props.cell}_0a${props.submersion}m.geojson` : undefined,
+    //   // url: props.submersion > 0 ? `submersion/${props.cell}/submersion_${props.adaptation}_${props.cell}_0a${props.submersion}m.geojson` : undefined,
+    //   styleFunction: (feature) => {
+    //     return {
+    //       stroke: false,
+    //       fillColor: "#38F",
+    //       fillOpacity: 0.6
+    //     }
+    //   }
+    // },
+    // {
+    //   url: props.year > 2020 ? `erosion/${props.cell}/${props.erosion}_erosion_${props.adaptation}_${props.cell}_${props.year}.geojson` : undefined,
+    //   styleFunction: (feature) => {
+    //     return {
+    //       stroke: false,
+    //       fillColor: "red",
+    //       fillOpacity: 0.5
+    //     }
+    //   }
+    // }
   ]
 
   if (damages) {
