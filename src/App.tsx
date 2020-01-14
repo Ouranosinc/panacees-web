@@ -32,15 +32,39 @@ const App = () => {
 
     if (match("/projet")) {
       return <div className="container">
-        <MarkdownPage path="markdown/apropos.md"/>
+        <MarkdownPage path="markdown/projet.md"/>
       </div>
     }
 
     if (match("/panacees")) {
+      return <div className="container">
+        <MarkdownPage path="markdown/panacees.md"/>
+      </div>
+    }
+
+    if (match("/adaptation")) {
+      return <div className="container">
+        <MarkdownPage path="markdown/adaptation.md"/>
+      </div>
+    }
+
+    if (match("/liens")) {
+      return <div className="container">
+        <MarkdownPage path="markdown/liens.md"/>
+      </div>
+    }
+
+    if (match("/faq")) {
+      return <div className="container">
+        <MarkdownPage path="markdown/faq.md"/>
+      </div>
+    }
+
+    if (match("/outil")) {
       return <SelectCell history={history}/>
     }
     
-    result = match("/panacees/:id")
+    result = match("/outil/:id")
     if (result) {
       return <CellPage history={history} cellId={result.id}/>
     }
@@ -73,11 +97,11 @@ const Navbar = (props: { location: Location }) => {
             <NavLink pattern="/" url="/" location={props.location}>
               Accueil
             </NavLink>
+            <NavLink pattern="/projet" url="/projet" location={props.location}>
+              Le projet
+            </NavLink>
             <NavLink pattern="/panacees*" url="/panacees" location={props.location}>
               PANACÉES
-            </NavLink>
-            <NavLink pattern="/apropos" url="/apropos" location={props.location}>
-              À propos
             </NavLink>
             <NavLink pattern="/adaptation" url="/adaptation" location={props.location}>
               Vers l'adaptation

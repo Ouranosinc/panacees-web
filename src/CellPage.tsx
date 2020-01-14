@@ -35,7 +35,7 @@ export const CellPage = (props: {
   }
 
   const handleBack = () => {
-    props.history.push("/panacees")
+    props.history.push("/outil")
   }
 
   const renderContents = () => {

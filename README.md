@@ -33,5 +33,5 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 
 ```
-rsync --info=progress2 -r build/* root@165.227.42.230:/var/www/html/
+npm run build && rsync --info=progress2 -r build/* root@165.227.42.230:/var/www/html/
 ```

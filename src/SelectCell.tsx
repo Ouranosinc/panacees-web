@@ -35,7 +35,7 @@ export const SelectCell = (props: {
         setTimeout(() => layer.openTooltip(), 100)
       }
       layer.on("click", () => {
-        props.history.push(`/panacees/${cell.id}`)
+        props.history.push(`/outil/${cell.id}`)
       })
       layer.on("mouseover", () => {
         setHover(cell.id)
@@ -72,7 +72,7 @@ export const SelectCell = (props: {
                 className="list-cell"
                 onMouseEnter={() => { setHover(cell.id) }}
                 onMouseLeave={() => { setHover(undefined) }}
-                onClick={() => { props.history.push(`/panacees/${cell.id}`) }}>{cell.name}</div>
+                onClick={() => { props.history.push(`/outil/${cell.id}`) }}>{cell.name}</div>
             })}
           </div>
         </div>

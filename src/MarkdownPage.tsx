@@ -18,7 +18,7 @@ const MarkdownPage = (props: { path: string }) => {
 
   return <div 
     style={{ textAlign: "center", paddingTop: 20 }}
-    dangerouslySetInnerHTML={{ __html: new Markdown().render(md) }}
+    dangerouslySetInnerHTML={{ __html: new Markdown({ html: true }).render(md) }}
     />
 }
 
