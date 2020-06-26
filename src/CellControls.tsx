@@ -1,18 +1,13 @@
 import { useMemo, FC, ReactNode } from "react"
 import React from "react"
 import Slider from "rc-slider"
-import { CellDisplayParams } from "./CellDisplayParams"
+import { DisplayParams } from "./DisplayParams"
 import produce from 'immer'
 
 /** Controls displayed on left panel for a specific cell */
 export const CellControls = (props: {
-  params: CellDisplayParams
-  onChange: (params: CellDisplayParams) => void
-
-  /** Possible levels for each submersion frequency */
-  submersion2YLevels: number[]
-  submersion20YLevels: number[]
-  submersion100YLevels: number[]
+  params: DisplayParams
+  onChange: (params: DisplayParams) => void
 
   /** Which controls to disable */
   disabled: ("year" | "submersion" | "erosion" | "adaptation")[]
@@ -20,7 +15,7 @@ export const CellControls = (props: {
   const params = props.params
 
   /** Set a value on a param by mutating p */
-  const setParam = (action: (p: CellDisplayParams) => void) => {
+  const setParam = (action: (p: DisplayParams) => void) => {
     props.onChange(produce(params, draft => { action(draft) }))
   }
 
@@ -31,6 +26,12 @@ export const CellControls = (props: {
     }
     return marks
   }, [])
+
+  const submersionOptions = [
+    { value: "min", label: "Min" },
+    { value: "moy", label: "Moy" },
+    { value: "max", label: "Max" }
+  ]
 
   return <div>
     <CellControl 
@@ -84,53 +85,32 @@ export const CellControls = (props: {
     <CellControl 
       title="Submersion:"
       disabled={props.disabled.includes("submersion")}>
-        <div style={{ display: "inline-block", paddingLeft: 5 }}>
-          <Toggle 
-            options={[
-              { label: "Fréquence", value: "frequency" },
-              { label: "Événement", value: "event" }
-            ]}
-            value={params.submersionMode}
-            onChange={mode => setParam(p => p.submersionMode = mode)}
-          />
-        </div>
-        { params.submersionMode == "event" ?
-          <div style={{ paddingBottom: 25, paddingLeft: 20, paddingRight: 20, paddingTop: 10 }}>
-            <Slider 
-              min={0} 
-              max={10} 
-              value={params.submersionEventLevel} 
-              onChange={level => setParam(p => p.submersionEventLevel = level)}  
-              marks={{ 0: "0m", 1: "1m", 2: "2m", 3: "3m", 4: "4m", 5: "5m", 6: "6m", 7: "7m", 8: "8m", 9: "9m", 10: "10m" }}
-              />
-          </div>
-        : 
           <div style={{ paddingLeft: 20, paddingTop: 10 }}>
             <div style={{ paddingBottom: 5 }}>
               <div className="submersion-freq-title">2 ans:</div>
               <Toggle 
-                options={props.submersion2YLevels.map(l => ({ value: l, label: `${l}m` }))}
-                value={params.submersion2YLevel} 
-                onChange={level => setParam(p => p.submersion2YLevel = level)}
+                options={submersionOptions}
+                value={params.submersion2Y} 
+                onChange={level => setParam(p => p.submersion2Y = level)}
               />
             </div>
             <div style={{ paddingBottom: 5 }}>
               <div className="submersion-freq-title">20 ans:</div>
               <Toggle 
-                options={props.submersion20YLevels.map(l => ({ value: l, label: `${l}m` }))}
-                value={params.submersion20YLevel} 
-                onChange={level => setParam(p => p.submersion20YLevel = level)}
+                options={submersionOptions}
+                value={params.submersion20Y} 
+                onChange={level => setParam(p => p.submersion20Y = level)}
               />
             </div>
             <div style={{ paddingBottom: 5 }}>
               <div className="submersion-freq-title">100 ans:</div>
               <Toggle 
-                options={props.submersion100YLevels.map(l => ({ value: l, label: `${l}m` }))}
-                value={params.submersion100YLevel} 
-                onChange={level => setParam(p => p.submersion100YLevel = level)}
+                options={submersionOptions}
+                value={params.submersion100Y} 
+                onChange={level => setParam(p => p.submersion100Y = level)}
               />
             </div>
-          </div> }
+          </div>
     </CellControl>
   </div>
 }
