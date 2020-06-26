@@ -4,7 +4,7 @@ import React from "react";
 
 /** Simple markdown page */
 const MarkdownPage = (props: { path: string }) => {
-  const [md, setMd] = useState()
+  const [md, setMd] = useState<string>()
   
   useEffect(() => {
     fetch(props.path).then((response) => response.text()).then((md) => {

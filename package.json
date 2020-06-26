@@ -24,7 +24,7 @@
     "rc-slider": "^8.7.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-scripts": "3.1.1",
+    "react-scripts": "3.4.1",
     "typescript": "3.6.3",
     "url-pattern": "^1.0.3"
   },
@@ -54,7 +54,9 @@
     "@types/history": "^4.7.3",
     "@types/leaflet": "^1.5.5",
     "@types/markdown-it": "0.0.8",
+    "@types/ol": "^6.3.1",
     "@types/rc-slider": "^8.6.5",
+    "csv-parse": "^4.10.1",
     "ora": "^4.0.2"
   }
 }
