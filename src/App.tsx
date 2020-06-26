@@ -4,6 +4,7 @@ import UrlPattern from 'url-pattern'
 import MarkdownPage from './MarkdownPage';
 import { CellPage } from './CellPage';
 import { SelectMRC } from './SelectMRC';
+import { MRCPage } from './MRCPage';
 
 const history = createHashHistory()
 
@@ -64,9 +65,9 @@ const App = () => {
       return <SelectMRC history={history}/>
     }
     
-    result = match("/outil/:id")
+    result = match("/outil/:mrc")
     if (result) {
-      return <CellPage history={history} cellId={result.id}/>
+      return <MRCPage history={history} mrcId={result.mrc}/>
     }
 
     return <div>Page non trouvée</div>

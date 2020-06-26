@@ -2,6 +2,7 @@
 
 mkdir public/data
 mkdir public/data/cells
+mkdir public/data/mrcs
 
 # Copy global files
 cp input_data/mrcs.geojson public/data/
