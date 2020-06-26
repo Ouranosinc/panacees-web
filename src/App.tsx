@@ -3,7 +3,7 @@ import { createHashHistory, Location } from 'history';
 import UrlPattern from 'url-pattern'
 import MarkdownPage from './MarkdownPage';
 import { CellPage } from './CellPage';
-import { SelectCell } from './SelectCell';
+import { SelectMRC } from './SelectMRC';
 
 const history = createHashHistory()
 
@@ -61,7 +61,7 @@ const App = () => {
     }
 
     if (match("/outil")) {
-      return <SelectCell history={history}/>
+      return <SelectMRC history={history}/>
     }
     
     result = match("/outil/:id")

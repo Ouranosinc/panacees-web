@@ -65,24 +65,11 @@
   font-size: 14pt;
 }
 
-.list-municipalities {
+.list-mrcs {
   margin-top: 10px;
 }
 
-.list-municipality-header {
-  font-size: 16px;
-  background-color: #EEE;
-  padding: 5px;
-  padding-left: 10px;
-  border-bottom: solid 1px #DDD;
-}
-
-.list-municipality {
-  margin-bottom: 10px;
-  border: solid 1px #DDD;
-}
-
-.list-cell {
+.list-mrc {
   font-size: 14px;
   color: #333;
   padding: 5px;
@@ -91,6 +78,6 @@
   cursor: pointer;
 }
 
-.list-cell:hover {
+.list-mrc:hover {
   background-color: #f8f8f8;
 }
