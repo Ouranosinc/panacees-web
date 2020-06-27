@@ -3,6 +3,78 @@ const fs = require('fs')
 const path = require('path')
 const CsvParser = require('./CsvParser')
 
+/** Split adaptations_disponibles.csv (which adaptations are available per cell) */
+async function adaptations_disponibles() {
+  const parser = new CsvParser("input_data/adaptations_disponibles.csv")
+
+  let n = 0
+  while (true) {
+    const row = await parser.read()
+    if (!row) {
+      break
+    }
+
+    if ((n % 100000) == 0) {
+      console.log(n)
+    }
+
+    outputDir = `public/data/cells/${row.ID_field}`
+
+    // Create output dir
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir)
+    }
+
+    // Write to file
+    const filepath = path.join(outputDir, `adaptations_disponibles.csv`)
+
+    // Append to file
+    if (!fs.existsSync(filepath)) {
+      fs.writeFileSync(filepath, `measure\n`)  
+    }
+  
+    fs.appendFileSync(filepath, `${row.adaptations}\n`)
+
+    n += 1
+  }
+}
+
+/** Split affichage_adaptations (where adaptations are applicable per ID which is a segment of the coast) */
+async function affichage_adaptations() {
+  const parser = new CsvParser("input_data/affichage_adaptations.csv")
+
+  let n = 0
+  while (true) {
+    const row = await parser.read()
+    if (!row) {
+      break
+    }
+
+    if ((n % 100000) == 0) {
+      console.log(n)
+    }
+
+    outputDir = `public/data/cells/${row.ID_field}`
+    
+    // Create output dir
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir)
+    }
+
+    // Write to file
+    const filepath = path.join(outputDir, `affichage_adaptations.csv`)
+
+    // Append to file
+    if (!fs.existsSync(filepath)) {
+      fs.writeFileSync(filepath, `ID,measure\n`)  
+    }
+  
+    fs.appendFileSync(filepath, `${row.ID},${row.adaptations}\n`)
+
+    n += 1
+  }
+}
+
 async function couts_adaptations() {
   const parser = new CsvParser("input_data/couts_adaptation.csv")
 
@@ -34,7 +106,7 @@ async function couts_adaptations() {
 
     // Append to file
     if (!fs.existsSync(filepath)) {
-      fs.writeFileSync(filepath, `mesures,type,secteur,year,value\n`)  
+      fs.writeFileSync(filepath, `measure,type,sector,year,value\n`)  
     }
 
     fs.appendFileSync(filepath, `${row.mesures},${row.type},${row.secteur},${row.year},${row.value}\n`)
@@ -43,6 +115,7 @@ async function couts_adaptations() {
   }
 }
 
+/** Split damages into submersion and erosion and then by cell + erosion + submersion (if applicable) */
 async function dommages_totaux() {
   const parser = new CsvParser("input_data/dommages_totaux.csv")
 
@@ -81,7 +154,7 @@ async function dommages_totaux() {
 
       // Append to file
       if (!fs.existsSync(filepath)) {
-        fs.writeFileSync(filepath, `secteur,type,year,mesures,value\n`)  
+        fs.writeFileSync(filepath, `sector,type,year,measure,value\n`)  
       }
   
       fs.appendFileSync(filepath, `${row.secteur},${row.type},${row.year},${row.mesures},${row.value}\n`)
@@ -93,7 +166,7 @@ async function dommages_totaux() {
 
       // Append to file
       if (!fs.existsSync(filepath)) {
-        fs.writeFileSync(filepath, `secteur,type,year,mesures,value\n`)  
+        fs.writeFileSync(filepath, `sector,type,year,measure,value\n`)  
       }
 
       fs.appendFileSync(filepath, `${row.secteur},${row.type},${row.year},${row.mesures},${row.value}\n`)
@@ -104,6 +177,7 @@ async function dommages_totaux() {
 }
 
 async function run() {
+  await affichage_adaptations()
   await couts_adaptations()
   await dommages_totaux()
 }

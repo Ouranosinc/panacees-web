@@ -7,8 +7,6 @@ mkdir public/data/mrcs
 # Copy global files
 cp input_data/mrcs.geojson public/data/
 cp input_data/adaptations.csv public/data/
-cp input_data/adaptations_disponibles.csv public/data/
-cp input_data/affichage_adaptations.csv public/data/
 cp input_data/hauteur.csv public/data/
 cp input_data/valorisation.csv public/data/
 

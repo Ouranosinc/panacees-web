@@ -19,9 +19,13 @@ for (const mrc of mrcs) {
     features: geojson.features.filter(f => f.properties.ID_field.split("_")[0] == mrc)
   }
 
-  // Create output directory
-  outputDir = `public/data`
+  outputDir = `public/data/mrcs/${mrc}`
+  
+  // Create output dir
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir)
+  }
 
-  fs.writeFileSync(path.join(outputDir, process.argv[2] + "_" + mrc + ".geojson"), JSON.stringify(mrcgeo, null, 2))
+  fs.writeFileSync(path.join(outputDir, process.argv[2] + ".geojson"), JSON.stringify(mrcgeo, null, 2))
 }
 
