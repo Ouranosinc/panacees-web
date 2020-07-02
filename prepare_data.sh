@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm -r public/data
 mkdir public/data
 mkdir public/data/cells
 mkdir public/data/mrcs
@@ -7,7 +8,6 @@ mkdir public/data/mrcs
 # Copy global files
 cp input_data/mrcs.geojson public/data/
 cp input_data/adaptations.csv public/data/
-cp input_data/hauteur.csv public/data/
 cp input_data/valorisation.csv public/data/
 
 # Split geojson files by mrc
@@ -22,5 +22,5 @@ node scripts/split_geojson_by_cell line_infras
 node scripts/split_geojson_by_cell polygone_agri
 node scripts/split_geojson_by_cell polygone_enviro
 
-# Split csv files by cell and scenario
-node scripts/split_csvs
+# Process csv files to split when necessary
+node scripts/process_csvs
