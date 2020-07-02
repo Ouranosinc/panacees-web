@@ -105,8 +105,9 @@ export const MRCMap = (props: {
 
         // Calculate damage per km
         const damagePerKm = (erosionDamage + submersionDamage) / cellLength
+        // const damagePerKm = (submersionDamage) / cellLength
 
-        console.log(damagePerKm)
+        // console.log(`${damagePerKm} = ${submersionDamage} / ${cellLength}`)
 
         return {
           fill: false,

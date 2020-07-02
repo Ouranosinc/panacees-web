@@ -236,12 +236,13 @@ async function damages_by_cell() {
 async function damages_by_mrc() {
   const parser = new CsvParser("input_data/dommages_totaux.csv")
 
-  let n = 0
+  let n = -1
   while (true) {
     const row = await parser.read()
     if (!row) {
       break
     }
+    n += 1
 
     if ((n % 100000) == 0) {
       console.log(n)
@@ -250,7 +251,11 @@ async function damages_by_mrc() {
     // Skip empty values for speed
     const value = parseFloat(row.value)
     if (value == 0) {
-      n += 1
+      continue
+    }
+
+    // Skip non-status quo as these are not displayed at the MRC level
+    if (row.mesures != "statuquo") {
       continue
     }
 
@@ -292,8 +297,6 @@ async function damages_by_mrc() {
 
       fs.appendFileSync(filepath, csvifyRow([row.ID_field, row.secteur, row.type, row.year, row.mesures, row.value]))
     }
-
-    n += 1
   }
 }
 

@@ -73,11 +73,11 @@ export const CellControls = (props: {
             onChange={ev => setParam(p => p.erosion = ev.target.value as any)} 
             className="form-control form-control-sm" 
             style={{ width: "auto", display: "inline-block"}}>
-            <option value="verylow">Très Bas</option>
+            <option value="vlow">Très Bas</option>
             <option value="low">Bas</option>
             <option value="med">Moyen</option>
             <option value="high">Élevé</option>
-            <option value="veryhigh">Très Élevé</option>
+            <option value="vhigh">Très Élevé</option>
           </select>
         </div>
     </CellControl>

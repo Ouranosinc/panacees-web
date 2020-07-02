@@ -35,11 +35,11 @@ const Maps = () => {
   }
 
   const erosionKeys: { [value: number]: string } = {
-    0: "verylow",
+    0: "vlow",
     1: "low",
     2: "med",
     3: "high",
-    4: "veryhigh"
+    4: "vhigh"
   }
 
   const layers: GeoLayerSpec[] = [
