@@ -6,6 +6,7 @@ import { History } from "history"
 import { DisplayParams } from "./DisplayParams"
 import { GeoJsonMap, GeoLayerSpec } from "./GeoJsonMap"
 import { MRCMap } from './MRCMap'
+import { FillHeight } from './FillHeight'
 
 /** Page that displays all data about an MRC, including maps and indicators. */
 export const MRCPage = (props: {
@@ -30,10 +31,14 @@ export const MRCPage = (props: {
   }
 
   const renderContents = () => {
-    return <MRCMap 
-      mrcId={props.mrcId} 
-      displayParams={params}
-      onCellClick={handleCellClick} />
+    return <FillHeight>
+      {(height) => <MRCMap 
+        mrcId={props.mrcId} 
+        displayParams={params}
+        onCellClick={handleCellClick}
+        height={height}
+        />}
+    </FillHeight>
   }
 
   return <div>

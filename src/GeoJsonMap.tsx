@@ -38,6 +38,9 @@ export const GeoJsonMap = (props: {
   height: number
 
   baseLayer: "bing_satellite" | "positron"
+
+  /** True to display loading */
+  loading?: boolean
 }) => {
   const [map, setMap] = useState<L.Map>()
   const mapRef = useRef<L.Map>()
@@ -157,7 +160,7 @@ export const GeoJsonMap = (props: {
   return (
     <div style={{position: "relative" }}>
       <div ref={mapNode} style={{height: props.height}} />
-      { loading ? 
+      { loading || props.loading ? 
         <div style={{ position: "absolute", left: 50, top: 12, backgroundColor: "white", zIndex: 10000, borderRadius: 4, padding: 5, fontSize: 30 }}>
           <i className="fa fa-spinner fa-spin fa-fw"/>
         </div>

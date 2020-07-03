@@ -4,6 +4,7 @@ import bbox from '@turf/bbox'
 import L from "leaflet"
 import { Feature, Point } from "geojson"
 import { useGetDamages } from "./calculateCost"
+import { DamageSummary } from "./DamageSummary"
 
 export const CellMap = (props: {
   /** ID of cell */
@@ -201,22 +202,7 @@ export const CellMap = (props: {
       <Checkbox value={environment} onChange={setEnvironment}>Plan</Checkbox>
       <Checkbox value={damages} onChange={setDamages}>Dommages</Checkbox>
     </div>
-    <div style={{ position: "absolute", textAlign: "center", width: "100%", top: 20, zIndex: 1000, pointerEvents: "none" }}>
-      <div style={{ display: "inline-block", backgroundColor: "white", padding: 10, borderRadius: 8, fontSize: 14, opacity: 0.9 }}>
-        <table>
-          <tbody>
-            <tr>
-              <td style={{textAlign: "left"}}><span className="text-muted">Coût de l'érosion:</span></td>
-              <td style={{textAlign: "right"}}>{ (erosionDamage || 0).toLocaleString("fr", { style: "currency", currency: "CAD" }).replace("CA", "").replace(",00", "") }</td>
-            </tr>
-            <tr>
-              <td style={{textAlign: "left"}}><span className="text-muted">Coût de la submersion:</span></td>
-              <td style={{textAlign: "right", minWidth: 90}}>{ (submersionDamage || 0).toLocaleString("fr", { style: "currency", currency: "CAD" }).replace("CA", "").replace(",00", "") }</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <DamageSummary erosionDamage={erosionDamage} submersionDamage={submersionDamage} />
     <GeoJsonMap 
       layers={layers} 
       bounds={bounds} 
@@ -235,27 +221,3 @@ const Checkbox: FC<{ value: boolean, onChange: (value: boolean) => void }> = (pr
     {props.children}
   </div>
 }
-
-// const Toggle = (props: {
-//   options: { value: any, label: ReactNode }[],
-//   value: any,
-//   onChange: (value: any) => void
-// }) => {
-//   return <div className="btn-group">
-//     {props.options.map(option => {
-//       return <button 
-//         type="button" 
-//         className={ props.value == option.value ? "btn btn-primary btn-sm" : "btn btn-light btn-sm" }
-//         onClick={() => props.onChange(option.value)}>{option.label}</button>
-//     })}
-//   </div>
-// }
-
-// <Toggle 
-// options={[
-//   { value: "satellite", label: "Satellite" },
-//   { value: "environment", label: "Environment" },
-// ]}
-// value={mode}
-// onChange={(value) => { setMode(value) }}
-// />

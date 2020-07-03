@@ -3,7 +3,7 @@ import { Options as ChartOptions, SeriesBarOptions } from "highcharts"
 import React, { useState, useEffect } from "react"
 import { Highchart } from "./Highchart"
 import { Adaptation } from "../params"
-import { csv } from 'd3-fetch'
+import { csv } from 'd3'
 import { FillHeight } from '../FillHeight'
 
 export const NetCostsByTypeChart = (props: {

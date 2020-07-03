@@ -8,6 +8,8 @@ import length from '@turf/length'
 import { GeoJsonObject, Feature, Point, FeatureCollection } from 'geojson'
 import { useLoadJson, useLoadCsv } from "./utils"
 import { DisplayParams } from './DisplayParams'
+import { scaleLinear, interpolateRdYlBu, scaleSequential, interpolateSpectral } from 'd3'
+import { DamageSummary } from './DamageSummary'
 
 /** Map for an MRC which shows the cells and the coastline highlighted by cost of damages */
 export const MRCMap = (props: {
@@ -19,12 +21,15 @@ export const MRCMap = (props: {
 
   /** Called when a cell is clicked */
   onCellClick: (cellId: string) => void
+
+  /** Height of the map */
+  height: number
 }) => {
   // Load coastline
-  const coastline = useLoadJson<FeatureCollection>(`data/mrcs/${props.mrcId}/trait_de_cote.geojson`)
+  const [coastline, coastlineLoading] = useLoadJson<FeatureCollection>(`data/mrcs/${props.mrcId}/trait_de_cote.geojson`)
 
   // Load cells
-  const cells = useLoadJson<FeatureCollection>(`data/mrcs/${props.mrcId}/sub_cellules.geojson`)
+  const [cells, cellsLoading] = useLoadJson<FeatureCollection>(`data/mrcs/${props.mrcId}/sub_cellules.geojson`)
 
   // Initial map bounds. Set based on cells
   const [bounds, setBounds] = useState<[number,number][]>()
@@ -43,10 +48,10 @@ export const MRCMap = (props: {
 
   // Load damages for parameters
   const params = props.displayParams
-  const rawErosionDamages = useLoadCsv(
+  const [rawErosionDamages, rawErosionDamagesLoading] = useLoadCsv(
     `data/mrcs/${props.mrcId}/dommages_erosion_${params.erosion}.csv`, 
     row => ({ ...row, value: + row.value }))
-  const rawSubmersionDamages = useLoadCsv(
+  const [rawSubmersionDamages, rawSubmersionDamagesLoading] = useLoadCsv(
     `data/mrcs/${props.mrcId}/dommages_submersion_${params.erosion}_2${params.submersion2Y}_20${params.submersion20Y}_100${params.submersion100Y}.csv`, 
     row => ({ ...row, value: + row.value }))
   
@@ -107,12 +112,14 @@ export const MRCMap = (props: {
         const damagePerKm = (erosionDamage + submersionDamage) / cellLength
         // const damagePerKm = (submersionDamage) / cellLength
 
-        // console.log(`${damagePerKm} = ${submersionDamage} / ${cellLength}`)
+        // console.log(`${damagePerKm} = ${erosionDamage} + ${submersionDamage} / ${cellLength}`)
+
+        const color = scaleLinear().domain([0, 2000000, 4000000]).range(["green", "yellow", "red"] as any)
 
         return {
           fill: false,
           weight: 4,
-          color: damagePerKm > 1000000 ? "red" : "#38F"
+          color: color(damagePerKm) as any
         }
       }, 
     } as GeoLayerSpec,
@@ -145,19 +152,21 @@ export const MRCMap = (props: {
 
   ], [cells, coastline, cellErosionDamages, cellSubmersionDamages, cellLengths])
 
-  const renderMap = (height: number) => {
-    if (!bounds || !cellSubmersionDamages || !coastline || !cellLengths || !cells) {
-      return null
-    }
+  if (!bounds || !cellSubmersionDamages || !coastline || !cellLengths || !cells || !rawErosionDamages || !rawSubmersionDamages) {
+    return null
+  }
 
-    return <GeoJsonMap 
+  const erosionDamage = _.sum(rawErosionDamages.filter(row => row.year <= params.year).map(row => row.value))
+  const submersionDamage = _.sum(rawSubmersionDamages.filter(row => row.year <= params.year).map(row => row.value))
+
+  return <div style={{ position: "relative" }}>
+    <DamageSummary erosionDamage={erosionDamage} submersionDamage={submersionDamage} />
+    <GeoJsonMap 
       layers={layers} 
       bounds={bounds} 
       baseLayer={"positron"}
-      height={height}/>
-  }
-
-  return <FillHeight>
-    {(height) => renderMap(height)}
-  </FillHeight>
+      height={props.height}
+      loading={rawErosionDamagesLoading || rawSubmersionDamagesLoading}
+    />
+  </div>
 }
