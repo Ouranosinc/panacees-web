@@ -52,6 +52,9 @@ export const MRCPage = (props: {
         params={params}
         onChange={setParams}
         disabled={["adaptation"]}
+        adaptations={
+          [{ id: "statuquo", nom: "Statu quo", description: "Option de référence qui implique le maintien des conditions actuelles." }]
+        }
         />
     </div>
     <div className="cell-contents">

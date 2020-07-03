@@ -3,14 +3,14 @@ import { useCallback, useRef, useEffect, useState } from 'react'
 import React from 'react'
 import 'leaflet/dist/leaflet.css'
 import BingLayer from './BingLayer'
-import { GeoJsonObject, Feature, Point } from 'geojson'
+import { GeoJsonObject, Feature, Point, MultiPoint } from 'geojson'
 
 /** Specification for a layer to display */
 export interface GeoLayerSpec {
   url?: string
   data?: GeoJsonObject
   styleFunction: StyleFunction
-  pointToLayer?: (geoJsonPoint: Feature<Point, any>, latlng: L.LatLng) => L.Layer
+  pointToLayer?: (geoJsonPoint: Feature<Point | MultiPoint, any>, latlng: L.LatLng) => L.Layer
   filter?: (feature: Feature) => boolean
   /** Optionally style each feature */
   onEachFeature?: (feature: Feature, layer: L.Layer) => void

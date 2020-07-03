@@ -65,9 +65,14 @@ const App = () => {
       return <SelectMRC history={history}/>
     }
     
-    result = match("/outil/:mrc")
+    result = match("/outil/:mrcId")
     if (result) {
-      return <MRCPage history={history} mrcId={result.mrc}/>
+      return <MRCPage history={history} mrcId={result.mrcId}/>
+    }
+
+    result = match("/outil/:mrcId/:cellId")
+    if (result) {
+      return <CellPage history={history} mrcId={result.mrcId} cellId={result.cellId}/>
     }
 
     return <div>Page non trouvée</div>

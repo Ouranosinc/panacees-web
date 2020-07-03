@@ -60,7 +60,7 @@ export const NetCostsByTypeChart = (props: {
       text: "Coûts Nets Actualisés"
     },
     xAxis: {
-      categories: props.adaptations.map(adaptation => adaptation.name)
+      categories: props.adaptations.map(adaptation => adaptation.nom)
     },
     yAxis: {
       title: {

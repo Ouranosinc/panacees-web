@@ -10,6 +10,7 @@ import { useLoadJson, useLoadCsv } from "./utils"
 import { DisplayParams } from './DisplayParams'
 import { scaleLinear, interpolateRdYlBu, scaleSequential, interpolateSpectral } from 'd3'
 import { DamageSummary } from './DamageSummary'
+import LoadingComponent from './LoadingComponent'
 
 /** Map for an MRC which shows the cells and the coastline highlighted by cost of damages */
 export const MRCMap = (props: {
@@ -153,7 +154,7 @@ export const MRCMap = (props: {
   ], [cells, coastline, cellErosionDamages, cellSubmersionDamages, cellLengths])
 
   if (!bounds || !cellSubmersionDamages || !coastline || !cellLengths || !cells || !rawErosionDamages || !rawSubmersionDamages) {
-    return null
+    return <LoadingComponent/>
   }
 
   const erosionDamage = _.sum(rawErosionDamages.filter(row => row.year <= params.year).map(row => row.value))

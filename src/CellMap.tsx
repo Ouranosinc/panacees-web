@@ -1,62 +1,69 @@
+import _ from 'lodash'
 import { GeoLayerSpec, GeoJsonMap } from "./GeoJsonMap"
-import React, { useState, useEffect, useCallback, ReactNode, FC, Children } from "react"
+import React, { useState, useEffect, useCallback, ReactNode, FC, Children, useMemo } from "react"
 import bbox from '@turf/bbox'
 import L from "leaflet"
-import { Feature, Point } from "geojson"
-import { useGetDamages } from "./calculateCost"
+import { GeoJsonObject, Feature, Point, FeatureCollection, MultiPoint } from 'geojson'
 import { DamageSummary } from "./DamageSummary"
+import { DisplayParams } from "./DisplayParams"
+import LoadingComponent from "./LoadingComponent"
+import { Checkbox, useLoadJson, convertFeatureToCoords, useLoadCsv } from "./utils"
 
 export const CellMap = (props: {
   /** ID of cell */
-  cell: string
+  cellId: string
 
-  /** Erosion level "vlow", etc */
-  erosion: string
-
-  /** Adaptation measure ("statuquo", "sansadap") */
-  adaptation: string
-
-  /** Submersion level 0, 1, ... */
-  submersion: number
-
-  /** Year e.g. 2040 */
-  year: number
+  displayParams: DisplayParams
 
   /** Height of the map */
   height: number
 }) => {
-  const [bounds, setBounds] = useState<L.LatLngBoundsExpression>()
+  // Initial map bounds. Set based on cell
+  const [bounds, setBounds] = useState<[number,number][]>()
+
   const [satellite, setSatellite] = useState(true)
   const [environment, setEnvironment] = useState(false)
   const [damages, setDamages] = useState(true)
 
-  // Get damages
-  const { erosionDamage, submersionDamage } = useGetDamages(props.cell, props.erosion, props.year, props.adaptation, props.submersion)
+  // Load cell
+  const [cell, cellLoading] = useLoadJson<FeatureCollection>(`data/cells/${props.cellId}/sub_cellules.geojson`)
 
-  // Load initial bounds
+  // Load heights
+  const [heights, heightsLoading] = useLoadCsv(`data/cells/${props.cellId}/hauteur.csv`,
+    row => ({ ...row, value: +row.value })
+  )
+
+  // Load damages for parameters
+  const params = props.displayParams
+  const [rawErosionDamages, rawErosionDamagesLoading] = useLoadCsv(
+    `data/cells/${props.cellId}/dommages_erosion_${params.erosion}.csv`, 
+    row => ({ ...row, year: +row.year, value: + row.value }))
+  const [rawSubmersionDamages, rawSubmersionDamagesLoading] = useLoadCsv(
+    `data/cells/${props.cellId}/dommages_submersion_${params.erosion}_2${params.submersion2Y}_20${params.submersion20Y}_100${params.submersion100Y}.csv`, 
+    row => ({ ...row, year: +row.year, value: +row.value }))
+
+  // Calculate bounding box
   useEffect(() => {
-    fetch(`/statiques/${props.cell}/cellule_${props.cell}.geojson`).then(r => r.json()).then((geojson: any) => {
+    if (cell) {
       // bbox gives minx, miny, maxx, maxy
-      const [minx, miny, maxx, maxy] = bbox(geojson)
+      const [minx, miny, maxx, maxy] = bbox(cell)
       setBounds([[miny, minx], [maxy, maxx]])
-    })
-    // TODO errors?
-  }, [props.cell])  
+    }
+  }, [cell])
 
-  const erosionBuildingFilter = useCallback((feature: Feature) => {
-    // Look up key
-    const key = props.erosion.replace("ery", "") + "_" + props.adaptation
-    const value = feature.properties![key]
-    return (value != "NA" && parseInt(value) <= props.year)
-  }, [props.cell, props.adaptation, props.year, props.erosion])
-
-  const submersionBuildingFilter = useCallback((feature: Feature) => {
-    return feature.properties!.submersion_depth && feature.properties!.submersion_depth <= props.submersion
-  }, [props.cell, props.adaptation, props.submersion])
+  // Determine height of flooding
+  const floodHeight = useMemo(() => {
+    if (heights) {
+      const row = heights.find(row => row.scenario == params.submersion20Y && row.frequence == "h20ans")
+      return row ? row.value : 0
+    }
+    return 0
+  }, [heights, params.submersion20Y]) 
 
   const layers: GeoLayerSpec[] = [
+    // Cell outline
     {
-      url: `statiques/${props.cell}/cellule_${props.cell}.geojson`,
+      url: `data/cells/${props.cellId}/sub_cellules.geojson`,
       styleFunction: (feature) => {
         return {
           fill: false,
@@ -66,37 +73,46 @@ export const CellMap = (props: {
         }
       }
     },
-    // {
-    //   // TODO doesn't use adaptation as not present
-    //   url: props.submersion > 0 ? `submersion/${props.cell}/submersion_sansadapt_${props.cell}_0a${props.submersion}m.geojson` : undefined,
-    //   // url: props.submersion > 0 ? `submersion/${props.cell}/submersion_${props.adaptation}_${props.cell}_0a${props.submersion}m.geojson` : undefined,
-    //   styleFunction: (feature) => {
-    //     return {
-    //       stroke: false,
-    //       fillColor: "#38F",
-    //       fillOpacity: 0.6
-    //     }
-    //   }
-    // },
-    // {
-    //   url: props.year > 2020 ? `erosion/${props.cell}/${props.erosion}_erosion_${props.adaptation}_${props.cell}_${props.year}.geojson` : undefined,
-    //   styleFunction: (feature) => {
-    //     return {
-    //       stroke: false,
-    //       fillColor: "red",
-    //       fillOpacity: 0.5
-    //     }
-    //   }
-    // }
+    // Coastline
+    {
+      url: `data/cells/${props.cellId}/trait_de_cote.geojson`,
+      styleFunction: (feature) => {
+        return {
+          fill: false,
+          weight: 4,
+          color: "#38F",
+        }
+      }
+    },
   ]
 
-  if (damages) {
-    // Layer to display red icon for eroded houses
-    layers.push({
-      url: `statiques/${props.cell}/batiments_${props.cell}.geojson`,
+  const erosionFilter = useCallback((feature: Feature) => {
+    // Determine rate of erosion
+    let rate = 0
+    if (params.adaptation == "statuquo") {
+      rate = feature.properties!.taux_statu
+    }
+    else if (params.adaptation == "sansadapt") {
+      rate = feature.properties!.taux_sansa
+    }
+    const distance = feature.properties!.distance
+
+    // Get number ofparams.year years 
+    const years = rate > 0 ? (distance / rate) : 500
+    return params.year > (2020 + years)
+  }, [params.year, params.adaptation])
+
+  const submersionFilter = useCallback((feature: Feature) => {
+    return +feature.properties!.hauteur <= floodHeight
+  }, [floodHeight])
+
+  /** Layer to display red icon for eroded houses */
+  const erosionDamagesLayer = useMemo(() => {
+    return {
+      url: `data/cells/${props.cellId}/point_role.geojson`,
       styleFunction: () => ({}),
-      pointToLayer: (p: Feature<Point>) => { 
-        const coords = [p.geometry.coordinates[1], p.geometry.coordinates[0]]
+      pointToLayer: (p: Feature<Point | MultiPoint>) => { 
+        const coords = convertFeatureToCoords(p)
         const marker = L.marker(coords as any, {
           icon: L.icon({ iconUrl: "house_red_128.png", iconAnchor: [9, 21], iconSize: [18, 21], popupAnchor: [0, -21] })
         })
@@ -111,15 +127,17 @@ export const CellMap = (props: {
         return marker
         // return L.circleMarker(coords as any, { radius: 1, color: "yellow", opacity: 0.7 })
       },
-      filter: erosionBuildingFilter
-    })
+      filter: erosionFilter
+    }
+  }, [erosionFilter])
 
-    // Layer to display blue icon for submerged houses
-    layers.push({
-      url: `statiques/${props.cell}/batiments_${props.cell}.geojson`,
+  /** Layer to display blue icon for submerged houses */
+  const submersionDamagesLayer = useMemo(() => {
+    return {
+      url: `data/cells/${props.cellId}/point_role.geojson`,
       styleFunction: () => ({}),
-      pointToLayer: (p: Feature<Point>) => { 
-        const coords = [p.geometry.coordinates[1], p.geometry.coordinates[0]]
+      pointToLayer: (p: Feature<Point | MultiPoint>) => { 
+        const coords = convertFeatureToCoords(p)
         const marker = L.marker(coords as any, {
           icon: L.icon({ iconUrl: "house_blue_128.png", iconAnchor: [9, 21], iconSize: [18, 21], popupAnchor: [0, -21] })
         })
@@ -133,17 +151,22 @@ export const CellMap = (props: {
           `, { })
         return marker
       },
-      filter: submersionBuildingFilter
-    })
+      filter: submersionFilter
+    }
+  }, [submersionFilter])
+
+  if (damages) {
+    layers.push(submersionDamagesLayer)
+    layers.push(erosionDamagesLayer)
   }
 
   if (environment) {
     // Add buildings
     layers.unshift({
-      url: `statiques/${props.cell}/batiments_${props.cell}.geojson`,
+      url: `data/cells/${props.cellId}/point_role.geojson`,
       styleFunction: () => ({}),
-      pointToLayer: (p: Feature<Point>) => { 
-        const coords = [p.geometry.coordinates[1], p.geometry.coordinates[0]]
+      pointToLayer: (p: Feature<Point | MultiPoint>) => { 
+        const coords = convertFeatureToCoords(p)
         // const marker = L.marker(coords as any, {
         //   icon: L.icon({ iconUrl: "house_128.png", iconAnchor: [10, 8], iconSize: [20, 16], popupAnchor: [0, -8] })
         // })
@@ -157,13 +180,13 @@ export const CellMap = (props: {
         //   `, { })
         // return marker
         const marker = L.circleMarker(coords as any, { radius: 1, color: "#c89c34ff", opacity: 0.8 })
-        marker.bindTooltip(p.properties!.description)
+        marker.bindTooltip(p.properties!.desc)
         return marker
       }
     })
   
     layers.unshift({
-      url: `statiques/${props.cell}/environnement_${props.cell}.geojson`,
+      url: `data/cells/${props.cellId}/polygone_enviro.geojson`,
       styleFunction: (feature) => {
         return {
           weight: 0.5,
@@ -174,7 +197,7 @@ export const CellMap = (props: {
         }
       },
       onEachFeature: (feature, layer) => {
-        layer.bindTooltip(feature.properties!.name)
+        layer.bindTooltip(feature.properties!.desc)
       }
     })
   }
@@ -191,10 +214,16 @@ export const CellMap = (props: {
   // }
 
   if (!bounds) {
-    return <div>
-      <i className="fa fa-spinner fa-spin"/>
-    </div>
+    return <LoadingComponent/>
   }
+
+  const erosionDamage = _.sum((rawErosionDamages || [])
+    .filter(row => row.adaptation == params.adaptation && row.year <= params.year)
+    .map(row => row.value))
+
+  const submersionDamage = _.sum((rawSubmersionDamages || [])
+    .filter(row => row.adaptation == params.adaptation && row.year <= params.year)
+    .map(row => row.value))
 
   return <div style={{ position: "relative" }}>
     <div style={{ position: "absolute", right: 20, top: 20, zIndex: 1000, backgroundColor: "white", padding: 10, opacity: 0.8, borderRadius: 5 }}>
@@ -211,13 +240,3 @@ export const CellMap = (props: {
     </div>
 }
 
-const Checkbox: FC<{ value: boolean, onChange: (value: boolean) => void }> = (props) => {
-  return <div onClick={() => { props.onChange(!props.value) }} style={{ cursor: "pointer" }}>
-    { props.value ?
-      <i className="text-primary fa fa-fw fa-check-square"/>
-    : <i className="text-muted fa fa-fw fa-square"/>
-    }
-    &nbsp;
-    {props.children}
-  </div>
-}

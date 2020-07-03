@@ -37,7 +37,7 @@ export const NetCostsByYearChart = (props: {
   // Get series (one for each adaptation)
   let series = props.adaptations.map(adaptation => {
     return ({
-      name: adaptation.name,
+      name: adaptation.nom,
       data: years.map(year => {
         const rows = filtered.filter(d => d.mesure == adaptation.id && d.year == year + "")
         return Math.round(_.sum(rows.map(row => parseFloat(row.value))))

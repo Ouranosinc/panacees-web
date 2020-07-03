@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FC } from "react"
+import { GeoJsonObject, Feature, Point, FeatureCollection, MultiPoint } from 'geojson'
 import { csv } from 'd3'
+import React from "react"
 
 /** React hook to load a JSON file. Returns [result | undefined, loading: boolean] */
 export function useLoadJson<T>(url: string, onLoad?: (data: T) => void, onError?: () => void): [T | undefined, boolean] {
@@ -53,4 +55,23 @@ export function useLoadCsv<T>(url: string, processRow?: (data: any) => T, onErro
   }, [url])
 
   return [data, loadingCount > 0]
+}
+
+/** Checkbox with big box */
+export const Checkbox: FC<{ value: boolean, onChange: (value: boolean) => void }> = (props) => {
+  return <div onClick={() => { props.onChange(!props.value) }} style={{ cursor: "pointer" }}>
+    { props.value ?
+      <i className="text-primary fa fa-fw fa-check-square"/>
+    : <i className="text-muted fa fa-fw fa-square"/>
+    }
+    &nbsp;
+    {props.children}
+  </div>
+}
+
+/** Converts feature coordinates for points */
+export function convertFeatureToCoords(feature: Feature<Point | MultiPoint>): [number, number] {
+  return feature.geometry.type == "MultiPoint" ? 
+    [feature.geometry.coordinates[0][1], feature.geometry.coordinates[0][0]] : 
+    [feature.geometry.coordinates[1], feature.geometry.coordinates[0]]
 }

@@ -15,6 +15,8 @@ node scripts/split_geojson_by_mrc sub_cellules
 node scripts/split_geojson_by_mrc trait_de_cote
 
 # Split geojson files by cell
+node scripts/split_geojson_by_cell sub_cellules
+node scripts/split_geojson_by_cell trait_de_cote
 node scripts/split_geojson_by_cell point_role
 node scripts/split_geojson_by_cell polygone_role
 node scripts/split_geojson_by_cell polygone_infras

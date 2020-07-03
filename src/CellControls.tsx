@@ -3,11 +3,14 @@ import React from "react"
 import Slider from "rc-slider"
 import { DisplayParams } from "./DisplayParams"
 import produce from 'immer'
+import { Adaptation } from "./params"
 
 /** Controls displayed on left panel for a specific cell */
 export const CellControls = (props: {
   params: DisplayParams
   onChange: (params: DisplayParams) => void
+
+  adaptations: Adaptation[]
 
   /** Which controls to disable */
   disabled: ("year" | "submersion" | "erosion" | "adaptation")[]
@@ -58,8 +61,9 @@ export const CellControls = (props: {
             onChange={ev => setParam(p => p.adaptation = ev.target.value)} 
             className="form-control form-control-sm" 
             style={{ width: "auto", display: "inline-block"}}>
-            <option value="sansadapt">Sans Adaptation</option>
-            <option value="statuquo">Statu Quo</option>
+            {
+              props.adaptations.map(adaptation => <option key={adaptation.id} value={adaptation.id}>{adaptation.nom}</option>)
+            }
           </select>
         </div>          
     </CellControl>

@@ -2,5 +2,6 @@
 /** One adaptation measure */
 export interface Adaptation {
   id: string
-  name: string
+  nom: string
+  description: string
 }
