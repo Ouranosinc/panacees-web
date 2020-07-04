@@ -29,6 +29,7 @@ interface GeoLayer {
 }
 
 export const GeoJsonMap = (props: { 
+  /** Layers of the map from back to front */
   layers: GeoLayerSpec[] 
 
   /** Initial bounds of map */
