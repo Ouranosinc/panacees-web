@@ -86,6 +86,9 @@ export const CellMap = (props: {
     },
   ]
 
+  /** Filter to determine if feature is touched by erosion. 
+   * Uses feature properties distance, taux_statu and taux_sansa to calculate
+   */
   const erosionFilter = useCallback((feature: Feature) => {
     // Determine rate of erosion
     let rate = 0
@@ -102,6 +105,9 @@ export const CellMap = (props: {
     return params.year > (2020 + years)
   }, [params.year, params.adaptation])
 
+  /** Filter to determine if feature is touched by erosion. 
+   * Uses feature property hauteur to calculate
+   */
   const submersionFilter = useCallback((feature: Feature) => {
     return +feature.properties!.hauteur <= floodHeight
   }, [floodHeight])
@@ -116,16 +122,7 @@ export const CellMap = (props: {
         const marker = L.marker(coords as any, {
           icon: L.icon({ iconUrl: "house_red_128.png", iconAnchor: [9, 21], iconSize: [18, 21], popupAnchor: [0, -21] })
         })
-        // TODO escape HTML
-        // TODO format currency
-        marker.bindPopup(`
-          <p>${p.properties!.description}</p>
-          <div>Valeur du bâtiment: ${(p.properties!.valeur_tot || 0)}</div>
-          <div>Valeur du terrain: ${(p.properties!.valeur_ter || 0)}</div>
-          <div>Valeur totale: ${(p.properties!.valeur_tot || 0)}</div>
-          `, { })
         return marker
-        // return L.circleMarker(coords as any, { radius: 1, color: "yellow", opacity: 0.7 })
       },
       filter: erosionFilter
     }
@@ -213,7 +210,7 @@ export const CellMap = (props: {
   //   })
   // }
 
-  if (!bounds) {
+  if (!bounds || !heights) {
     return <LoadingComponent/>
   }
 
@@ -236,7 +233,17 @@ export const CellMap = (props: {
       layers={layers} 
       bounds={bounds} 
       baseLayer={ satellite ? "bing_satellite" : "positron" }
+      loading={rawSubmersionDamagesLoading || rawErosionDamagesLoading}
       height={props.height}/>
     </div>
 }
 
+        // // TODO escape HTML
+        // // TODO format currency
+        // marker.bindPopup(`
+        //   <p>${p.properties!.description}</p>
+        //   <div>Valeur du bâtiment: ${(p.properties!.valeur_tot || 0)}</div>
+        //   <div>Valeur du terrain: ${(p.properties!.valeur_ter || 0)}</div>
+        //   <div>Valeur totale: ${(p.properties!.valeur_tot || 0)}</div>
+        //   `, { })
+        // return L.circleMarker(coords as any, { radius: 1, color: "yellow", opacity: 0.7 })
