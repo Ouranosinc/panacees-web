@@ -12,8 +12,6 @@ import { useLoadJson } from "./utils"
 export const SelectMRC = (props: {
   history: History
 }) => {
-  const [geojson, setGeojson] = useState<FeatureCollection>()
-
   // Search text
   const [search, setSearch] = useState("")
 
@@ -33,7 +31,7 @@ export const SelectMRC = (props: {
   }
 
   const layer: GeoLayerSpec = {
-    data: geojson as GeoJsonObject,
+    data: mrcs as GeoJsonObject,
     styleFunction: (feature) => {
       return {
         weight: 1,
