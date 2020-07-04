@@ -109,7 +109,7 @@ export const CellPage = (props: {
       <div className="cell-sidebar-title">
         <a style={{cursor: "pointer", color: "#38F" }} onClick={handleBack}>
           <i className="fa fa-fw fa-arrow-left"/>
-        </a> TODO
+        </a> {props.cellId}
       </div>
       <NavSelector options={[
         { value: "map", label: [<i className="fa fa-map fa-fw faded-icon"/>," Carte"]},

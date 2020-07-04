@@ -4,9 +4,11 @@ import 'rc-slider/assets/index.css'
 import { CellControls } from "./CellControls"
 import { History } from "history"
 import { DisplayParams } from "./DisplayParams"
-import { GeoJsonMap, GeoLayerSpec } from "./GeoJsonMap"
+import { GeoJsonObject, Feature, Point, FeatureCollection } from 'geojson'
 import { MRCMap } from './MRCMap'
 import { FillHeight } from './FillHeight'
+import { useLoadJson } from './utils'
+import LoadingComponent from './LoadingComponent'
 
 /** Page that displays all data about an MRC, including maps and indicators. */
 export const MRCPage = (props: {
@@ -22,12 +24,26 @@ export const MRCPage = (props: {
     submersion100Y: "moy"
   })
 
+  // Load mrcs
+  const [mrcs] = useLoadJson<FeatureCollection>("data/mrcs.geojson")
+
+  const mrc = useMemo(() => {
+    if (mrcs) {
+      return mrcs.features.find(m => m.properties!.id == props.mrcId)
+    }
+    return undefined
+  }, [mrcs, props.mrcId])
+
   const handleBack = () => {
     props.history.push("/outil")
   }
 
   const handleCellClick = (cellId: string) => {
     props.history.push(`/outil/${props.mrcId}/${cellId}`)
+  }
+
+  if (!mrc) {
+    return <LoadingComponent/>
   }
 
   const renderContents = () => {
@@ -46,7 +62,7 @@ export const MRCPage = (props: {
       <div className="cell-sidebar-title">
         <a style={{cursor: "pointer", color: "#38F" }} onClick={handleBack}>
           <i className="fa fa-fw fa-arrow-left"/>
-        </a> {"TODO"}
+        </a> {mrc.properties!.name}
       </div>
       <CellControls 
         params={params}

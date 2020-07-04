@@ -63,13 +63,15 @@ export const CellMap = (props: {
   }, [cell])
 
   // Determine height of flooding
-  const floodHeight = useMemo(() => {
+  const floodHeights = useMemo(() => {
     if (heights) {
-      const row = heights.find(row => row.scenario == params.submersion20Y && row.frequence == "h20ans")
-      return row ? row.value : 0
+      const row2 = heights.find(row => row.scenario == params.submersion2Y && row.frequence == "h2ans")
+      const row20 = heights.find(row => row.scenario == params.submersion20Y && row.frequence == "h20ans")
+      const row100 = heights.find(row => row.scenario == params.submersion100Y && row.frequence == "h100ans")
+      return [row2!.value, row20!.value, row100!.value]
     }
-    return 0
-  }, [heights, params.submersion20Y]) 
+    return [0, 0, 0]
+  }, [heights, params]) 
 
   /** Create feature collection that is all damageable items */
   const damageableFeatures = useMemo<FeatureCollection>(() => {
@@ -118,8 +120,22 @@ export const CellMap = (props: {
    * Uses feature property hauteur to calculate
    */
   const submersionFilter = useCallback((feature: Feature) => {
-    return +feature.properties!.hauteur <= floodHeight
-  }, [floodHeight])
+    // Probability of flooding (rough)
+    let prob = 0
+    const height = +feature.properties!.hauteur
+    const years = params.year - 2020
+    
+    if (height < floodHeights[0]) {
+      prob += (1.0/2) * years
+    }
+    if (height < floodHeights[1]) {
+      prob += (1.0/20) * years
+    }
+    if (height < floodHeights[2]) {
+      prob += (1.0/100) * years
+    }
+    return prob > 0.5
+  }, [floodHeights])
 
   /** Layer to display red icon for eroded houses */
   const erosionDamagesLayer = useMemo(() => {

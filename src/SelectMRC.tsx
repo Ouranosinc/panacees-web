@@ -6,6 +6,7 @@ import { FillHeight } from "./FillHeight"
 import { GeoJsonObject, Feature, Point, FeatureCollection } from 'geojson'
 import { bounds } from "./config"
 import LoadingComponent from "./LoadingComponent"
+import { useLoadJson } from "./utils"
 
 /** Selects a particular mrc */
 export const SelectMRC = (props: {
@@ -24,15 +25,10 @@ export const SelectMRC = (props: {
     return !search || str.toLowerCase().includes(search.toLowerCase())
   }
 
-  // Load geojson
-  useEffect(() => {
-    fetch("data/mrcs.geojson").then(resp => resp.json()).then((geojson: FeatureCollection) => {
-      setGeojson(geojson)
-    })
-    // TODO error handling
-  }, [])
+  // Load mrcs
+  const [mrcs] = useLoadJson<FeatureCollection>("data/mrcs.geojson")
 
-  if (!geojson) {
+  if (!mrcs) {
     return <LoadingComponent/>
   }
 
@@ -68,7 +64,7 @@ export const SelectMRC = (props: {
 
   const renderList = () => {
     // MRC is visible if it or any cell matches
-    const visibleMRCs = geojson.features.filter(mrc => {
+    const visibleMRCs = mrcs.features.filter(mrc => {
       return matches(mrc.properties!.name)
     })
 
