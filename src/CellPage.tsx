@@ -65,28 +65,24 @@ export const CellPage = (props: {
         )}
       </FillHeight>
     }
-    // if (mode == "netCostsByType") {
-    //   return <div>
-    //     <NetCostsByTypeChart
-    //       adaptations={adaptationOptions}
-    //       cell={props.cellId}
-    //       erosion={erosion}
-    //       year={year + ""}
-    //     />
-    //   </div>
-    // }
-    // if (mode == "netCostsByYear") {
-    //   return <div>
-    //     <NetCostsByYearChart
-    //       adaptations={[
-    //         { id: "sansadapt", name: "Sans Adaptation" },
-    //         { id: "statuquo", name: "Statu Quo" }
-    //       ]}
-    //       cell={props.cellId}
-    //       erosion={erosion}
-    //     />
-    //   </div>
-    // }
+    if (mode == "netCostsByType") {
+      return <div>
+        <NetCostsByTypeChart
+          adaptations={adaptationOptions}
+          cellId={props.cellId}
+          displayParams={params}
+        />
+      </div>
+    }
+    if (mode == "netCostsByYear") {
+      return <div>
+        <NetCostsByYearChart
+          adaptations={adaptationOptions}
+          cellId={props.cellId}
+          displayParams={params}
+        />
+      </div>
+    }
     return null
   }
 
@@ -97,10 +93,10 @@ export const CellPage = (props: {
       disabled = []
       break
     case "netCostsByType":
-      disabled = ["adaptation", "submersion"]
+      disabled = ["adaptation"]
       break
     case "netCostsByYear":
-      disabled = ["year", "submersion", "adaptation"]
+      disabled = ["year", "adaptation"]
       break
   }
 

@@ -1,50 +1,59 @@
 import _ from 'lodash'
 import { Options as ChartOptions, SeriesBarOptions } from "highcharts"
-import React, { useState, useEffect } from "react"
+import React from "react"
 import { Highchart } from "./Highchart"
 import { Adaptation } from "../params"
-import { csv } from 'd3'
 import { FillHeight } from '../FillHeight'
+import { DisplayParams } from '../DisplayParams'
+import { useLoadCsv } from '../utils'
+import LoadingComponent from '../LoadingComponent'
 
 export const NetCostsByTypeChart = (props: {
   adaptations: Adaptation[]
-  cell: string
-  year: string
-  erosion: string
+  displayParams: DisplayParams
+  cellId: string
 }) => {
-  const [data, setData] = useState<any[]>()
-
   // Load data
-  useEffect(() => {
-    csv(`/indicateurs/couts_nets_actualises_${props.cell}.csv`).then((d) => {
-      setData(d)
-    })
-  }, [props.cell])
+  const params = props.displayParams
+  const [rawErosionDamages, rawErosionDamagesLoading] = useLoadCsv(
+    `data/cells/${props.cellId}/dommages_erosion_${params.erosion}.csv`, 
+    row => ({ ...row, year: +row.year, value: + row.value }))
+  const [rawSubmersionDamages, rawSubmersionDamagesLoading] = useLoadCsv(
+    `data/cells/${props.cellId}/dommages_submersion_${params.erosion}_2${params.submersion2Y}_20${params.submersion20Y}_100${params.submersion100Y}.csv`, 
+    row => ({ ...row, year: +row.year, value: +row.value }))
+  const [rawAdaptationCosts, rawAdaptationCostsLoading] = useLoadCsv(
+    `data/cells/${props.cellId}/couts_adaptation_${params.erosion}.csv`, 
+    row => ({ ...row, year: +row.year, value: +row.value }))
 
-  if (!data) {
-    return null
+  if (!rawErosionDamages || !rawSubmersionDamages || !rawAdaptationCosts) {
+    return <LoadingComponent/>
   }
 
-  // Calculate absolute max so axis doesn't change
-  const groups = _.groupBy(data, d => d.scenario + ":" + d.year + ":" + d.mesure)
-  const max = _.max(_.values(groups).map(group => _.sum(group.map(d => parseFloat(d.value)))))
+  // Combine data into single list with year, value and adaptation
+  let data: { type: string, adaptation: string, year: number, value: number }[] = []
+  data = data.concat(rawErosionDamages.map(r => ({ type: r.type, adaptation: r.adaptation, year: r.year, value: r.value })))
+  data = data.concat(rawSubmersionDamages.map(r => ({ type: r.type, adaptation: r.adaptation, year: r.year, value: r.value })))
+  data = data.concat(rawAdaptationCosts.map(r => ({ type: r.type, adaptation: r.adaptation, year: r.year, value: r.value })))
+  
+  // // Calculate absolute max so axis doesn't change
+  // const groups = _.groupBy(data, d => d.scenario + ":" + d.year + ":" + d.mesure)
+  // const max = _.max(_.values(groups).map(group => _.sum(group.map(d => parseFloat(d.value)))))
 
-  // Filter data by year + erosion
-  // TODO ery
-  let filtered = data.filter(d => d.scenario == props.erosion.replace("ery", "") && d.year == props.year)
+  // Filter data by year
+  let filtered = data.filter(d => d.year == params.year)
 
-  // Sort by impacts
-  filtered = _.sortBy(filtered, f => f.impacts)
+  // Sort by type
+  filtered = _.sortBy(filtered, f => f.type)
 
-  // Get series (one for each impact)
-  const impacts = _.uniq(data.map(d => d.impacts))
-  let series = impacts.map(impact => {
+  // Get series (one for each type)
+  const types = _.uniq(data.map(d => d.type))
+  let series = types.map(type => {
     return ({
-      name: impact,
+      name: type,
       data: props.adaptations.map(adaptation => {
-        const row = filtered.find(d => d.mesure == adaptation.id && d.impacts == impact)
+        const row = filtered.find(d => d.adaptation == adaptation.id && d.type == type)
         if (row) {
-          return Math.round(parseFloat(row.value))
+          return Math.round(row.value)
         }
         return 0
       }),
@@ -66,7 +75,7 @@ export const NetCostsByTypeChart = (props: {
       title: {
         text: "Coûts"
       },
-      max: max
+      // max: max
     },
     series: [] as SeriesBarOptions[]
   }

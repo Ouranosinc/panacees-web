@@ -1,4 +1,4 @@
-import { useState, useEffect, FC } from "react"
+import { useState, useEffect, FC, useRef } from "react"
 import { GeoJsonObject, Feature, Point, FeatureCollection, MultiPoint } from 'geojson'
 import { csv } from 'd3'
 import React from "react"
@@ -7,23 +7,38 @@ import centroid from '@turf/centroid'
 /** React hook to load a JSON file. Returns [result | undefined, loading: boolean]. Can load multiple times and ensures latest is always returned */
 export function useLoadJson<T>(url: string, onLoad?: (data: T) => void, onError?: () => void): [T | undefined, boolean] {
   const [data, setData] = useState<T>()
-  const [loadingCount, setLoadingCount] = useState(0)
+  const loadingCount = useRef(0)
+
+  // Track current url to prevent stale data
+  const currentUrl = useRef(url)
 
   useEffect(() => {
-    // Increment loading count
-    setLoadingCount(l => l + 1)
+    // Set current URL
+    currentUrl.current = url
 
-    // TODO ordering
+    // Increment loading count
+    loadingCount.current += 1
 
     fetch(url).then(response => response.json()).then(d => {
-      setLoadingCount(l => l - 1)
+      loadingCount.current -= 1
 
+      // Ignore if stale
+      if (url != currentUrl.current) {
+        return
+      }
+      
       setData(d)
       if (onLoad) {
         onLoad(d)
       }
     }).catch((err) => {
-      setLoadingCount(l => l - 1)
+      loadingCount.current -= 1
+
+      // Ignore if stale
+      if (url != currentUrl.current) {
+        return
+      }
+
       console.error(err)
 
       if (onError) {
@@ -32,47 +47,54 @@ export function useLoadJson<T>(url: string, onLoad?: (data: T) => void, onError?
     })
   }, [url])
 
-  return [data, loadingCount > 0]
+  return [data, loadingCount.current > 0]
 }
 
-// /** React hook to load a JSON file once with a default value if not loaded or if error loading */
-// export function useLoadJsonWithDefault<T>(url: string, defaultValue: T): T | undefined{
-//   const [data, setData] = useState<T>(defaultValue)
-
-//   useEffect(() => {
-//     fetch(url).then(response => response.json()).then(d => {
-//       setData(d)
-//     }).catch((err) => {
-//       // Do nothing
-//     })
-//   }, [url])
-
-//   return data
-// }
-
-/** React hook to load a CSV file */
+/** React hook to load a CSV file. If fails to load, returns [] */
 export function useLoadCsv<T>(url: string, processRow?: (data: any) => T, onError?: () => void): [T[] | undefined, boolean] {
   const [data, setData] = useState<T[]>()
-  const [loadingCount, setLoadingCount] = useState(0)
+  const loadingCount = useRef(0)
+
+  // Track current url to prevent stale data
+  const currentUrl = useRef(url)
 
   useEffect(() => {
+    // Set current URL
+    currentUrl.current = url
+
     // Increment loading count
-    setLoadingCount(l => l + 1)
+    loadingCount.current += 1
 
     csv(url, processRow as any).then((rows) => {
-      setLoadingCount(l => l - 1)
+      loadingCount.current -= 1
+
+      // Ignore if stale
+      if (url != currentUrl.current) {
+        return
+      }
+            
+      // Handle strange case of webpack dev server returning HTML instead of 404
+      if (rows[0] && rows[0]["<!DOCTYPE html>"]) {
+        setData([])
+        return
+      }
       setData(rows as any)
     }).catch((err) => {
-      console.error(err)
-      setLoadingCount(l => l - 1)
+      loadingCount.current -= 1
+      setData([])
 
+      // Ignore if stale
+      if (url != currentUrl.current) {
+        return
+      }
+      
       if (onError) {
         onError()
       }
     })
   }, [url])
 
-  return [data, loadingCount > 0]
+  return [data, loadingCount.current > 0]
 }
 
 /** Checkbox with big box */
