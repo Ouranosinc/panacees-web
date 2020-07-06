@@ -115,11 +115,8 @@ export const CellMap = (props: {
     return params.year > (2020 + years)
   }, [params.year, params.adaptation])
 
-  /** 
-   * Filter to determine if feature is touched by erosion. 
-   * Uses feature property hauteur to calculate
-   */
-  const submersionFilter = useCallback((feature: Feature) => {
+  /** Calculate probability of submersion (rough) for the current year */
+  const submersionProbability = useCallback((feature: Feature) => {
     // Probability of flooding (rough)
     let prob = 0
     const height = +feature.properties!.hauteur
@@ -134,8 +131,16 @@ export const CellMap = (props: {
     if (height < floodHeights[2]) {
       prob += (1.0/100) * years
     }
-    return prob > 0.5
+    return Math.min(prob, 1)
   }, [floodHeights])
+
+  /** 
+   * Filter to determine if feature is touched by erosion. 
+   * Uses feature property hauteur to calculate
+   */
+  const submersionFilter = useCallback((feature: Feature) => {
+    return submersionProbability(feature) > 0
+  }, [submersionProbability])
 
   /** Layer to display red icon for eroded houses */
   const erosionDamagesLayer = useMemo(() => {
@@ -163,6 +168,8 @@ export const CellMap = (props: {
         const marker = L.marker(coords as any, {
           icon: L.icon({ iconUrl: "house_blue_128.png", iconAnchor: [9, 21], iconSize: [18, 21], popupAnchor: [0, -21] })
         })
+        // Use opacity to show probability
+        marker.setOpacity(submersionProbability(p))
         return marker
       },
       filter: submersionFilter
@@ -285,72 +292,6 @@ export const CellMap = (props: {
     layers.push(erosionDamagesLayer)
   }
 
-  // // Add buildings
-  // layers.unshift({
-  //   url: `data/cells/${props.cellId}/point_role.geojson`,
-  //   styleFunction: () => ({}),
-  //   pointToLayer: (p: Feature<Point | MultiPoint>) => { 
-  //     const coords = convertFeatureToCoords(p)
-  //     const marker = L.circleMarker(coords as any, { radius: 1, color: "#c89c34ff", opacity: 0.8 })
-  //     marker.bindTooltip(p.properties!.desc)
-  //     return marker
-  //   }
-  // })
-
-
-  // if (showEnvironment && enviroPolygons) {
-  //   // Add buildings
-  //   layers.unshift({
-  //     url: `data/cells/${props.cellId}/point_role.geojson`,
-  //     styleFunction: () => ({}),
-  //     pointToLayer: (p: Feature<Point | MultiPoint>) => { 
-  //       const coords = convertFeatureToCoords(p)
-  //       // const marker = L.marker(coords as any, {
-  //       //   icon: L.icon({ iconUrl: "house_128.png", iconAnchor: [10, 8], iconSize: [20, 16], popupAnchor: [0, -8] })
-  //       // })
-  //       // // TODO escape HTML
-  //       // // TODO format currency
-  //       // marker.bindPopup(`
-  //       //   <p>${p.properties!.description}</p>
-  //       //   <div>Valeur du bâtiment: ${(p.properties!.valeur_tot || 0)}</div>
-  //       //   <div>Valeur du terrain: ${(p.properties!.valeur_ter || 0)}</div>
-  //       //   <div>Valeur totale: ${(p.properties!.valeur_tot || 0)}</div>
-  //       //   `, { })
-  //       // return marker
-  //       const marker = L.circleMarker(coords as any, { radius: 1, color: "#c89c34ff", opacity: 0.8 })
-  //       marker.bindTooltip(p.properties!.desc)
-  //       return marker
-  //     }
-  //   })
-  
-  //   layers.unshift({
-  //     url: `data/cells/${props.cellId}/polygone_enviro.geojson`,
-  //     styleFunction: (feature) => {
-  //       return {
-  //         weight: 0.5,
-  //         color: "purple",
-  //         opacity: 0.7,
-  //         fillColor: "purple",
-  //         fillOpacity: 0.2
-  //       }
-  //     },
-  //     onEachFeature: (feature, layer) => {
-  //       layer.bindTooltip(feature.properties!.desc)
-  //     }
-  //   })
-  // }
-
-  // if (batiments) {
-  //   layers.push({ 
-  //     url: "static/batiments_deMetissurMer-4326.geojson", 
-  //     styleFunction: () => ({}),
-  //     pointToLayer: (p: any) => { 
-  //       const coords = [p.geometry.coordinates[0][1], p.geometry.coordinates[0][0]]
-  //       return L.circleMarker(coords as any, { radius: 1, color: "yellow", opacity: 0.7 })
-  //     }
-  //   })
-  // }
-
   if (!bounds || !heights) {
     return <LoadingComponent/>
   }
@@ -417,3 +358,70 @@ const emptyFeatureCollection: FeatureCollection = {
         //   <div>Valeur du terrain: ${(p.properties!.valeur_ter || 0)}</div>
         //   <div>Valeur totale: ${(p.properties!.valeur_tot || 0)}</div>
         //   `, { })
+
+  // // Add buildings
+  // layers.unshift({
+  //   url: `data/cells/${props.cellId}/point_role.geojson`,
+  //   styleFunction: () => ({}),
+  //   pointToLayer: (p: Feature<Point | MultiPoint>) => { 
+  //     const coords = convertFeatureToCoords(p)
+  //     const marker = L.circleMarker(coords as any, { radius: 1, color: "#c89c34ff", opacity: 0.8 })
+  //     marker.bindTooltip(p.properties!.desc)
+  //     return marker
+  //   }
+  // })
+
+
+  // if (showEnvironment && enviroPolygons) {
+  //   // Add buildings
+  //   layers.unshift({
+  //     url: `data/cells/${props.cellId}/point_role.geojson`,
+  //     styleFunction: () => ({}),
+  //     pointToLayer: (p: Feature<Point | MultiPoint>) => { 
+  //       const coords = convertFeatureToCoords(p)
+  //       // const marker = L.marker(coords as any, {
+  //       //   icon: L.icon({ iconUrl: "house_128.png", iconAnchor: [10, 8], iconSize: [20, 16], popupAnchor: [0, -8] })
+  //       // })
+  //       // // TODO escape HTML
+  //       // // TODO format currency
+  //       // marker.bindPopup(`
+  //       //   <p>${p.properties!.description}</p>
+  //       //   <div>Valeur du bâtiment: ${(p.properties!.valeur_tot || 0)}</div>
+  //       //   <div>Valeur du terrain: ${(p.properties!.valeur_ter || 0)}</div>
+  //       //   <div>Valeur totale: ${(p.properties!.valeur_tot || 0)}</div>
+  //       //   `, { })
+  //       // return marker
+  //       const marker = L.circleMarker(coords as any, { radius: 1, color: "#c89c34ff", opacity: 0.8 })
+  //       marker.bindTooltip(p.properties!.desc)
+  //       return marker
+  //     }
+  //   })
+  
+  //   layers.unshift({
+  //     url: `data/cells/${props.cellId}/polygone_enviro.geojson`,
+  //     styleFunction: (feature) => {
+  //       return {
+  //         weight: 0.5,
+  //         color: "purple",
+  //         opacity: 0.7,
+  //         fillColor: "purple",
+  //         fillOpacity: 0.2
+  //       }
+  //     },
+  //     onEachFeature: (feature, layer) => {
+  //       layer.bindTooltip(feature.properties!.desc)
+  //     }
+  //   })
+  // }
+
+  // if (batiments) {
+  //   layers.push({ 
+  //     url: "static/batiments_deMetissurMer-4326.geojson", 
+  //     styleFunction: () => ({}),
+  //     pointToLayer: (p: any) => { 
+  //       const coords = [p.geometry.coordinates[0][1], p.geometry.coordinates[0][0]]
+  //       return L.circleMarker(coords as any, { radius: 1, color: "yellow", opacity: 0.7 })
+  //     }
+  //   })
+  // }
+

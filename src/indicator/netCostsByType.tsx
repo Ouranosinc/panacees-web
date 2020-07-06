@@ -35,9 +35,9 @@ export const NetCostsByTypeChart = (props: {
   data = data.concat(rawSubmersionDamages.map(r => ({ type: r.type, adaptation: r.adaptation, year: r.year, value: r.value })))
   data = data.concat(rawAdaptationCosts.map(r => ({ type: r.type, adaptation: r.adaptation, year: r.year, value: r.value })))
   
-  // // Calculate absolute max so axis doesn't change
-  // const groups = _.groupBy(data, d => d.scenario + ":" + d.year + ":" + d.mesure)
-  // const max = _.max(_.values(groups).map(group => _.sum(group.map(d => parseFloat(d.value)))))
+  // Calculate absolute max so axis doesn't change
+  const groups = _.groupBy(data, d => d.year + ":" + d.adaptation)
+  const max = _.max(_.values(groups).map(group => _.sum(group.map(d => d.value))))
 
   // Filter data by year
   let filtered = data.filter(d => d.year == params.year)
@@ -75,7 +75,7 @@ export const NetCostsByTypeChart = (props: {
       title: {
         text: "Coûts"
       },
-      // max: max
+      max: max
     },
     series: [] as SeriesBarOptions[]
   }
