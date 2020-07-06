@@ -8,7 +8,7 @@ import { DisplayParams } from '../DisplayParams'
 import { useLoadCsv } from '../utils'
 import LoadingComponent from '../LoadingComponent'
 
-export const NetCostsByTypeChart = (props: {
+export const NetCostsBySectorChart = (props: {
   adaptations: Adaptation[]
   displayParams: DisplayParams
   cellId: string
@@ -30,10 +30,10 @@ export const NetCostsByTypeChart = (props: {
   }
 
   // Combine data into single list with year, value and adaptation
-  let data: { type: string, adaptation: string, year: number, value: number }[] = []
-  data = data.concat(rawErosionDamages.map(r => ({ type: r.type, adaptation: r.adaptation, year: r.year, value: r.value })))
-  data = data.concat(rawSubmersionDamages.map(r => ({ type: r.type, adaptation: r.adaptation, year: r.year, value: r.value })))
-  data = data.concat(rawAdaptationCosts.map(r => ({ type: r.type, adaptation: r.adaptation, year: r.year, value: r.value })))
+  let data: { secteur: string, adaptation: string, year: number, value: number }[] = []
+  data = data.concat(rawErosionDamages.map(r => ({ secteur: r.secteur, adaptation: r.adaptation, year: r.year, value: r.value })))
+  data = data.concat(rawSubmersionDamages.map(r => ({ secteur: r.secteur, adaptation: r.adaptation, year: r.year, value: r.value })))
+  data = data.concat(rawAdaptationCosts.map(r => ({ secteur: r.secteur, adaptation: r.adaptation, year: r.year, value: r.value })))
   
   // // Calculate absolute max so axis doesn't change
   // const groups = _.groupBy(data, d => d.year + ":" + d.adaptation)
@@ -42,16 +42,16 @@ export const NetCostsByTypeChart = (props: {
   // Filter data by year
   let filtered = data.filter(d => d.year == params.year)
 
-  // Sort by type
-  filtered = _.sortBy(filtered, f => f.type)
+  // Sort by secteur
+  filtered = _.sortBy(filtered, f => f.secteur)
 
-  // Get series (one for each type)
-  const types = _.uniq(data.map(d => d.type))
-  let series = types.map(type => {
+  // Get series (one for each secteur)
+  const secteurs = _.uniq(data.map(d => d.secteur))
+  let series = secteurs.map(secteur => {
     return ({
-      name: type,
+      name: secteur,
       data: props.adaptations.map(adaptation => {
-        const row = filtered.find(d => d.adaptation == adaptation.id && d.type == type)
+        const row = filtered.find(d => d.adaptation == adaptation.id && d.secteur == secteur)
         if (row) {
           return Math.round(row.value)
         }

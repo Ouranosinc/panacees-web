@@ -11,6 +11,7 @@ import { DisplayParams } from "./DisplayParams"
 import { NavSelector } from "./navSelector"
 import { useLoadCsv } from "./utils"
 import { Adaptation } from './params'
+import { NetCostsBySectorChart } from './indicator/netCostsBySector'
 
 /** Page that displays all data about a cell, including maps and indicators. */
 export const CellPage = (props: {
@@ -74,6 +75,15 @@ export const CellPage = (props: {
         />
       </div>
     }
+    if (mode == "netCostsBySector") {
+      return <div>
+        <NetCostsBySectorChart
+          adaptations={adaptationOptions}
+          cellId={props.cellId}
+          displayParams={params}
+        />
+      </div>
+    }
     if (mode == "netCostsByYear") {
       return <div>
         <NetCostsByYearChart
@@ -95,6 +105,9 @@ export const CellPage = (props: {
     case "netCostsByType":
       disabled = ["adaptation"]
       break
+    case "netCostsBySector":
+      disabled = ["adaptation"]
+      break
     case "netCostsByYear":
       disabled = ["year", "adaptation"]
       break
@@ -110,6 +123,7 @@ export const CellPage = (props: {
       <NavSelector options={[
         { value: "map", label: [<i className="fa fa-map fa-fw faded-icon"/>," Carte"]},
         { value: "netCostsByType", label: [<i className="fa fa-bar-chart fa-fw faded-icon"/>," Coûts Nets Actualisés par Type"]},
+        { value: "netCostsBySector", label: [<i className="fa fa-bar-chart fa-fw faded-icon"/>," Coûts Nets Actualisés par Secteur"]},
         { value: "netCostsByYear", label: [<i className="fa fa-line-chart fa-fw faded-icon"/>," Coûts Nets Actualisés par Année"]} 
       ]} value={mode} onChange={setMode}/>
       <CellControls 
