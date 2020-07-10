@@ -49,7 +49,7 @@ export const NetCostsByYearChart = (props: {
     return ({
       name: adaptation.nom,
       data: years.map(year => {
-        const rows = data.filter(d => d.adaptation == adaptation.id && d.year == year)
+        const rows = data.filter(d => d.adaptation == adaptation.id && d.year <= year)
         return Math.round(_.sum(rows.map(row => row.value)))
       })
     }) 

@@ -40,7 +40,7 @@ export const NetCostsBySectorChart = (props: {
   // const max = _.max(_.values(groups).map(group => _.sum(group.map(d => d.value))))
 
   // Filter data by year
-  let filtered = data.filter(d => d.year == params.year)
+  let filtered = data.filter(d => d.year <= params.year)
 
   // Sort by secteur
   filtered = _.sortBy(filtered, f => f.secteur)
@@ -51,11 +51,8 @@ export const NetCostsBySectorChart = (props: {
     return ({
       name: secteur,
       data: props.adaptations.map(adaptation => {
-        const row = filtered.find(d => d.adaptation == adaptation.id && d.secteur == secteur)
-        if (row) {
-          return Math.round(row.value)
-        }
-        return 0
+        const rows = filtered.filter(d => d.adaptation == adaptation.id && d.secteur == secteur)
+        return Math.round(_.sum(rows.map(row => row.value))) || 0
       }),
       stacking: "stream"
     }) 

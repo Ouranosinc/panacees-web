@@ -139,7 +139,10 @@ export const CellMap = (props: {
    * Uses feature property hauteur to calculate
    */
   const submersionFilter = useCallback((feature: Feature) => {
-    return submersionProbability(feature) > 0
+    const distance = feature.properties!.distance
+
+    // Fudge to prevent inland depressions from showing up as flooding
+    return submersionProbability(feature) > 0 && distance < 200
   }, [submersionProbability])
 
   /** Layer to display red icon for eroded houses */

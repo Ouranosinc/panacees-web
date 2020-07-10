@@ -47,7 +47,7 @@ export const CellPage = (props: {
       return []
     }
     const adaptationsMap = _.keyBy(adaptations, "id")
-    return adaptationsAvailable.map(row => adaptationsMap[row.adaptation])
+    return _.uniq(adaptationsAvailable.map(row => row.adaptation)).map(adaptation => adaptationsMap[adaptation])
   }, [adaptations, adaptationsAvailable])
 
   const handleBack = () => {
