@@ -120,7 +120,7 @@ export const CellPage = (props: {
           <i className="fa fa-fw fa-arrow-left"/>
         </a> {props.cellId}
       </div>
-      <div style={{ fontSize: 12, color: "#666"}}>
+      <div style={{ fontSize: 12, color: "#666", paddingLeft: 5, paddingRight: 5 }}>
         PANACÉES calcul 27 scénarios de submersion et 3 scénario d’érosion selon 
         27 indicateurs répartis dans huit secteurs d’activités d’intérêts pour un segment côtier donnée. 
       </div>
