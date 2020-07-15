@@ -1,13 +1,15 @@
 import _ from 'lodash'
 import { GeoLayerSpec, GeoJsonMap } from "./GeoJsonMap"
 import React, { useState, useEffect, useCallback, ReactNode, FC, Children, useMemo } from "react"
+import ReactDOMServer from 'react-dom/server'
 import bbox from '@turf/bbox'
 import L from "leaflet"
+import length from '@turf/length'
 import { GeoJsonObject, Feature, Point, FeatureCollection, MultiPoint } from 'geojson'
 import { DamageSummary } from "./DamageSummary"
 import { DisplayParams } from "./DisplayParams"
 import LoadingComponent from "./LoadingComponent"
-import { Checkbox, useLoadJson, convertFeatureToCoords, useLoadCsv, convertFeatureToPoint } from "./utils"
+import { Checkbox, useLoadJson, convertFeatureToCoords, useLoadCsv, convertFeatureToPoint, formatCurrency } from "./utils"
 
 export const CellMap = (props: {
   /** ID of cell */
@@ -38,6 +40,7 @@ export const CellMap = (props: {
   )
 
   // Load layer data
+  const [traitDeCote] = useLoadJson<FeatureCollection>(`data/cells/${props.cellId}/trait_de_cote.geojson`)
   const [rolePoints] = useLoadJson<FeatureCollection>(`data/cells/${props.cellId}/point_role.geojson`)
   const [rolePolygons] = useLoadJson<FeatureCollection>(`data/cells/${props.cellId}/polygone_role.geojson`)
   const [agriPolygons] = useLoadJson<FeatureCollection>(`data/cells/${props.cellId}/polygone_agri.geojson`)
@@ -100,19 +103,7 @@ export const CellMap = (props: {
    * Uses feature properties distance, taux_statu and taux_sansa to calculate
    */
   const erosionFilter = useCallback((feature: Feature) => {
-    // Determine rate of erosion
-    let rate = 0
-    if (params.adaptation == "statuquo") {
-      rate = feature.properties!.taux_statu
-    }
-    else if (params.adaptation == "sansadapt") {
-      rate = feature.properties!.taux_sansa
-    }
-    const distance = feature.properties!.distance
-
-    // Get number ofparams.year years 
-    const years = rate > 0 ? (distance / rate) : 500
-    return params.year > (2020 + years)
+    return params.year > getErosionYear(params, feature)
   }, [params.year, params.adaptation])
 
   /** Calculate probability of submersion (rough) for the current year */
@@ -145,7 +136,7 @@ export const CellMap = (props: {
     return submersionProbability(feature) > 0 && distance < 200
   }, [submersionProbability])
 
-  /** Layer to display red icon for eroded houses */
+  /** Layer to display red icon for eroded features */
   const erosionDamagesLayer = useMemo(() => {
     return {
       data: damageableFeatures,
@@ -155,16 +146,19 @@ export const CellMap = (props: {
         const marker = L.marker(coords as any, {
           icon: L.icon({ iconUrl: "house_red_128.png", iconAnchor: [9, 21], iconSize: [18, 21], popupAnchor: [0, -21] })
         })
+
+        // Add popup
+        bindFeaturePopup(params, marker, p)
         return marker
       },
       filter: erosionFilter
     }
   }, [erosionFilter])
 
-  /** Layer to display blue icon for submerged houses */
+  /** Layer to display blue icon for submerged features */
   const submersionDamagesLayer = useMemo(() => {
     return {
-      url: `data/cells/${props.cellId}/point_role.geojson`,
+      data: damageableFeatures,
       styleFunction: () => ({}),
       pointToLayer: (p: Feature<Point | MultiPoint>) => { 
         const coords = convertFeatureToCoords(p)
@@ -173,6 +167,10 @@ export const CellMap = (props: {
         })
         // Use opacity to show probability
         marker.setOpacity(submersionProbability(p))
+
+        // Add popup
+        bindFeaturePopup(params, marker, p)
+
         return marker
       },
       filter: submersionFilter
@@ -194,7 +192,7 @@ export const CellMap = (props: {
     },
     // Coastline
     {
-      url: `data/cells/${props.cellId}/trait_de_cote.geojson`,
+      data: traitDeCote,
       styleFunction: (feature) => {
         return {
           fill: false,
@@ -246,10 +244,10 @@ export const CellMap = (props: {
       data: infrasPolygons,
       styleFunction: (feature) => {
         return {
-          weight: 0.5,
-          color: "green",
+          weight: 2,
+          color: "black",
           opacity: 0.7,
-          fillColor: "green",
+          fillColor: "black",
           fillOpacity: 0.2
         }
       },
@@ -295,7 +293,7 @@ export const CellMap = (props: {
     layers.push(erosionDamagesLayer)
   }
 
-  if (!bounds || !heights) {
+  if (!bounds || !heights || !traitDeCote) {
     return <LoadingComponent/>
   }
 
@@ -307,17 +305,19 @@ export const CellMap = (props: {
     .filter(row => row.adaptation == params.adaptation && row.year <= params.year)
     .map(row => row.value))
 
+  const totalDamagePerMeter = (erosionDamage + submersionDamage) / (length(traitDeCote) * 1000)
+
   return <div style={{ position: "relative" }}>
-    <div style={{ position: "absolute", right: 20, top: 20, zIndex: 1000, backgroundColor: "white", padding: 10, opacity: 0.8, borderRadius: 5 }}>
-      <Checkbox value={showSatellite} onChange={setShowSatellite}>Satellite</Checkbox>
+    <div style={{ position: "absolute", right: 20, top: 20, zIndex: 600, backgroundColor: "white", padding: 10, opacity: 0.8, borderRadius: 5 }}>
+      <Checkbox value={showDamages} onChange={setShowDamages}>Dommages</Checkbox>
+      <Checkbox value={showRolePoints} onChange={setShowRolePoints}>Bâtiments (points)</Checkbox>
+      <Checkbox value={showRolePolygons} onChange={setShowRolePolygons}>Bâtiments (polygones)</Checkbox>
+      <Checkbox value={showInfras} onChange={setShowInfras}>Infrastructures</Checkbox>
       <Checkbox value={showEnviro} onChange={setShowEnviro}>Environment</Checkbox>
       <Checkbox value={showAgri} onChange={setShowAgri}>Agriculture</Checkbox>
-      <Checkbox value={showInfras} onChange={setShowInfras}>Infrastructures</Checkbox>
-      <Checkbox value={showRolePolygons} onChange={setShowRolePolygons}>Bâtiments (polygones)</Checkbox>
-      <Checkbox value={showRolePoints} onChange={setShowRolePoints}>Bâtiments (points)</Checkbox>
-      <Checkbox value={showDamages} onChange={setShowDamages}>Dommages</Checkbox>
+      <Checkbox value={showSatellite} onChange={setShowSatellite}>Satellite</Checkbox>
     </div>
-    <DamageSummary erosionDamage={erosionDamage} submersionDamage={submersionDamage} />
+    <DamageSummary erosionDamage={erosionDamage} submersionDamage={submersionDamage} totalDamagePerMeter={totalDamagePerMeter} />
     <GeoJsonMap 
       layers={layers} 
       bounds={bounds} 
@@ -332,99 +332,37 @@ const emptyFeatureCollection: FeatureCollection = {
   features: []
 }
 
-        // // TODO escape HTML
-        // // TODO format currency
-        // marker.bindPopup(`
-        //   <p>${p.properties!.description}</p>
-        //   <div>Valeur du bâtiment: ${(p.properties!.valeur_tot || 0)}</div>
-        //   <div>Valeur du terrain: ${(p.properties!.valeur_ter || 0)}</div>
-        //   <div>Valeur totale: ${(p.properties!.valeur_tot || 0)}</div>
-        //   `, { })
-        // return L.circleMarker(coords as any, { radius: 1, color: "yellow", opacity: 0.7 })
-      // const marker = L.marker(coords as any, {
-      //   icon: L.icon({ iconUrl: "house_128.png", iconAnchor: [10, 8], iconSize: [20, 16], popupAnchor: [0, -8] })
-      // })
-      // // TODO escape HTML
-      // // TODO format currency
-      // marker.bindPopup(`
-      //   <p>${p.properties!.description}</p>
-      //   <div>Valeur du bâtiment: ${(p.properties!.valeur_tot || 0)}</div>
-      //   <div>Valeur du terrain: ${(p.properties!.valeur_ter || 0)}</div>
-      //   <div>Valeur totale: ${(p.properties!.valeur_tot || 0)}</div>
-      //   `, { })
-      // return marker
-        // // TODO escape HTML
-        // // TODO format currency
-        // marker.bindPopup(`
-        //   <p>${p.properties!.description}</p>
-        //   <div>Valeur du bâtiment: ${(p.properties!.valeur_tot || 0)}</div>
-        //   <div>Valeur du terrain: ${(p.properties!.valeur_ter || 0)}</div>
-        //   <div>Valeur totale: ${(p.properties!.valeur_tot || 0)}</div>
-        //   `, { })
+function bindFeaturePopup(params: DisplayParams, marker: L.Marker, feature: Feature) {
+  const props = feature.properties!
 
-  // // Add buildings
-  // layers.unshift({
-  //   url: `data/cells/${props.cellId}/point_role.geojson`,
-  //   styleFunction: () => ({}),
-  //   pointToLayer: (p: Feature<Point | MultiPoint>) => { 
-  //     const coords = convertFeatureToCoords(p)
-  //     const marker = L.circleMarker(coords as any, { radius: 1, color: "#c89c34ff", opacity: 0.8 })
-  //     marker.bindTooltip(p.properties!.desc)
-  //     return marker
-  //   }
-  // })
+  const html = <div>
+    <div><span className="text-muted">Description:</span> {props.desc}</div>
+    <div><span className="text-muted">Secteur:</span> {props.secteur}</div>
+    <div><span className="text-muted">Valeur totale:</span> {formatCurrency(props.valeur_tot)}</div>
+    <div><span className="text-muted">Ouvrage de protection:</span> {props.ouvrage == "0" ? "Non" : "Oui"}</div>
+    <div><span className="text-muted">Distance à la côte:</span> {props.distance ? props.distance.toFixed(0) : ""}</div>
+    <div><span className="text-muted">Hauteur géodésique:</span> {props.hauteur}</div>
+    <div><span className="text-muted">Année d'exposition:</span> {getErosionYear(params, feature) > 2100 ? "" : getErosionYear(params, feature)}</div>
+    <div><span className="text-muted">Aléa:</span> TO DO</div>
+  </div>
 
+  marker.bindPopup(ReactDOMServer.renderToString(html))
+}
 
-  // if (showEnvironment && enviroPolygons) {
-  //   // Add buildings
-  //   layers.unshift({
-  //     url: `data/cells/${props.cellId}/point_role.geojson`,
-  //     styleFunction: () => ({}),
-  //     pointToLayer: (p: Feature<Point | MultiPoint>) => { 
-  //       const coords = convertFeatureToCoords(p)
-  //       // const marker = L.marker(coords as any, {
-  //       //   icon: L.icon({ iconUrl: "house_128.png", iconAnchor: [10, 8], iconSize: [20, 16], popupAnchor: [0, -8] })
-  //       // })
-  //       // // TODO escape HTML
-  //       // // TODO format currency
-  //       // marker.bindPopup(`
-  //       //   <p>${p.properties!.description}</p>
-  //       //   <div>Valeur du bâtiment: ${(p.properties!.valeur_tot || 0)}</div>
-  //       //   <div>Valeur du terrain: ${(p.properties!.valeur_ter || 0)}</div>
-  //       //   <div>Valeur totale: ${(p.properties!.valeur_tot || 0)}</div>
-  //       //   `, { })
-  //       // return marker
-  //       const marker = L.circleMarker(coords as any, { radius: 1, color: "#c89c34ff", opacity: 0.8 })
-  //       marker.bindTooltip(p.properties!.desc)
-  //       return marker
-  //     }
-  //   })
-  
-  //   layers.unshift({
-  //     url: `data/cells/${props.cellId}/polygone_enviro.geojson`,
-  //     styleFunction: (feature) => {
-  //       return {
-  //         weight: 0.5,
-  //         color: "purple",
-  //         opacity: 0.7,
-  //         fillColor: "purple",
-  //         fillOpacity: 0.2
-  //       }
-  //     },
-  //     onEachFeature: (feature, layer) => {
-  //       layer.bindTooltip(feature.properties!.desc)
-  //     }
-  //   })
-  // }
+/** Get year when will be exposed */
+function getErosionYear(params: DisplayParams, feature: Feature) {
+  // Determine rate of erosion
+  let rate = 0
+  if (params.adaptation == "statuquo") {
+    rate = feature.properties!.taux_statu
+  }
+  else if (params.adaptation == "sansadapt") {
+    rate = feature.properties!.taux_sansa
+  }
+  const distance = feature.properties!.distance
 
-  // if (batiments) {
-  //   layers.push({ 
-  //     url: "static/batiments_deMetissurMer-4326.geojson", 
-  //     styleFunction: () => ({}),
-  //     pointToLayer: (p: any) => { 
-  //       const coords = [p.geometry.coordinates[0][1], p.geometry.coordinates[0][0]]
-  //       return L.circleMarker(coords as any, { radius: 1, color: "yellow", opacity: 0.7 })
-  //     }
-  //   })
-  // }
+  // Get number of years 
+  const years = rate > 0 ? (distance / rate) : 500
 
+  return Math.floor(years + 2020)
+}

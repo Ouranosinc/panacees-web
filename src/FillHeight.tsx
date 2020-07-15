@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback, ReactNode } from "react"
  */
 export const FillHeight = (props: { children: (height: number) => ReactNode }) => {
   const [height, setHeight] = useState<number>()
-  const [div, setDiv] = useState()
+  const [div, setDiv] = useState<HTMLDivElement | null>(null)
 
   const updateSize = useCallback(() => {
     if (!div) {

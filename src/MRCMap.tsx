@@ -11,6 +11,7 @@ import { DisplayParams } from './DisplayParams'
 import { scaleLinear, interpolateRdYlBu, scaleSequential, interpolateSpectral } from 'd3'
 import { DamageSummary } from './DamageSummary'
 import LoadingComponent from './LoadingComponent'
+import ReactSelect from 'react-select'
 
 /** Map for an MRC which shows the cells and the coastline highlighted by cost of damages */
 export const MRCMap = (props: {
@@ -70,7 +71,7 @@ export const MRCMap = (props: {
     if (coastline) {
       // Group by cell and total
       const byCell = _.groupBy(coastline.features, f => f.properties!.ID_field)
-      setCellLengths(_.mapValues(byCell, (features) => _.sum(features.map(f => length(f)))))
+      setCellLengths(_.mapValues(byCell, (features) => _.sum(features.map(f => length(f) * 1000))))
     }
   }, [coastline])
 
@@ -111,11 +112,8 @@ export const MRCMap = (props: {
 
         // Calculate damage per km
         const damagePerKm = (erosionDamage + submersionDamage) / cellLength
-        // const damagePerKm = (submersionDamage) / cellLength
 
-        // console.log(`${damagePerKm} = ${erosionDamage} + ${submersionDamage} / ${cellLength}`)
-
-        const color = scaleLinear().domain([0, 2000000, 4000000]).range(["green", "yellow", "red"] as any)
+        const color = scaleLinear().domain([0, 2000, 3000, 4000]).range(["green", "yellow", "orange", "red"] as any)
 
         return {
           fill: false,
@@ -130,12 +128,14 @@ export const MRCMap = (props: {
         return {
           weight: 1,
           fillColor: "#444",
-          fillOpacity: 0.1,
-          opacity: 0.1
+          fillOpacity: 0,
+          opacity: 0
         }
       }, 
       onEachFeature: (feature, layer: L.GeoJSON) => {
         const cellId = feature.properties!.ID_field
+
+        layer.bindTooltip(cellId)
 
         layer.on("click", () => {
           props.onCellClick(cellId)
@@ -146,7 +146,7 @@ export const MRCMap = (props: {
         })
         layer.on("mouseout", (e) => {
           setHover(undefined)
-          e.target.setStyle({ fillColor: "#444", fillOpacity: 0.1 })
+          e.target.setStyle({ fillColor: "#444", fillOpacity: 0 })
         })
       }
     } as GeoLayerSpec
@@ -159,9 +159,10 @@ export const MRCMap = (props: {
 
   const erosionDamage = _.sum(rawErosionDamages.filter(row => row.year <= params.year).map(row => row.value))
   const submersionDamage = _.sum(rawSubmersionDamages.filter(row => row.year <= params.year).map(row => row.value))
+  const totalDamagePerMeter = (erosionDamage + submersionDamage) / _.sum(_.values(cellLengths))
 
   return <div style={{ position: "relative" }}>
-    <DamageSummary erosionDamage={erosionDamage} submersionDamage={submersionDamage} />
+    <DamageSummary erosionDamage={erosionDamage} submersionDamage={submersionDamage} totalDamagePerMeter={totalDamagePerMeter} />
     <GeoJsonMap 
       layers={layers} 
       bounds={bounds} 
@@ -169,5 +170,40 @@ export const MRCMap = (props: {
       height={props.height}
       loading={rawErosionDamagesLoading || rawSubmersionDamagesLoading}
     />
+    <CellSelector 
+      options={_.sortBy(cells.features.map(f => ({ value: f.properties!.ID_field, label: f.properties!.ID_field })), o => o.label)}
+      onSelect={props.onCellClick}
+    />
+    <Legend/>
+  </div>
+}
+
+const CellSelector = (props: {
+  options: { value: string, label: string }[]
+  onSelect: (value: string) => void
+}) => {
+  return <div style={{ position: "absolute", top: 10, right: 10, zIndex: 1000, width: 250 }}>
+    <ReactSelect
+      placeholder="Sélectionner une cellule"
+      options={props.options}
+      onChange={option => { if (option) { props.onSelect((option as any).value) }}}
+    />
+  </div>
+}
+
+
+const Legend = (props: {}) => {
+  return <div style={{ position: "absolute", bottom: 20, right: 10, zIndex: 1000, padding: 10, backgroundColor: "white", borderRadius: 8, fontSize: 14, opacity: 0.9 }}>
+    <div className="text-muted">Coût total au mètre linéaire</div>
+    <LegendItem color="red">4000$ / m</LegendItem>
+    <LegendItem color="orange">3000$ / m</LegendItem>
+    <LegendItem color="yellow">2000$ / m</LegendItem>
+    <LegendItem color="green">0$ / m</LegendItem>
+  </div>
+}
+
+const LegendItem = (props: { color: any, children: React.ReactNode }) => {
+  return <div style={{ fontSize: 12 }}>
+    <i className="fa fa-square" style={{ color: props.color }}/> {props.children}
   </div>
 }

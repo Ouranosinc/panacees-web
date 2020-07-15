@@ -4,6 +4,17 @@ import { csv } from 'd3'
 import React from "react"
 import centroid from '@turf/centroid'
 
+/** Format currency for French Canada */
+export function formatCurrency(value: number | null | undefined | string) {
+  if (value == null || value == "") {
+    return ""
+  }
+  if (typeof(value) == "string") {
+    value = parseFloat(value)
+  }
+  return value.toLocaleString("fr", { style: "currency", currency: "CAD" }).replace("CA", "").replace(",00", "")
+}
+
 /** React hook to load a JSON file. Returns [result | undefined, loading: boolean]. Can load multiple times and ensures latest is always returned */
 export function useLoadJson<T>(url: string, onLoad?: (data: T) => void, onError?: () => void): [T | undefined, boolean] {
   const [data, setData] = useState<T>()
@@ -19,14 +30,21 @@ export function useLoadJson<T>(url: string, onLoad?: (data: T) => void, onError?
     // Increment loading count
     loadingCount.current += 1
 
-    fetch(url).then(response => response.json()).then(d => {
+    fetch(url).then(response => response.text()).then(text => {
       loadingCount.current -= 1
 
       // Ignore if stale
       if (url != currentUrl.current) {
         return
       }
+
+      // Handle strange case of webpack dev server returning HTML instead of 404
+      if (text.startsWith("<!DOCTYPE html>")) {
+        setData(undefined)
+        return
+      }
       
+      const d = JSON.parse(text)
       setData(d)
       if (onLoad) {
         onLoad(d)

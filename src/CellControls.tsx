@@ -4,6 +4,7 @@ import Slider from "rc-slider"
 import { DisplayParams } from "./DisplayParams"
 import produce from 'immer'
 import { Adaptation } from "./params"
+import { PopoverHelpComponent } from "./PopoverHelp"
 
 /** Controls displayed on left panel for a specific cell */
 export const CellControls = (props: {
@@ -65,6 +66,7 @@ export const CellControls = (props: {
               props.adaptations.map(adaptation => <option key={adaptation.id} value={adaptation.id}>{adaptation.nom}</option>)
             }
           </select>
+          <PopoverHelpComponent>Lorem ipsum</PopoverHelpComponent>
         </div>          
     </CellControl>
 
@@ -83,11 +85,15 @@ export const CellControls = (props: {
             <option value="high">Élevé</option>
             <option value="vhigh">Très Élevé</option>
           </select>
+          <PopoverHelpComponent>Lorem ipsum</PopoverHelpComponent>
         </div>
     </CellControl>
 
     <CellControl 
-      title="Submersion:"
+      title={<span>
+          Submersion:
+          <PopoverHelpComponent>Lorem ipsum</PopoverHelpComponent>
+        </span>}
       disabled={props.disabled.includes("submersion")}>
           <div style={{ paddingLeft: 20, paddingTop: 10 }}>
             <div style={{ paddingBottom: 5 }}>
@@ -134,6 +140,7 @@ const Toggle = (props: {
   return <div className="btn-group">
     {props.options.map(option => {
       return <button 
+        key={option.value}
         type="button" 
         className={ props.value == option.value ? "btn btn-primary btn-sm active" : "btn btn-outline-primary btn-sm" }
         onClick={() => props.onChange(option.value)}>{option.label}</button>
