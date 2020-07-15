@@ -6,8 +6,8 @@ import produce from 'immer'
 import { Adaptation } from "./params"
 import { PopoverHelpComponent } from "./PopoverHelp"
 
-/** Controls displayed on left panel for a specific cell */
-export const CellControls = (props: {
+/** Display parameter controls displayed on left panel */
+export const DisplayParamsControls = (props: {
   params: DisplayParams
   onChange: (params: DisplayParams) => void
 
@@ -36,6 +36,8 @@ export const CellControls = (props: {
     { value: "moy", label: "Moy" },
     { value: "max", label: "Max" }
   ]
+
+  const adaptation = props.adaptations.find(a => a.id == params.adaptation)
 
   return <div>
     <CellControl 
@@ -66,7 +68,9 @@ export const CellControls = (props: {
               props.adaptations.map(adaptation => <option key={adaptation.id} value={adaptation.id}>{adaptation.nom}</option>)
             }
           </select>
-          <PopoverHelpComponent>Lorem ipsum</PopoverHelpComponent>
+          <PopoverHelpComponent>
+            { adaptation ? adaptation.description : "Selectionner une adaptation"}
+          </PopoverHelpComponent>
         </div>          
     </CellControl>
 

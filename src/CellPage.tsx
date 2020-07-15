@@ -3,7 +3,7 @@ import React, { useState, ReactNode, useMemo } from "react"
 import { CellMap } from "./CellMap"
 import 'rc-slider/assets/index.css'
 import { NetCostsByTypeChart } from "./indicator/netCostsByType"
-import { CellControls } from "./CellControls"
+import { DisplayParamsControls } from "./DisplayParamsControls"
 import { History } from "history"
 import { FillHeight } from "./FillHeight"
 import { NetCostsByYearChart } from "./indicator/netCostsByYear"
@@ -130,7 +130,7 @@ export const CellPage = (props: {
         { value: "netCostsBySector", label: [<i className="fa fa-bar-chart fa-fw faded-icon"/>," Coûts Nets Actualisés par Secteur"]},
         { value: "netCostsByYear", label: [<i className="fa fa-line-chart fa-fw faded-icon"/>," Coûts Nets Actualisés par Année"]} 
       ]} value={mode} onChange={setMode}/>
-      <CellControls 
+      <DisplayParamsControls 
         params={params}
         onChange={setParams}
         disabled={disabled}

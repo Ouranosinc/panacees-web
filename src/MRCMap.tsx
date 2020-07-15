@@ -2,7 +2,7 @@ import _ from 'lodash'
 import React, { useState, useMemo, useEffect } from "react"
 import { GeoLayerSpec, GeoJsonMap } from "./GeoJsonMap"
 import { FillHeight } from "./FillHeight"
-import { CellControls } from "./CellControls"
+import { DisplayParamsControls } from "./DisplayParamsControls"
 import bbox from '@turf/bbox'
 import length from '@turf/length'
 import { GeoJsonObject, Feature, Point, FeatureCollection } from 'geojson'

@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import React, { useState, useMemo } from "react"
 import 'rc-slider/assets/index.css'
-import { CellControls } from "./CellControls"
+import { DisplayParamsControls } from "./DisplayParamsControls"
 import { History } from "history"
 import { DisplayParams } from "./DisplayParams"
 import { GeoJsonObject, Feature, Point, FeatureCollection } from 'geojson'
@@ -64,7 +64,7 @@ export const MRCPage = (props: {
           <i className="fa fa-fw fa-arrow-left"/>
         </a> {mrc.properties!.name}
       </div>
-      <CellControls 
+      <DisplayParamsControls 
         params={params}
         onChange={setParams}
         disabled={["adaptation"]}
