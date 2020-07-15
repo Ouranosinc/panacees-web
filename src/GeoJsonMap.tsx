@@ -64,7 +64,8 @@ export const GeoJsonMap = (props: {
       zoomControl: true,
       // scrollWheelZoom: false
     })
-    
+
+    L.control.scale({ imperial: false }).addTo(mapObj)
     mapRef.current = mapObj
     setMap(mapObj)
   }, [])
@@ -80,7 +81,8 @@ export const GeoJsonMap = (props: {
 
     if (props.baseLayer === "positron") {
       baseLayerRef.current = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
+        attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, 
+          &copy; <a href="https://cartodb.com/attributions">CartoDB</a> | <a href="#/projet">contributions</a>`
       })
     }
     else if (props.baseLayer === "bing_satellite") {
