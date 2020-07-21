@@ -41,7 +41,7 @@ export const DisplayParamsControls = (props: {
   const adaptation = props.adaptations.find(a => a.id == params.adaptation)
 
   const formatAdaptationOption = (option: Adaptation, labelMeta: FormatOptionLabelMeta<Adaptation>) => {
-    return labelMeta.context == "value" ? option.nom : <span>{option.nom} - <span className="text-muted">{option.description}</span></span>
+    return labelMeta.context == "value" ? option.nom : <span>{option.nom} - <span style={{ fontSize: 11 }}>{option.description}</span></span>
   }
 
   const reactSelectStyles = {
