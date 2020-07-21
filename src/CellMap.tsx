@@ -5,17 +5,24 @@ import ReactDOMServer from 'react-dom/server'
 import bbox from '@turf/bbox'
 import L from "leaflet"
 import length from '@turf/length'
+import { History } from "history"
 import { GeoJsonObject, Feature, Point, FeatureCollection, MultiPoint } from 'geojson'
 import { DamageSummary } from "./DamageSummary"
 import { DisplayParams } from "./DisplayParams"
 import LoadingComponent from "./LoadingComponent"
 import { Checkbox, useLoadJson, convertFeatureToCoords, useLoadCsv, convertFeatureToPoint, formatCurrency } from "./utils"
+import { PopoverHelpComponent } from './PopoverHelp'
 
 export const CellMap = (props: {
+  /** ID of MRC */
+  mrcId: string
+
   /** ID of cell */
   cellId: string
 
   displayParams: DisplayParams
+ 
+  history: History
 
   /** Height of the map */
   height: number
@@ -24,10 +31,10 @@ export const CellMap = (props: {
   const [bounds, setBounds] = useState<[number,number][]>()
 
   const [showSatellite, setShowSatellite] = useState(false)
-  const [showAgri, setShowAgri] = useState(true)
+  const [showAgri, setShowAgri] = useState(false)
   const [showEnviro, setShowEnviro] = useState(false)
-  const [showInfras, setShowInfras] = useState(true)
-  const [showRolePolygons, setShowRolePolygons] = useState(true)
+  const [showInfras, setShowInfras] = useState(false)
+  const [showRolePolygons, setShowRolePolygons] = useState(false)
   const [showRolePoints, setShowRolePoints] = useState(true)
   const [showDamages, setShowDamages] = useState(true)
 
@@ -178,18 +185,38 @@ export const CellMap = (props: {
   }, [submersionFilter])
 
   const layers: GeoLayerSpec[] = [
-    // Cell outline
+    // All cells (to allow selecting adjacent)
     {
-      url: `data/cells/${props.cellId}/sub_cellules.geojson`,
+      url: `data/mrcs/${props.mrcId}/sub_cellules.geojson`,
       styleFunction: (feature) => {
+        const cellId = feature!.properties!.ID_field
+
         return {
-          fill: false,
           weight: 1,
           color: "#38F",
-          opacity: 0.8
+          opacity: cellId == props.cellId ? 0.8 : 0,
+          fillColor: "#444",
+          fillOpacity: 0,
         }
-      }
-    },
+      }, 
+      onEachFeature: (feature, layer: L.GeoJSON) => {
+        const cellId = feature.properties!.ID_field
+
+        layer.on("click", () => {
+          if (cellId != props.cellId) {
+            props.history.push(`/outil/${props.mrcId}/${cellId}`)
+          }
+        })
+        layer.on("mouseover", (e) => {
+          if (cellId != props.cellId) {
+            e.target.setStyle({ fillOpacity: 0.2 })
+          }
+        })
+        layer.on("mouseout", (e) => {
+          e.target.setStyle({ fillOpacity: 0 })
+        })
+      },
+    } as GeoLayerSpec,
     // Coastline
     {
       data: traitDeCote,
@@ -197,7 +224,7 @@ export const CellMap = (props: {
         return {
           fill: false,
           weight: 4,
-          color: "#38F",
+          color: "black",
         }
       }
     },
@@ -245,14 +272,14 @@ export const CellMap = (props: {
       styleFunction: (feature) => {
         return {
           weight: 2,
-          color: "black",
+          color: "#888",
           opacity: 0.7,
-          fillColor: "black",
+          fillColor: "#888",
           fillOpacity: 0.2
         }
       },
       onEachFeature: (feature, layer) => {
-        layer.bindTooltip(feature.properties!.desc)
+        // layer.bindTooltip(feature.properties!.desc)
       }
     })
   }
@@ -309,13 +336,34 @@ export const CellMap = (props: {
 
   return <div style={{ position: "relative" }}>
     <div style={{ position: "absolute", right: 20, top: 20, zIndex: 600, backgroundColor: "white", padding: 10, opacity: 0.8, borderRadius: 5 }}>
-      <Checkbox value={showDamages} onChange={setShowDamages}>Dommages</Checkbox>
-      <Checkbox value={showRolePoints} onChange={setShowRolePoints}>Bâtiments (points)</Checkbox>
-      <Checkbox value={showRolePolygons} onChange={setShowRolePolygons}>Bâtiments (polygones)</Checkbox>
-      <Checkbox value={showInfras} onChange={setShowInfras}>Infrastructures</Checkbox>
-      <Checkbox value={showEnviro} onChange={setShowEnviro}>Environment</Checkbox>
-      <Checkbox value={showAgri} onChange={setShowAgri}>Agriculture</Checkbox>
-      <Checkbox value={showSatellite} onChange={setShowSatellite}>Satellite</Checkbox>
+      <Checkbox value={showDamages} onChange={setShowDamages}>
+        Dommages
+        <PopoverHelpComponent>Lorem Ipsum</PopoverHelpComponent>
+      </Checkbox>
+      <Checkbox value={showRolePoints} onChange={setShowRolePoints}>
+        Bâtiments (points)
+        <PopoverHelpComponent>Lorem Ipsum</PopoverHelpComponent>
+      </Checkbox>
+      <Checkbox value={showRolePolygons} onChange={setShowRolePolygons}>
+        Bâtiments (polygones)
+        <PopoverHelpComponent>Lorem Ipsum</PopoverHelpComponent>
+      </Checkbox>
+      <Checkbox value={showInfras} onChange={setShowInfras}>
+        Infrastructures
+        <PopoverHelpComponent>Lorem Ipsum</PopoverHelpComponent>
+      </Checkbox>
+      <Checkbox value={showEnviro} onChange={setShowEnviro}>
+        Environment
+        <PopoverHelpComponent>Lorem Ipsum</PopoverHelpComponent>
+      </Checkbox>
+      <Checkbox value={showAgri} onChange={setShowAgri}>
+        Agriculture
+        <PopoverHelpComponent>Lorem Ipsum</PopoverHelpComponent>
+      </Checkbox>
+      <Checkbox value={showSatellite} onChange={setShowSatellite}>
+        Satellite
+        <PopoverHelpComponent>Lorem Ipsum</PopoverHelpComponent>
+      </Checkbox>
     </div>
     <DamageSummary erosionDamage={erosionDamage} submersionDamage={submersionDamage} totalDamagePerMeter={totalDamagePerMeter} />
     <GeoJsonMap 
@@ -340,8 +388,8 @@ function bindFeaturePopup(params: DisplayParams, marker: L.Marker, feature: Feat
     <div><span className="text-muted">Secteur:</span> {props.secteur}</div>
     <div><span className="text-muted">Valeur totale:</span> {formatCurrency(props.valeur_tot)}</div>
     <div><span className="text-muted">Ouvrage de protection:</span> {props.ouvrage == "0" ? "Non" : "Oui"}</div>
-    <div><span className="text-muted">Distance à la côte:</span> {props.distance ? props.distance.toFixed(0) : ""}</div>
-    <div><span className="text-muted">Hauteur géodésique:</span> {props.hauteur}</div>
+    <div><span className="text-muted">Distance à la côte:</span> {props.distance ? props.distance.toFixed(0) + " m" : ""}</div>
+    <div><span className="text-muted">Hauteur géodésique:</span> {props.hauteur} m</div>
     <div><span className="text-muted">Année d'exposition:</span> {getErosionYear(params, feature) > 2100 ? "" : getErosionYear(params, feature)}</div>
     <div><span className="text-muted">Aléa:</span> TO DO</div>
   </div>

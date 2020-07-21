@@ -14,7 +14,7 @@ export class PopoverHelpComponent extends React.Component<{}> {
       trigger={["hover", "focus"]}
       placement={"right"}
       overlay={overlay}>
-      <span className="text-muted" style={{ cursor: "pointer", paddingLeft: 5, paddingRight: 5 }}>
+      <span style={{ cursor: "pointer", paddingLeft: 5, paddingRight: 5, color: "#8e9aa5" }}>
         <i className="fa fa-question-circle"/>
       </span>
     </OverlayTrigger>

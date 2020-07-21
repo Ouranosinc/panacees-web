@@ -1,5 +1,6 @@
 import React from "react"
 import { formatCurrency } from "./utils"
+import { PopoverHelpComponent } from "./PopoverHelp"
 
 /** Displays a damage summary box */
 export const DamageSummary = (props: {
@@ -12,16 +13,31 @@ export const DamageSummary = (props: {
       <table>
         <tbody>
           <tr key="erosion">
-            <td style={{textAlign: "left"}}><span className="text-muted">Coût de l'érosion:</span></td>
-            <td style={{textAlign: "right"}}>{formatCurrency(props.erosionDamage)}</td>
+            <td style={{textAlign: "left"}}>
+              <span className="text-muted">Coût de l'érosion:</span>
+            </td>
+            <td style={{textAlign: "right"}}>
+              {formatCurrency(props.erosionDamage)}
+              <PopoverHelpComponent>Lorem ipsum</PopoverHelpComponent>
+            </td>
           </tr>
           <tr key="submersion">
-            <td style={{textAlign: "left"}}><span className="text-muted">Coût de la submersion:</span></td>
-            <td style={{textAlign: "right", minWidth: 90}}>{formatCurrency(props.submersionDamage)}</td>
+            <td style={{textAlign: "left"}}>
+              <span className="text-muted">Coût de la submersion:</span>
+            </td>
+            <td style={{textAlign: "right", minWidth: 90}}>
+              {formatCurrency(props.submersionDamage)}
+              <PopoverHelpComponent>Lorem ipsum</PopoverHelpComponent>
+            </td>
           </tr>
           <tr key="total_per_m">
-            <td style={{textAlign: "left"}}><span className="text-muted">Coût total au mètre linéaire:</span></td>
-            <td style={{textAlign: "right", minWidth: 90}}>{formatCurrency(props.totalDamagePerMeter)}</td>
+            <td style={{textAlign: "left"}}>
+              <span className="text-muted">Coût total au mètre linéaire:</span>
+            </td>
+            <td style={{textAlign: "right", minWidth: 90}}>
+              {formatCurrency(props.totalDamagePerMeter)}
+              <PopoverHelpComponent>Lorem ipsum</PopoverHelpComponent>
+            </td>
           </tr>
         </tbody>
       </table>

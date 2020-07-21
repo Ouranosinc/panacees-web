@@ -51,7 +51,7 @@ export const CellPage = (props: {
   }, [adaptations, adaptationsAvailable])
 
   const handleBack = () => {
-    props.history.push(`/outil/${props.mrcId}`)
+    props.history.push(`/outil/${props.mrcId}?prevCell=${props.cellId}`)
   }
 
   const renderContents = () => {
@@ -60,7 +60,9 @@ export const CellPage = (props: {
         {(height) => (
           <CellMap
             displayParams={params}
+            mrcId={props.mrcId}
             cellId={props.cellId}
+            history={props.history}
             height={height}
             />
         )}

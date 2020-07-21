@@ -9,6 +9,7 @@ import { MRCMap } from './MRCMap'
 import { FillHeight } from './FillHeight'
 import { useLoadJson } from './utils'
 import LoadingComponent from './LoadingComponent'
+import querystring from 'querystring'
 
 /** Page that displays all data about an MRC, including maps and indicators. */
 export const MRCPage = (props: {
@@ -23,6 +24,9 @@ export const MRCPage = (props: {
     submersion20Y: "moy",
     submersion100Y: "moy"
   })
+
+  // Get previous cell
+  const prevCellId = querystring.parse((props.history.location.search || "?").substr(1)).prevCell as string | null
 
   // Load mrcs
   const [mrcs] = useLoadJson<FeatureCollection>("data/mrcs.geojson")
@@ -53,6 +57,7 @@ export const MRCPage = (props: {
         displayParams={params}
         onCellClick={handleCellClick}
         height={height}
+        prevCellId={prevCellId}
         />}
     </FillHeight>
   }

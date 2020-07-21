@@ -1,8 +1,6 @@
 import _ from 'lodash'
 import React, { useState, useMemo, useEffect } from "react"
 import { GeoLayerSpec, GeoJsonMap } from "./GeoJsonMap"
-import { FillHeight } from "./FillHeight"
-import { DisplayParamsControls } from "./DisplayParamsControls"
 import bbox from '@turf/bbox'
 import length from '@turf/length'
 import { GeoJsonObject, Feature, Point, FeatureCollection } from 'geojson'
@@ -23,6 +21,9 @@ export const MRCMap = (props: {
 
   /** Called when a cell is clicked */
   onCellClick: (cellId: string) => void
+
+  /** Previous cell id to show as ghost */
+  prevCellId?: string | null
 
   /** Height of the map */
   height: number
@@ -125,11 +126,14 @@ export const MRCMap = (props: {
     {
       data: cells,
       styleFunction: (feature) => {
+        const cellId = feature!.properties!.ID_field
+
         return {
           weight: 1,
           fillColor: "#444",
           fillOpacity: 0,
-          opacity: 0
+          opacity: cellId == props.prevCellId ? 0.8 : 0,
+          color: "#38F"
         }
       }, 
       onEachFeature: (feature, layer: L.GeoJSON) => {

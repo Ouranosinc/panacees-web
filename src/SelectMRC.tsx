@@ -36,7 +36,7 @@ export const SelectMRC = (props: {
       return {
         weight: 1,
         fillColor: "#38F",
-        fillOpacity: hover == feature!.properties.id ? 0.8 : 0.5
+        fillOpacity: hover == feature!.properties.id ? 0.7 : 0.5
       }
     },
     onEachFeature: (feature, layer: L.GeoJSON) => {

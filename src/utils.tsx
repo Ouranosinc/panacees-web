@@ -12,7 +12,7 @@ export function formatCurrency(value: number | null | undefined | string) {
   if (typeof(value) == "string") {
     value = parseFloat(value)
   }
-  return value.toLocaleString("fr", { style: "currency", currency: "CAD" }).replace("CA", "").replace(",00", "")
+  return Math.round(value).toLocaleString("fr", { style: "currency", currency: "CAD" }).replace("CA", "").replace(",00", "")
 }
 
 /** React hook to load a JSON file. Returns [result | undefined, loading: boolean]. Can load multiple times and ensures latest is always returned */
