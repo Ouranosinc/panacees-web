@@ -5,7 +5,7 @@ import { Highchart } from "./Highchart"
 import { Adaptation } from "../params"
 import { FillHeight } from '../FillHeight'
 import { DisplayParams } from '../DisplayParams'
-import { useLoadCsv } from '../utils'
+import { useLoadCsv, downloadData } from '../utils'
 import LoadingComponent from '../LoadingComponent'
 
 export const NetCostsByYearChart = (props: {
@@ -55,6 +55,12 @@ export const NetCostsByYearChart = (props: {
     }) 
   }) as SeriesBarOptions[]
 
+  // Create download
+  const handleDownload = () => {
+    downloadData(`couts_par_annee.csv`, ["annee", "adaptation", "valeur"], 
+      _.flatten(series.map(ser => ser.data!.map((d, i) => [years[i], ser.name, d]))))
+  }  
+
   const chartOptions: ChartOptions = {
     chart: {
       type: "line"
@@ -83,6 +89,15 @@ export const NetCostsByYearChart = (props: {
   chartOptions.series = series
 
   return <FillHeight>
-    {(height) => <Highchart chartOptions={chartOptions} style={{height: height, padding: 40}}/>}
+    {(height) => 
+      <div style={{ position: "relative" }}>
+        <Highchart chartOptions={chartOptions} style={{height: height, padding: 40}}/>
+        <div style={{ position: "absolute", right: 10, top: 10 }}>
+          <button className="btn btn-link btn-sm" onClick={handleDownload}>
+            <i className="fa fa-download"/> Télécharger
+          </button>
+        </div>
+      </div>
+    }
   </FillHeight>
 }

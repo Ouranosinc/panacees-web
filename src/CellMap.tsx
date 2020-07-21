@@ -46,6 +46,10 @@ export const CellMap = (props: {
     row => ({ ...row, value: +row.value })
   )
 
+  // Load adaptations possible
+  const [adaptationsPossible, adaptationsPossibleLoading] = useLoadCsv(
+    `data/cells/${props.cellId}/affichage_adaptations.csv`)
+
   // Load layer data
   const [traitDeCote] = useLoadJson<FeatureCollection>(`data/cells/${props.cellId}/trait_de_cote.geojson`)
   const [rolePoints] = useLoadJson<FeatureCollection>(`data/cells/${props.cellId}/point_role.geojson`)
@@ -143,46 +147,49 @@ export const CellMap = (props: {
     return submersionProbability(feature) > 0 && distance < 200
   }, [submersionProbability])
 
-  /** Layer to display red icon for eroded features */
-  const erosionDamagesLayer = useMemo(() => {
+  /** Layer to display red icon for eroded features and blue for submerged */
+  const damagesLayer = useMemo(() => {
     return {
       data: damageableFeatures,
       styleFunction: () => ({}),
-      pointToLayer: (p: Feature<Point | MultiPoint>) => { 
-        const coords = convertFeatureToCoords(p)
-        const marker = L.marker(coords as any, {
-          icon: L.icon({ iconUrl: "house_red_128.png", iconAnchor: [9, 21], iconSize: [18, 21], popupAnchor: [0, -21] })
-        })
+      pointToLayer: (feature: Feature<Point | MultiPoint>) => { 
+        const coords = convertFeatureToCoords(feature)
+
+        let marker: L.Marker
+
+        const isEroded = erosionFilter(feature)
+        const submersionProb = submersionProbability(feature)
+
+        if (isEroded) {
+          marker = L.marker(coords as any, {
+            icon: L.icon({ iconUrl: "house_red_128.png", iconAnchor: [9, 21], iconSize: [18, 21], popupAnchor: [0, -21] })
+          })
+        }
+        else {
+          marker = L.marker(coords as any, {
+            icon: L.icon({ iconUrl: "house_blue_128.png", iconAnchor: [9, 21], iconSize: [18, 21], popupAnchor: [0, -21] })
+          })
+          // Use opacity to show probability
+          marker.setOpacity(submersionProb)
+        }
+
+        // Generate cause
+        let cause = isEroded ? "Érosion" : ""
+        if (submersionProb) {
+          if (cause) {
+            cause += " + "
+          }
+          cause += `Submersion ${(submersionProb * 100).toFixed(0)}% prob`
+        }
 
         // Add popup
-        bindFeaturePopup(params, marker, p)
-        return marker
-      },
-      filter: erosionFilter
-    }
-  }, [erosionFilter])
-
-  /** Layer to display blue icon for submerged features */
-  const submersionDamagesLayer = useMemo(() => {
-    return {
-      data: damageableFeatures,
-      styleFunction: () => ({}),
-      pointToLayer: (p: Feature<Point | MultiPoint>) => { 
-        const coords = convertFeatureToCoords(p)
-        const marker = L.marker(coords as any, {
-          icon: L.icon({ iconUrl: "house_blue_128.png", iconAnchor: [9, 21], iconSize: [18, 21], popupAnchor: [0, -21] })
-        })
-        // Use opacity to show probability
-        marker.setOpacity(submersionProbability(p))
-
-        // Add popup
-        bindFeaturePopup(params, marker, p)
+        bindFeaturePopup(params, marker, feature, cause)
 
         return marker
       },
-      filter: submersionFilter
+      filter: (feature: Feature) => erosionFilter(feature) || submersionFilter(feature)
     }
-  }, [submersionFilter])
+  }, [erosionFilter, submersionFilter])
 
   const layers: GeoLayerSpec[] = [
     // All cells (to allow selecting adjacent)
@@ -219,14 +226,18 @@ export const CellMap = (props: {
     } as GeoLayerSpec,
     // Coastline
     {
-      data: traitDeCote,
+      data: !adaptationsPossibleLoading ? traitDeCote : undefined,
       styleFunction: (feature) => {
+        const segId = feature!.properties!.ID
+
         return {
           fill: false,
-          weight: 4,
+          weight: 5,
           color: "black",
+          // Show dark if possible/exists
+          opacity: (_.find(adaptationsPossible, (row: any) => row.ID == segId && row.adaptation == params.adaptation)) ? 1 : 0.2
         }
-      }
+      },
     },
   ]
 
@@ -316,8 +327,7 @@ export const CellMap = (props: {
   }
 
   if (showDamages) {
-    layers.push(submersionDamagesLayer)
-    layers.push(erosionDamagesLayer)
+    layers.push(damagesLayer)
   }
 
   if (!bounds || !heights || !traitDeCote) {
@@ -375,12 +385,7 @@ export const CellMap = (props: {
     </div>
 }
 
-const emptyFeatureCollection: FeatureCollection = {
-  type: "FeatureCollection",
-  features: []
-}
-
-function bindFeaturePopup(params: DisplayParams, marker: L.Marker, feature: Feature) {
+function bindFeaturePopup(params: DisplayParams, marker: L.Marker, feature: Feature, cause: string) {
   const props = feature.properties!
 
   const html = <div>
@@ -391,7 +396,7 @@ function bindFeaturePopup(params: DisplayParams, marker: L.Marker, feature: Feat
     <div><span className="text-muted">Distance à la côte:</span> {props.distance ? props.distance.toFixed(0) + " m" : ""}</div>
     <div><span className="text-muted">Hauteur géodésique:</span> {props.hauteur} m</div>
     <div><span className="text-muted">Année d'exposition:</span> {getErosionYear(params, feature) > 2100 ? "" : getErosionYear(params, feature)}</div>
-    <div><span className="text-muted">Aléa:</span> TO DO</div>
+    <div><span className="text-muted">Aléa:</span> {cause}</div>
   </div>
 
   marker.bindPopup(ReactDOMServer.renderToString(html))

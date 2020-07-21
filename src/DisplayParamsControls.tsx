@@ -1,10 +1,11 @@
-import { useMemo, FC, ReactNode } from "react"
+import { useMemo, FC, ReactNode, CSSProperties } from "react"
 import React from "react"
 import Slider from "rc-slider"
 import { DisplayParams } from "./DisplayParams"
 import produce from 'immer'
 import { Adaptation } from "./params"
 import { PopoverHelpComponent } from "./PopoverHelp"
+import ReactSelect, { FormatOptionLabelMeta } from 'react-select'
 
 /** Display parameter controls displayed on left panel */
 export const DisplayParamsControls = (props: {
@@ -39,6 +40,14 @@ export const DisplayParamsControls = (props: {
 
   const adaptation = props.adaptations.find(a => a.id == params.adaptation)
 
+  const formatAdaptationOption = (option: Adaptation, labelMeta: FormatOptionLabelMeta<Adaptation>) => {
+    return labelMeta.context == "value" ? option.nom : <span>{option.nom} - <span className="text-muted">{option.description}</span></span>
+  }
+
+  const reactSelectStyles = {
+    menuPortal: (style: CSSProperties) => ({ ...style, zIndex: 2000 })
+  }
+
   return <div>
     <CellControl 
       title={[<i className="fa fa-calendar fa-fw"/>," Année"]}
@@ -57,21 +66,24 @@ export const DisplayParamsControls = (props: {
 
     <CellControl
       disabled={props.disabled.includes("adaptation")}
-      title="Mesure d'Adaptation:">
-        <div style={{ display: "inline-block", paddingLeft: 5 }}>
-          <select 
-            value={params.adaptation} 
-            onChange={ev => setParam(p => p.adaptation = ev.target.value)} 
-            className="form-control form-control-sm" 
-            style={{ width: "auto", display: "inline-block"}}>
-            {
-              props.adaptations.map(adaptation => <option key={adaptation.id} value={adaptation.id}>{adaptation.nom}</option>)
-            }
-          </select>
-          <PopoverHelpComponent>
-            { adaptation ? adaptation.description : "Selectionner une adaptation"}
-          </PopoverHelpComponent>
-        </div>          
+      title={<span>
+        Mesure d'Adaptation:
+        <PopoverHelpComponent>
+          { adaptation ? adaptation.description : "Selectionner une adaptation"}
+        </PopoverHelpComponent>
+      </span>}>
+        <div style={{ paddingLeft: 5, paddingRight: 5 }}>
+          <ReactSelect
+            options={props.adaptations}
+            onChange={option => { if (option) { setParam(p => p.adaptation = (option as any).id) }}}
+            value={props.adaptations.find(a => a.id == params.adaptation)}
+            styles={reactSelectStyles}
+            menuPortalTarget={document.body}
+            formatOptionLabel={formatAdaptationOption}
+            getOptionLabel={opt => opt.nom}
+            getOptionValue={opt => opt.id}
+          />
+        </div>
     </CellControl>
 
     <CellControl

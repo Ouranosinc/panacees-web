@@ -5,7 +5,7 @@ import { Highchart } from "./Highchart"
 import { Adaptation } from "../params"
 import { FillHeight } from '../FillHeight'
 import { DisplayParams } from '../DisplayParams'
-import { useLoadCsv } from '../utils'
+import { useLoadCsv, downloadData, sumValues } from '../utils'
 import LoadingComponent from '../LoadingComponent'
 
 export const NetCostsByTypeChart = (props: {
@@ -41,6 +41,19 @@ export const NetCostsByTypeChart = (props: {
 
   // Filter data by year
   let filtered = data.filter(d => d.year <= params.year)
+
+  // Create download
+  const handleDownload = () => {
+    downloadData(`couts_par_type.csv`, ["type", "adaptation", "valeur"], 
+      // Only include ones with adaptation
+      sumValues(filtered.filter(row => props.adaptations.find(a => a.id == row.adaptation) != null), 
+        r => `${r.type}:${r.adaptation}`).map(row => [
+          row.type,
+          props.adaptations.find(a => a.id == row.adaptation)!.nom,
+          row.value
+        ])
+      )
+  }
 
   // Sort by type
   filtered = _.sortBy(filtered, f => f.type)
@@ -80,6 +93,15 @@ export const NetCostsByTypeChart = (props: {
   chartOptions.series = series
 
   return <FillHeight>
-    {(height) => <Highchart chartOptions={chartOptions} style={{height: height, padding: 40}}/>}
+    {(height) => 
+      <div style={{ position: "relative" }}>
+        <Highchart chartOptions={chartOptions} style={{height: height, padding: 40}}/>
+        <div style={{ position: "absolute", right: 10, top: 10 }}>
+          <button className="btn btn-link btn-sm" onClick={handleDownload}>
+            <i className="fa fa-download"/> Télécharger
+          </button>
+        </div>
+      </div>
+    }
   </FillHeight>
 }

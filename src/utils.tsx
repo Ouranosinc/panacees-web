@@ -1,8 +1,10 @@
+import _ from 'lodash'
 import { useState, useEffect, FC, useRef } from "react"
 import { GeoJsonObject, Feature, Point, FeatureCollection, MultiPoint } from 'geojson'
 import { csv } from 'd3'
 import React from "react"
 import centroid from '@turf/centroid'
+import FileSaver from 'file-saver'
 
 /** Format currency for French Canada */
 export function formatCurrency(value: number | null | undefined | string) {
@@ -140,4 +142,33 @@ export function convertFeatureToPoint(feature: Feature): Feature<Point> {
     properties: feature.properties,
     geometry: centroid(feature).geometry
   }
+}
+
+/** Convert an array representing a row to a string */
+function csvifyRow(input: any[]) {
+  return input.map(cell => '"' + ((cell + "").replace('"', '\"')) + '"').join(",") + "\n"
+}
+
+/** Download the data as CSV */
+export function downloadData(filename: string, headers: string[], rows: any[][]) {
+  let csv = ''
+
+  csv += csvifyRow(headers)
+  for (const row of rows) {
+    csv += csvifyRow(row)
+  }
+
+  const blob = new Blob([csv], {type: "text/csv"});
+  FileSaver.saveAs(blob, filename)
+}
+
+/** Sum the "value" field for all rows, keeping keys distinct */
+export function sumValues<T>(rows: T[], uniq: (r: T) => string): T[] {
+  const groups = _.groupBy(rows, uniq)
+
+  return _.map(_.values(groups), (g: any[]) => {
+    const ret = _.clone(g[0])
+    ret.value = _.sum(g.map(g => g.value))
+    return ret
+  })
 }
