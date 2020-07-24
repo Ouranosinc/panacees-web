@@ -101,14 +101,32 @@ export const DisplayParamsControls = (props: {
             <option value="high">Élevé</option>
             <option value="vhigh">Très Élevé</option>
           </select>
-          <PopoverHelpComponent>Lorem ipsum</PopoverHelpComponent>
+          <PopoverHelpComponent>
+            Les scénarios d’érosion modélisés dans PANACÉES sont extrapolés des données fournies par le Laboratoire de dynamique et de gestion intégrée des zones côtières (LDGIZC) de l’Université de Québec à Rimouski (UQAR). Le  taux de recul moyen annuel (TR/an) par segment côtier homogène a été décliné en cinq scénarios pondérés :
+              <ul>
+                <li>Très optimiste (TR/an + 0,50 cm)</li>
+                <li>Optimiste (TR/an + 0,75 cm)</li>
+                <li>Moyen (TR/an)</li>
+                <li>Pessimiste  (TR/an + -1,25 cm)</li>
+                <li>Très pessimiste (TR/an + -1,5 cm)</li>
+              </ul>
+              Pour plus de détails consultez le guide de l'usager
+          </PopoverHelpComponent>
         </div>
     </CellControl>
 
     <CellControl 
       title={<span>
           Submersion:
-          <PopoverHelpComponent>Lorem ipsum</PopoverHelpComponent>
+          <PopoverHelpComponent>
+            Les scénarios de submersion modélisés dans PANACÉES sont extrapolés des données observées des inondations côtières survenues lors de la tempête du 6 décembre 2010. Ils inclut la hausse graduelle du niveau de la mer et la probabilité qu’un niveau d’eau lors d’onde de tempête pourrait engendrer des dommages à tous les 2, 20 ou 100 ans. 
+            <ul>
+              <li>2 ans : Scénario selon lequel le niveau d'eau minimum (min), moyen (moy) ou maximum (max) a une chance sur deux de se produire chaque année (50%).</li>
+              <li>20 ans : Scénario selon lequel le niveau d'eau minimum (min), moyen (moy) ou maximum (max) a une chance sur vingt de se produire chaque année (5%).</li>
+              <li>100 ans : Scénario selon lequel le niveau d'eau minimum (min), moyen (moy) ou maximum (max) a une chance sur cent de se produire chaque année (1%).</li>
+            </ul>
+            Pour plus de détails consultez le guide de l'usager
+          </PopoverHelpComponent>
         </span>}
       disabled={props.disabled.includes("submersion")}>
           <div style={{ paddingLeft: 20, paddingTop: 10 }}>

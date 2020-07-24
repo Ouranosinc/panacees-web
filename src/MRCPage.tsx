@@ -69,6 +69,11 @@ export const MRCPage = (props: {
           <i className="fa fa-fw fa-arrow-left"/>
         </a> {mrc.properties!.name}
       </div>
+      <div style={{ fontSize: 12, color: "#666", paddingLeft: 5, paddingRight: 5, paddingBottom: 10 }}>
+        PANACÉES permet de visualiser par défaut les pertes éconiomiques potentielles totales du scénario le plus probable pour 2050 selon le statu quo.
+        Pour changer le mode de visulation par défaut choisissez l'année ainsi que les scénarios d'érosion et de submersion. 
+        Pour en savoir plus sur un secteur cliquez sur le trait de côte de la carte.
+      </div>
       <DisplayParamsControls 
         params={params}
         onChange={setParams}

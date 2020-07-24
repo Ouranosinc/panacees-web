@@ -18,7 +18,9 @@ export const DamageSummary = (props: {
             </td>
             <td style={{textAlign: "right"}}>
               {formatCurrency(props.erosionDamage)}
-              <PopoverHelpComponent>Lorem ipsum</PopoverHelpComponent>
+              <PopoverHelpComponent>
+                Pertes économiques potentielles totales dues à l'érosion côtière
+              </PopoverHelpComponent>
             </td>
           </tr>
           <tr key="submersion">
@@ -27,7 +29,9 @@ export const DamageSummary = (props: {
             </td>
             <td style={{textAlign: "right", minWidth: 90}}>
               {formatCurrency(props.submersionDamage)}
-              <PopoverHelpComponent>Lorem ipsum</PopoverHelpComponent>
+              <PopoverHelpComponent>
+                Pertes économiques potentielles totales dues à la submersion côtière
+              </PopoverHelpComponent>
             </td>
           </tr>
           <tr key="total_per_m">
@@ -36,7 +40,9 @@ export const DamageSummary = (props: {
             </td>
             <td style={{textAlign: "right", minWidth: 90}}>
               {formatCurrency(props.totalDamagePerMeter)}
-              <PopoverHelpComponent>Lorem ipsum</PopoverHelpComponent>
+              <PopoverHelpComponent>
+                Pertes économiques potentielles totales dues à la submersion et l'érosion côtière au mètre linéaire
+              </PopoverHelpComponent>
             </td>
           </tr>
         </tbody>

@@ -348,31 +348,53 @@ export const CellMap = (props: {
     <div style={{ position: "absolute", right: 20, top: 20, zIndex: 600, backgroundColor: "white", padding: 10, opacity: 0.8, borderRadius: 5 }}>
       <Checkbox value={showDamages} onChange={setShowDamages}>
         Dommages
-        <PopoverHelpComponent>Lorem Ipsum</PopoverHelpComponent>
+        <PopoverHelpComponent>
+          Visualisation des bâtiments potentiellement touchés par l'érosion et/ou la submersion côtière - Ouranos
+        </PopoverHelpComponent>
       </Checkbox>
       <Checkbox value={showRolePoints} onChange={setShowRolePoints}>
         Bâtiments (points)
-        <PopoverHelpComponent>Lorem Ipsum</PopoverHelpComponent>
+        <PopoverHelpComponent>
+          Rôle foncier (2018) - MRC de La Mitis et MRC de Rivière-du-Loup
+        </PopoverHelpComponent>
       </Checkbox>
       <Checkbox value={showRolePolygons} onChange={setShowRolePolygons}>
         Bâtiments (polygones)
-        <PopoverHelpComponent>Lorem Ipsum</PopoverHelpComponent>
+        <PopoverHelpComponent>
+          Rôle foncier (2018) - MRC de La Mitis et MRC de Rivière-du-Loup
+        </PopoverHelpComponent>
       </Checkbox>
       <Checkbox value={showInfras} onChange={setShowInfras}>
         Infrastructures
-        <PopoverHelpComponent>Lorem Ipsum</PopoverHelpComponent>
+        <PopoverHelpComponent>
+          <div>Infrastructures routières (2019) - Ministère des Transports du Québec (MTQ)</div>
+          <div>Infrastructures souterraines (2019) - MRC de La Mitis et de Rivière-du-Loup</div>
+          <div>Biens meubles essentiels  (2019) - Ministère de la Sécurité publique (MSP)</div>
+          <div>Infrastructures de transports informels (2019) - Open Street Map</div>
+        </PopoverHelpComponent>
       </Checkbox>
       <Checkbox value={showEnviro} onChange={setShowEnviro}>
         Environment
-        <PopoverHelpComponent>Lorem Ipsum</PopoverHelpComponent>
+        <PopoverHelpComponent>
+          <div>Milieux humides potentiels (2018) - MRC de La Mitis et MRC de Rivière-du-Loup</div>
+          <div>Atlas des milieux côtiers d'intéret pour la conservation dans l'estuaire et du golfe du Saint-Laurent (2019) -  Environnement et Changements Climatiques Canada (ECCC)</div>
+          <div>Faune et Flore en danger (2018) - Ministère des Forêts, de la Faune et des Parcs du Québec (MFFP)</div>
+          <div>Changement dans le niveau marin (2019) - Ministère des Pêches et Océans Canada (MPO)</div>
+          <div>Usages reliés aux milieux aquatiques (2015) - Ministère des affaires municipales et de l'habitation du Québec (MAMH) </div>
+          <div>Environnment (2019) - Open Street Map</div>
+        </PopoverHelpComponent>
       </Checkbox>
       <Checkbox value={showAgri} onChange={setShowAgri}>
         Agriculture
-        <PopoverHelpComponent>Lorem Ipsum</PopoverHelpComponent>
+        <PopoverHelpComponent>
+          Parcelles agricoles (2019) - Financère agricole du Québec (FADQ)
+        </PopoverHelpComponent>
       </Checkbox>
       <Checkbox value={showSatellite} onChange={setShowSatellite}>
         Satellite
-        <PopoverHelpComponent>Lorem Ipsum</PopoverHelpComponent>
+        <PopoverHelpComponent>
+          Satellite par Bing Maps
+        </PopoverHelpComponent>
       </Checkbox>
     </div>
     <DamageSummary erosionDamage={erosionDamage} submersionDamage={submersionDamage} totalDamagePerMeter={totalDamagePerMeter} />
