@@ -9,27 +9,29 @@ C’est dans ce contexte qu’Ouranos, en étroite collaboration avec les munici
 
 Pour plus d’information sur le projet, veuillez consulter le Rapport final [insérer un lien PDF vers le document synthèse]
 
-**L’équipe**
+
+### Équipe de projet
 
 **Responsable du projet**
 
-Laurent Da Silva, Économiste principal, Ouranos\
-Nathalie Bleau,, Ouranos
+Nathalie Bleau, Coordonnatrice, Ourano
+
 
 **Équipe de réalisation**
 
 Chantal Quintin, Géographe, Ouranos\
-Ursule Boyer-Villemaire, Professeur, UQAM \
 Charles-Antoine Gosselin, Économiste, Ouranos\
-Travis Logan, Spécialiste, scénarios climatiques, Ouranos\
-Trevor Smith, Spécialiste, scénarios climatiques, Ouranos\
+Ursule Boyer-Villemaire, Chef - Analyses socio-économiques, Ouranos\
+Trevor Smith, Spécialiste - Plateformes climatiques, données et opérations, Ouranos\
+Travis Logan, Chef - Plateformes climatiques, données et opérations, Ouranos\
 Guillaume Fréchette-Ledoux, agent de recherche, UQAM
+
 
 **Collaborateurs** 
 
-Clayton Grassick, \
-Firme de génie,\
-Firme de graphisme
+Clayton Grassick, Concepteur de plateformes web\
+Laurent Da Silva, Économiste
+
 
 **Partenaires** 
 
