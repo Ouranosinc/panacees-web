@@ -22,7 +22,7 @@ export const NetCostsBySectorChart = (props: {
     `data/cells/${props.cellId}/dommages_submersion_${params.erosion}_2${params.submersion2Y}_20${params.submersion20Y}_100${params.submersion100Y}.csv`, 
     row => ({ ...row, year: +row.year, value: +row.value }))
   const [rawAdaptationCosts, rawAdaptationCostsLoading] = useLoadCsv(
-    `data/cells/${props.cellId}/couts_adaptation_${params.erosion}.csv`, 
+    `data/cells/${props.cellId}/couts_adaptations_${params.erosion}.csv`, 
     row => ({ ...row, year: +row.year, value: +row.value }))
 
   if (!rawErosionDamages || !rawSubmersionDamages || !rawAdaptationCosts) {

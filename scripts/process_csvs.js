@@ -131,7 +131,7 @@ async function heights() {
 
 
 async function couts_adaptations() {
-  const parser = new CsvParser("input_data/couts_adaptation.csv")
+  const parser = new CsvParser("input_data/couts_adaptations.csv")
 
   let n = 0
   while (true) {

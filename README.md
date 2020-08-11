@@ -32,6 +32,12 @@ Your app is ready to be deployed!
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 
+## Data conversion
+
+If data is in wrong encoding: (E.g.)
+
+`iconv -f iso-8859-1 -t utf-8 couts_adaptations.csv -o couts_adaptations_utf8.csv`
+
 ```
 npm run build && rsync --info=progress2 -rz build/* root@165.227.42.230:/var/www/html/
 ```
