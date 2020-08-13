@@ -35,6 +35,11 @@ export const CellPage = (props: {
 
   const { year, adaptation, erosion } = params
 
+  // Load heights
+  const [heights, heightsLoading] = useLoadCsv(`data/cells/${props.cellId}/hauteur.csv`,
+    row => ({ ...row, value: +row.value })
+  )
+
   // Load adaptations
   const [adaptations] = useLoadCsv<Adaptation>(`data/adaptations.csv`)
 
@@ -137,6 +142,7 @@ export const CellPage = (props: {
         onChange={setParams}
         disabled={disabled}
         adaptations={adaptationOptions}
+        heights={heights}
         />
     </div>
     <div className="cell-contents">

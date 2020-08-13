@@ -157,7 +157,7 @@ async function couts_adaptations() {
       fs.mkdirSync(outputDir)
     }
 
-    const filepath = path.join(outputDir, `couts_adaptation_${row.erosion}.csv`)
+    const filepath = path.join(outputDir, `couts_adaptations_${row.erosion}.csv`)
 
     // Append to file
     if (!fs.existsSync(filepath)) {

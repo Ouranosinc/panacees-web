@@ -7,7 +7,7 @@ import L from "leaflet"
 import length from '@turf/length'
 import { History } from "history"
 import { GeoJsonObject, Feature, Point, FeatureCollection, MultiPoint } from 'geojson'
-import { DamageSummary } from "./DamageSummary"
+import { CostSummary } from "./CostSummary"
 import { DisplayParams } from "./DisplayParams"
 import LoadingComponent from "./LoadingComponent"
 import { Checkbox, useLoadJson, convertFeatureToCoords, useLoadCsv, convertFeatureToPoint, formatCurrency } from "./utils"
@@ -58,7 +58,7 @@ export const CellMap = (props: {
   const [enviroPolygons] = useLoadJson<FeatureCollection>(`data/cells/${props.cellId}/polygone_enviro.geojson`)
   const [infrasPolygons] = useLoadJson<FeatureCollection>(`data/cells/${props.cellId}/polygone_infras.geojson`)
 
-  // Load damages for parameters
+  // Load damages and costs for parameters
   const params = props.displayParams
   const [rawErosionDamages, rawErosionDamagesLoading] = useLoadCsv(
     `data/cells/${props.cellId}/dommages_erosion_${params.erosion}.csv`, 
@@ -66,7 +66,10 @@ export const CellMap = (props: {
   const [rawSubmersionDamages, rawSubmersionDamagesLoading] = useLoadCsv(
     `data/cells/${props.cellId}/dommages_submersion_${params.erosion}_2${params.submersion2Y}_20${params.submersion20Y}_100${params.submersion100Y}.csv`, 
     row => ({ ...row, year: +row.year, value: +row.value }))
-
+  const [rawAdaptationCosts, rawAdaptationCostsLoading] = useLoadCsv(
+    `data/cells/${props.cellId}/couts_adaptations_${params.erosion}.csv`, 
+    row => ({ ...row, year: +row.year, value: +row.value }))
+  
   // Calculate bounding box
   useEffect(() => {
     if (cell) {
@@ -344,6 +347,10 @@ export const CellMap = (props: {
 
   const totalDamagePerMeter = (erosionDamage + submersionDamage) / (length(traitDeCote) * 1000)
 
+  const adaptationCost = _.sum((rawAdaptationCosts || [])
+    .filter(row => row.adaptation == params.adaptation && row.year <= params.year)
+    .map(row => row.value))
+
   return <div style={{ position: "relative" }}>
     <div style={{ position: "absolute", right: 20, top: 20, zIndex: 600, backgroundColor: "white", padding: 10, opacity: 0.8, borderRadius: 5 }}>
       <Checkbox value={showDamages} onChange={setShowDamages}>
@@ -397,7 +404,12 @@ export const CellMap = (props: {
         </PopoverHelpComponent>
       </Checkbox>
     </div>
-    <DamageSummary erosionDamage={erosionDamage} submersionDamage={submersionDamage} totalDamagePerMeter={totalDamagePerMeter} />
+    <CostSummary 
+      erosionDamage={erosionDamage} 
+      submersionDamage={submersionDamage} 
+      totalDamagePerMeter={totalDamagePerMeter} 
+      adaptationCost={adaptationCost}
+      />
     <GeoJsonMap 
       layers={layers} 
       bounds={bounds} 

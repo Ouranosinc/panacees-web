@@ -16,6 +16,13 @@ export const DisplayParamsControls = (props: {
 
   /** Which controls to disable */
   disabled: ("year" | "submersion" | "erosion" | "adaptation")[]
+
+  /** Heights to display (optional) */
+  heights?: {
+    scenario: "min" | "moy" | "max"
+    frequence: "h2ans" | "h20ans" | "h100ans"
+    value: number
+  }[]
 }) => {
   const params = props.params
 
@@ -32,11 +39,27 @@ export const DisplayParamsControls = (props: {
     return marks
   }, [])
 
-  const submersionOptions = [
+  /** Options if no heights available */
+  const baseSubmersionOptions = [
     { value: "min", label: "Min" },
     { value: "moy", label: "Moy" },
     { value: "max", label: "Max" }
   ]
+
+  const getSubmersionOptions = (frequence: "h2ans" | "h20ans" | "h100ans") => {
+    const heightMin = props.heights!.find(row => row.scenario == "min" && row.frequence == frequence)!.value
+    const heightMoy = props.heights!.find(row => row.scenario == "moy" && row.frequence == frequence)!.value
+    const heightMax = props.heights!.find(row => row.scenario == "max" && row.frequence == frequence)!.value
+    return [
+      { value: "min", label: heightMin.toFixed(2) + "m" },
+      { value: "moy", label: heightMoy.toFixed(2) + "m" },
+      { value: "max", label: heightMax.toFixed(2) + "m" }
+    ]
+  }
+
+  const submersion2Options = props.heights ? getSubmersionOptions("h2ans") : baseSubmersionOptions
+  const submersion20Options = props.heights ? getSubmersionOptions("h20ans") : baseSubmersionOptions
+  const submersion100Options = props.heights ? getSubmersionOptions("h100ans") : baseSubmersionOptions
 
   const adaptation = props.adaptations.find(a => a.id == params.adaptation)
 
@@ -133,7 +156,7 @@ export const DisplayParamsControls = (props: {
             <div style={{ paddingBottom: 5 }}>
               <div className="submersion-freq-title">2 ans:</div>
               <Toggle 
-                options={submersionOptions}
+                options={submersion2Options}
                 value={params.submersion2Y} 
                 onChange={level => setParam(p => p.submersion2Y = level)}
               />
@@ -141,7 +164,7 @@ export const DisplayParamsControls = (props: {
             <div style={{ paddingBottom: 5 }}>
               <div className="submersion-freq-title">20 ans:</div>
               <Toggle 
-                options={submersionOptions}
+                options={submersion20Options}
                 value={params.submersion20Y} 
                 onChange={level => setParam(p => p.submersion20Y = level)}
               />
@@ -149,7 +172,7 @@ export const DisplayParamsControls = (props: {
             <div style={{ paddingBottom: 5 }}>
               <div className="submersion-freq-title">100 ans:</div>
               <Toggle 
-                options={submersionOptions}
+                options={submersion100Options}
                 value={params.submersion100Y} 
                 onChange={level => setParam(p => p.submersion100Y = level)}
               />

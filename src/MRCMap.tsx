@@ -7,7 +7,7 @@ import { GeoJsonObject, Feature, Point, FeatureCollection } from 'geojson'
 import { useLoadJson, useLoadCsv } from "./utils"
 import { DisplayParams } from './DisplayParams'
 import { scaleLinear, interpolateRdYlBu, scaleSequential, interpolateSpectral } from 'd3'
-import { DamageSummary } from './DamageSummary'
+import { CostSummary } from './CostSummary'
 import LoadingComponent from './LoadingComponent'
 import ReactSelect from 'react-select'
 
@@ -166,7 +166,7 @@ export const MRCMap = (props: {
   const totalDamagePerMeter = (erosionDamage + submersionDamage) / _.sum(_.values(cellLengths))
 
   return <div style={{ position: "relative" }}>
-    <DamageSummary erosionDamage={erosionDamage} submersionDamage={submersionDamage} totalDamagePerMeter={totalDamagePerMeter} />
+    <CostSummary erosionDamage={erosionDamage} submersionDamage={submersionDamage} totalDamagePerMeter={totalDamagePerMeter} />
     <GeoJsonMap 
       layers={layers} 
       bounds={bounds} 
