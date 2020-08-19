@@ -39,5 +39,5 @@ If data is in wrong encoding: (E.g.)
 `iconv -f iso-8859-1 -t utf-8 couts_adaptations.csv -o couts_adaptations_utf8.csv`
 
 ```
-npm run build && rsync --info=progress2 -rz build/* root@165.227.42.230:/var/www/html/
+npm run build && rsync --info=progress2 -rz --delete build/* root@165.227.42.230:/var/www/html/
 ```
