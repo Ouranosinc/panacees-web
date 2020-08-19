@@ -165,15 +165,15 @@ export const CellMap = (props: {
 
         if (isEroded) {
           marker = L.marker(coords as any, {
-            icon: L.icon({ iconUrl: "house_red_128.png", iconAnchor: [9, 21], iconSize: [18, 21], popupAnchor: [0, -21] })
+            icon: L.icon({ iconUrl: "damage_red_128.png", iconAnchor: [9, 21], iconSize: [18, 21], popupAnchor: [0, -21] })
           })
         }
         else {
           marker = L.marker(coords as any, {
-            icon: L.icon({ iconUrl: "house_blue_128.png", iconAnchor: [9, 21], iconSize: [18, 21], popupAnchor: [0, -21] })
+            icon: L.icon({ iconUrl: "damage_blue_128.png", iconAnchor: [9, 21], iconSize: [18, 21], popupAnchor: [0, -21] })
           })
           // Use opacity to show probability
-          marker.setOpacity(submersionProb)
+          marker.setOpacity(submersionProb * 0.8 + 0.2)
         }
 
         // Generate cause
@@ -192,7 +192,7 @@ export const CellMap = (props: {
       },
       filter: (feature: Feature) => erosionFilter(feature) || submersionFilter(feature)
     }
-  }, [erosionFilter, submersionFilter])
+  }, [erosionFilter, submersionFilter, damageableFeatures])
 
   const layers: GeoLayerSpec[] = [
     // All cells (to allow selecting adjacent)
@@ -219,7 +219,7 @@ export const CellMap = (props: {
         })
         layer.on("mouseover", (e) => {
           if (cellId != props.cellId) {
-            e.target.setStyle({ fillOpacity: 0.2 })
+            e.target.setStyle({ fillOpacity: 0.6 })
           }
         })
         layer.on("mouseout", (e) => {
@@ -429,7 +429,7 @@ function bindFeaturePopup(params: DisplayParams, marker: L.Marker, feature: Feat
     <div><span className="text-muted">Ouvrage de protection:</span> {props.ouvrage == "0" ? "Non" : "Oui"}</div>
     <div><span className="text-muted">Distance à la côte:</span> {props.distance ? props.distance.toFixed(0) + " m" : ""}</div>
     <div><span className="text-muted">Hauteur géodésique:</span> {props.hauteur} m</div>
-    <div><span className="text-muted">Année d'exposition:</span> {getErosionYear(params, feature) > 2100 ? "" : getErosionYear(params, feature)}</div>
+    <div><span className="text-muted">Année d'exposition à l'érosion:</span> {getErosionYear(params, feature) > 2100 ? "" : getErosionYear(params, feature)}</div>
     <div><span className="text-muted">Aléa:</span> {cause}</div>
   </div>
 
