@@ -1,7 +1,12 @@
-/* Simplex size override */
-.navbar {
-  font-size: 14px;
+.rc-slider-track {
+  background-color: #d9230f !important;
 }
+
+.rc-slider-dot-active, .rc-slider-handle{
+  border-color: #d9230f !important;
+}
+
+
 
 /* Remove annoying Bootstrap 4 button outlines */
 .btn:focus, .btn:active:focus, .btn.active:focus { 

@@ -81,7 +81,7 @@ const App = () => {
   return (
     <div>
       <Navbar location={location}/>
-      <div style={{paddingTop: 70}}>
+      <div style={{paddingTop: 71}}>
         {renderContents()}
       </div>
     </div>
@@ -95,8 +95,8 @@ const Navbar = (props: { location: Location }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
       <div className="container-fluid">
-        <a className="navbar-brand" href="#">
-          <img src="ouranos.png" alt="Ouranos" style={{ position: "relative", display: "inline-block", top: -2, height: 27, left: -14, cursor: "pointer" }} />
+        <a className="navbar-brand" href="#" style={{ width: 90 }}>
+          <img src="ouranos.png" alt="Ouranos" style={{ position: "absolute", top: 17, height: 33, left: 10, cursor: "pointer" }} />
         </a>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
