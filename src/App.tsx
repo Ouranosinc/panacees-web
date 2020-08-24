@@ -81,7 +81,7 @@ const App = () => {
   return (
     <div>
       <Navbar location={location}/>
-      <div style={{paddingTop: 56}}>
+      <div style={{paddingTop: 70}}>
         {renderContents()}
       </div>
     </div>
@@ -93,7 +93,7 @@ export default App;
 /** Top navbar */
 const Navbar = (props: { location: Location }) => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
       <div className="container-fluid">
         <a className="navbar-brand" href="#">
           <img src="ouranos.png" alt="Ouranos" style={{ position: "relative", display: "inline-block", top: -2, height: 27, left: -14, cursor: "pointer" }} />

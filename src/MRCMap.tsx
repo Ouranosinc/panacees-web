@@ -133,7 +133,7 @@ export const MRCMap = (props: {
           fillColor: "#444",
           fillOpacity: 0,
           opacity: cellId == props.prevCellId ? 0.8 : 0,
-          color: "#38F"
+          color: "#d9230f"
         }
       }, 
       onEachFeature: (feature, layer: L.GeoJSON) => {
@@ -146,7 +146,7 @@ export const MRCMap = (props: {
         })
         layer.on("mouseover", (e) => {
           setHover(cellId)
-          e.target.setStyle({ fillColor: "#38F", fillOpacity: 0.3 })
+          e.target.setStyle({ fillColor: "#d9230f", fillOpacity: 0.3 })
         })
         layer.on("mouseout", (e) => {
           setHover(undefined)

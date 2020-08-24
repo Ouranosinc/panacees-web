@@ -35,7 +35,7 @@ export const SelectMRC = (props: {
     styleFunction: (feature) => {
       return {
         weight: 1,
-        fillColor: "#38F",
+        fillColor: "#d9230f",
         fillOpacity: hover == feature!.properties.id ? 0.7 : 0.5
       }
     },

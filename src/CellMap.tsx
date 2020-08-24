@@ -203,9 +203,9 @@ export const CellMap = (props: {
 
         return {
           weight: 1,
-          color: "#38F",
+          color: "#d9230f",
           opacity: cellId == props.cellId ? 0.8 : 0,
-          fillColor: "#444",
+          fillColor: "#d9230f",
           fillOpacity: 0,
         }
       }, 
@@ -219,11 +219,13 @@ export const CellMap = (props: {
         })
         layer.on("mouseover", (e) => {
           if (cellId != props.cellId) {
-            e.target.setStyle({ fillOpacity: 0.6 })
+            e.target.setStyle({ fillOpacity: 0.2, opacity: 1 })
           }
         })
         layer.on("mouseout", (e) => {
-          e.target.setStyle({ fillOpacity: 0 })
+          if (cellId != props.cellId) {
+            e.target.setStyle({ fillOpacity: 0, opacity: 0 })
+          }
         })
       },
     } as GeoLayerSpec,

@@ -65,7 +65,7 @@ export const MRCPage = (props: {
   return <div>
     <div className="cell-sidebar">
       <div className="cell-sidebar-title">
-        <a style={{cursor: "pointer", color: "#38F" }} onClick={handleBack}>
+        <a style={{cursor: "pointer", color: "#d9230f" }} onClick={handleBack}>
           <i className="fa fa-fw fa-arrow-left"/>
         </a> {mrc.properties!.name}
       </div>
