@@ -126,7 +126,7 @@ export const DisplayParamsControls = (props: {
           </select>
           <PopoverHelpComponent>
             Les scénarios d’érosion modélisés dans PANACÉES sont extrapolés des données fournies par le Laboratoire de dynamique et de gestion intégrée des zones côtières (LDGIZC) de l’Université de Québec à Rimouski (UQAR). Le taux de recul moyen annuel (TR/an) par segment côtier homogène a été décliné en cinq scénarios. 
-            Pour plus de détails, consultez le <a href="#/guide">guide de l'usager.</a>
+            Pour plus de détails, consultez le <a href="#/guide" target="_blank">guide de l'usager.</a>
           </PopoverHelpComponent>
         </div>
     </CellControl>
@@ -136,7 +136,7 @@ export const DisplayParamsControls = (props: {
           Submersion:
           <PopoverHelpComponent>
             Les scénarios de submersion modélisés dans PANACÉES sont extrapolés des données observées des inondations côtières survenues lors de la tempête du 6 décembre 2010. Ils inclut la hausse graduelle du niveau de la mer et la probabilité qu’un niveau d’eau lors d’onde de tempête pourrait engendrer des dommages à tous les 2, 20 ou 100 ans. 
-            Pour plus de détails consultez le <a href="#/guide">guide de l'usager.</a>
+            Pour plus de détails consultez le <a href="#/guide" target="_blank">guide de l'usager.</a>
           </PopoverHelpComponent>
         </span>}
       disabled={props.disabled.includes("submersion")}>
