@@ -9,7 +9,7 @@ export const CostSummary = (props: {
   totalDamagePerMeter?: number | null
   adaptationCost?: number | null
 }) => {
-  return <div style={{ position: "absolute", textAlign: "center", width: "100%", top: 20, zIndex: 1200 }}>
+  return <div style={{ position: "absolute", left: "50%", transform: "translate(-50%, 0)", top: 20, zIndex: 1200 }}>
     <div style={{ display: "inline-block", backgroundColor: "white", padding: 10, borderRadius: 8, fontSize: 14, opacity: 0.9 }}>
       <table>
         <tbody>

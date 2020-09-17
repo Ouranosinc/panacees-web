@@ -4,12 +4,13 @@ import { GeoLayerSpec, GeoJsonMap } from "./GeoJsonMap"
 import bbox from '@turf/bbox'
 import length from '@turf/length'
 import { GeoJsonObject, Feature, Point, FeatureCollection } from 'geojson'
-import { useLoadJson, useLoadCsv } from "./utils"
+import { useLoadJson, useLoadCsv, Checkbox } from "./utils"
 import { DisplayParams } from './DisplayParams'
 import { scaleLinear, interpolateRdYlBu, scaleSequential, interpolateSpectral } from 'd3'
 import { CostSummary } from './CostSummary'
 import LoadingComponent from './LoadingComponent'
 import ReactSelect from 'react-select'
+import { PopoverHelpComponent } from './PopoverHelp'
 
 /** Map for an MRC which shows the cells and the coastline highlighted by cost of damages */
 export const MRCMap = (props: {
@@ -30,6 +31,9 @@ export const MRCMap = (props: {
 }) => {
   // Load coastline
   const [coastline, coastlineLoading] = useLoadJson<FeatureCollection>(`data/mrcs/${props.mrcId}/trait_de_cote.geojson`)
+
+  // True to show satellite
+  const [showSatellite, setShowSatellite] = useState(false)
 
   // Load cells
   const [cells, cellsLoading] = useLoadJson<FeatureCollection>(`data/mrcs/${props.mrcId}/sub_cellules.geojson`)
@@ -167,10 +171,19 @@ export const MRCMap = (props: {
 
   return <div style={{ position: "relative" }}>
     <CostSummary erosionDamage={erosionDamage} submersionDamage={submersionDamage} totalDamagePerMeter={totalDamagePerMeter} />
+    <div style={{ position: "absolute", right: 20, top: 60, zIndex: 600, backgroundColor: "white", padding: 10, opacity: 0.8, borderRadius: 5 }}>
+      <Checkbox value={showSatellite} onChange={setShowSatellite}>
+        Satellite
+        <PopoverHelpComponent placement="bottom">
+          Satellite par Bing Maps
+        </PopoverHelpComponent>
+      </Checkbox>
+    </div>
+
     <GeoJsonMap 
       layers={layers} 
       bounds={bounds} 
-      baseLayer={"positron"}
+      baseLayer={ showSatellite ? "bing_satellite" : "positron" }
       height={props.height}
       loading={rawErosionDamagesLoading || rawSubmersionDamagesLoading}
     />
@@ -186,7 +199,7 @@ const CellSelector = (props: {
   options: { value: string, label: string }[]
   onSelect: (value: string) => void
 }) => {
-  return <div style={{ position: "absolute", top: 10, right: 10, zIndex: 1000, width: 250 }}>
+  return <div style={{ position: "absolute", top: 10, right: 10, zIndex: 1300, width: 250 }}>
     <ReactSelect
       placeholder="Sélectionner une cellule"
       options={props.options}

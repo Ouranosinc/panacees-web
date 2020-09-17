@@ -182,7 +182,7 @@ export const CellMap = (props: {
           if (cause) {
             cause += " + "
           }
-          cause += `Submersion ${(submersionProb * 100).toFixed(0)}% prob`
+          cause += `Submersion` // ${(submersionProb * 100).toFixed(0)}% prob`
         }
 
         // Add popup
@@ -202,7 +202,7 @@ export const CellMap = (props: {
         const cellId = feature!.properties!.ID_field
 
         return {
-          weight: 1,
+          weight: 2,
           color: "#d9230f",
           opacity: cellId == props.cellId ? 0.8 : 0,
           fillColor: "#d9230f",
@@ -357,25 +357,25 @@ export const CellMap = (props: {
     <div style={{ position: "absolute", right: 20, top: 20, zIndex: 600, backgroundColor: "white", padding: 10, opacity: 0.8, borderRadius: 5 }}>
       <Checkbox value={showDamages} onChange={setShowDamages}>
         Dommages
-        <PopoverHelpComponent>
+        <PopoverHelpComponent placement="bottom">
           Visualisation des bâtiments potentiellement touchés par l'érosion et/ou la submersion côtière - Ouranos
         </PopoverHelpComponent>
       </Checkbox>
       <Checkbox value={showRolePoints} onChange={setShowRolePoints}>
         Bâtiments (points)
-        <PopoverHelpComponent>
+        <PopoverHelpComponent placement="bottom">
           Rôle foncier (2018) - MRC de La Mitis et MRC de Rivière-du-Loup
         </PopoverHelpComponent>
       </Checkbox>
       <Checkbox value={showRolePolygons} onChange={setShowRolePolygons}>
         Bâtiments (polygones)
-        <PopoverHelpComponent>
+        <PopoverHelpComponent placement="bottom">
           Rôle foncier (2018) - MRC de La Mitis et MRC de Rivière-du-Loup
         </PopoverHelpComponent>
       </Checkbox>
       <Checkbox value={showInfras} onChange={setShowInfras}>
         Infrastructures
-        <PopoverHelpComponent>
+        <PopoverHelpComponent placement="bottom">
           <div>Infrastructures routières (2019) - Ministère des Transports du Québec (MTQ)</div>
           <div>Infrastructures souterraines (2019) - MRC de La Mitis et de Rivière-du-Loup</div>
           <div>Biens meubles essentiels  (2019) - Ministère de la Sécurité publique (MSP)</div>
@@ -384,7 +384,7 @@ export const CellMap = (props: {
       </Checkbox>
       <Checkbox value={showEnviro} onChange={setShowEnviro}>
         Environment
-        <PopoverHelpComponent>
+        <PopoverHelpComponent placement="bottom">
           <div>Milieux humides potentiels (2018) - MRC de La Mitis et MRC de Rivière-du-Loup</div>
           <div>Atlas des milieux côtiers d'intéret pour la conservation dans l'estuaire et du golfe du Saint-Laurent (2019) -  Environnement et Changements Climatiques Canada (ECCC)</div>
           <div>Faune et Flore en danger (2018) - Ministère des Forêts, de la Faune et des Parcs du Québec (MFFP)</div>
@@ -395,13 +395,13 @@ export const CellMap = (props: {
       </Checkbox>
       <Checkbox value={showAgri} onChange={setShowAgri}>
         Agriculture
-        <PopoverHelpComponent>
+        <PopoverHelpComponent placement="bottom">
           Parcelles agricoles (2019) - Financère agricole du Québec (FADQ)
         </PopoverHelpComponent>
       </Checkbox>
       <Checkbox value={showSatellite} onChange={setShowSatellite}>
         Satellite
-        <PopoverHelpComponent>
+        <PopoverHelpComponent placement="bottom">
           Satellite par Bing Maps
         </PopoverHelpComponent>
       </Checkbox>
@@ -425,6 +425,7 @@ function bindFeaturePopup(params: DisplayParams, marker: L.Marker, feature: Feat
   const props = feature.properties!
 
   const html = <div>
+    <div><span className="text-muted">ID du matricule:</span> {props.ID}</div>
     <div><span className="text-muted">Description:</span> {props.desc}</div>
     <div><span className="text-muted">Secteur:</span> {props.secteur}</div>
     <div><span className="text-muted">Valeur totale:</span> {formatCurrency(props.valeur_tot)}</div>
