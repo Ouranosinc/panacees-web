@@ -118,22 +118,15 @@ export const DisplayParamsControls = (props: {
             onChange={ev => setParam(p => p.erosion = ev.target.value as any)} 
             className="form-control form-control-sm" 
             style={{ width: "auto", display: "inline-block"}}>
-            <option value="vlow">Très Bas</option>
-            <option value="low">Bas</option>
-            <option value="med">Moyen</option>
-            <option value="high">Élevé</option>
-            <option value="vhigh">Très Élevé</option>
+            <option value="vlow">Très optimiste (TR/an * 0,5)</option>
+            <option value="low">Optimiste (TR/an * 0,75)</option>
+            <option value="med">Moyen (TR/an)</option>
+            <option value="high">Pessimiste (TR/an * 1,25)</option>
+            <option value="vhigh">Très pessimiste (TR/an * 1,5)</option>
           </select>
           <PopoverHelpComponent>
-            Les scénarios d’érosion modélisés dans PANACÉES sont extrapolés des données fournies par le Laboratoire de dynamique et de gestion intégrée des zones côtières (LDGIZC) de l’Université de Québec à Rimouski (UQAR). Le  taux de recul moyen annuel (TR/an) par segment côtier homogène a été décliné en cinq scénarios pondérés :
-              <ul>
-                <li>Très optimiste (TR/an + 0,50 cm)</li>
-                <li>Optimiste (TR/an + 0,75 cm)</li>
-                <li>Moyen (TR/an)</li>
-                <li>Pessimiste  (TR/an + -1,25 cm)</li>
-                <li>Très pessimiste (TR/an + -1,5 cm)</li>
-              </ul>
-              Pour plus de détails consultez le guide de l'usager
+            Les scénarios d’érosion modélisés dans PANACÉES sont extrapolés des données fournies par le Laboratoire de dynamique et de gestion intégrée des zones côtières (LDGIZC) de l’Université de Québec à Rimouski (UQAR). Le taux de recul moyen annuel (TR/an) par segment côtier homogène a été décliné en cinq scénarios. 
+            Pour plus de détails, consultez le <a href="#/guide">guide de l'usager.</a>
           </PopoverHelpComponent>
         </div>
     </CellControl>
@@ -148,7 +141,7 @@ export const DisplayParamsControls = (props: {
               <li>20 ans : Scénario selon lequel le niveau d'eau minimum (min), moyen (moy) ou maximum (max) a une chance sur vingt de se produire chaque année (5%).</li>
               <li>100 ans : Scénario selon lequel le niveau d'eau minimum (min), moyen (moy) ou maximum (max) a une chance sur cent de se produire chaque année (1%).</li>
             </ul>
-            Pour plus de détails consultez le guide de l'usager
+            Pour plus de détails consultez le <a href="#/guide">guide de l'usager.</a>
           </PopoverHelpComponent>
         </span>}
       disabled={props.disabled.includes("submersion")}>
