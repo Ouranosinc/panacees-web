@@ -136,11 +136,6 @@ export const DisplayParamsControls = (props: {
           Submersion:
           <PopoverHelpComponent>
             Les scénarios de submersion modélisés dans PANACÉES sont extrapolés des données observées des inondations côtières survenues lors de la tempête du 6 décembre 2010. Ils inclut la hausse graduelle du niveau de la mer et la probabilité qu’un niveau d’eau lors d’onde de tempête pourrait engendrer des dommages à tous les 2, 20 ou 100 ans. 
-            <ul>
-              <li>2 ans : Scénario selon lequel le niveau d'eau minimum (min), moyen (moy) ou maximum (max) a une chance sur deux de se produire chaque année (50%).</li>
-              <li>20 ans : Scénario selon lequel le niveau d'eau minimum (min), moyen (moy) ou maximum (max) a une chance sur vingt de se produire chaque année (5%).</li>
-              <li>100 ans : Scénario selon lequel le niveau d'eau minimum (min), moyen (moy) ou maximum (max) a une chance sur cent de se produire chaque année (1%).</li>
-            </ul>
             Pour plus de détails consultez le <a href="#/guide">guide de l'usager.</a>
           </PopoverHelpComponent>
         </span>}
@@ -153,6 +148,9 @@ export const DisplayParamsControls = (props: {
                 value={params.submersion2Y} 
                 onChange={level => setParam(p => p.submersion2Y = level)}
               />
+              <PopoverHelpComponent>
+                2 ans : Scénario selon lequel le niveau d'eau a une chance sur deux de se produire chaque année (50%).
+              </PopoverHelpComponent>
             </div>
             <div style={{ paddingBottom: 5 }}>
               <div className="submersion-freq-title">20 ans:</div>
@@ -161,6 +159,9 @@ export const DisplayParamsControls = (props: {
                 value={params.submersion20Y} 
                 onChange={level => setParam(p => p.submersion20Y = level)}
               />
+              <PopoverHelpComponent>
+                20 ans : Scénario selon lequel le niveau d'eau a une chance sur vingt de se produire chaque année (5%).
+              </PopoverHelpComponent>
             </div>
             <div style={{ paddingBottom: 5 }}>
               <div className="submersion-freq-title">100 ans:</div>
@@ -169,6 +170,9 @@ export const DisplayParamsControls = (props: {
                 value={params.submersion100Y} 
                 onChange={level => setParam(p => p.submersion100Y = level)}
               />
+              <PopoverHelpComponent>
+                100 ans : Scénario selon lequel le niveau d'eau a une chance sur cent de se produire chaque année (1%).
+              </PopoverHelpComponent>
             </div>
           </div>
     </CellControl>

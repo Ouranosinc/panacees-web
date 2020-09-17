@@ -76,7 +76,7 @@ export const NetCostsBySectorChart = (props: {
       type: "bar"
     },
     title: {
-      text: "Coûts Nets Actualisés"
+      text: "Valeur Actuelle Nette par secteur"
     },
     xAxis: {
       categories: props.adaptations.map(adaptation => adaptation.nom)
