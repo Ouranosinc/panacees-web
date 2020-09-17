@@ -55,6 +55,12 @@ const App = () => {
       </div>
     }
 
+    if (match("/guide")) {
+      return <div className="container">
+        <MarkdownPage path="markdown/guide.md"/>
+      </div>
+    }
+
     if (match("/faq")) {
       return <div className="container">
         <MarkdownPage path="markdown/faq.md"/>
@@ -114,6 +120,9 @@ const Navbar = (props: { location: Location }) => {
             </NavLink>
             <NavLink pattern="/liens" url="/liens" location={props.location}>
               Liens utiles
+            </NavLink>
+            <NavLink pattern="/guide" url="/guide" location={props.location}>
+              Guide de l'usager
             </NavLink>
             <NavLink pattern="/faq" url="/faq" location={props.location}>
               FAQ
