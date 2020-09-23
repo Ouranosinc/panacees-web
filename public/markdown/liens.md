@@ -1,6 +1,6 @@
 ### Liens utiles
 
-**Ouranos**
+##### Ouranos
 
 [Analyse coûts-avantages d’options d’adaptation en zone côtière au Québec – Rapport synthèse (2016)](https://www.ouranos.ca/publication-scientifique/Rapport-Synth%C3%A8se_Qc.pdf)
 
@@ -10,15 +10,15 @@
 
 [Plateforme pour l’analyse avantages-coûts en érosion côtière et submersion – Rapport synthèse (2020)]()
 
-**Université du Québec à Montréal (UQAM)**
+##### Université du Québec à Montréal (UQAM)
 
 [Département de géographie de l’UQAM](https://geo.uqam.ca/)
 
-**Fédération canadienne des municipalités (FCM)**
+##### Fédération canadienne des municipalités (FCM)
 
 [Programmes de financement de la FCM](https://fcm.ca/fr/programmes)
 
-**Gouvernement du Québec**
+##### Gouvernement du Québec
 
 [Ministère de la Sécurité publique du Québec – L’érosion côtière](https://www.securitepublique.gouv.qc.ca/securite-civile/surveillance-du-territoire/erosion-cotiere.html)
 
@@ -26,11 +26,11 @@
 
 [Institut national de santé publique – Mon climat, Ma santé – Innondations](http://www.monclimatmasante.qc.ca/public/inondations.aspx)
 
-**Université du Québec à Rimouski (UQAR)**
+##### Université du Québec à Rimouski (UQAR)
 
 [Laboratoire de dynamique de gestion intégrée des zones côtières](http://dgizc.uqar.ca/Web)
 
-**Divers**
+##### Divers
 
 [Costal Resilience](https://coastalresilience.org/)
 
