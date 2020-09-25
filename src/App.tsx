@@ -49,21 +49,9 @@ const App = () => {
       </div>
     }
 
-    if (match("/liens")) {
-      return <div className="container">
-        <MarkdownPage path="markdown/liens.md"/>
-      </div>
-    }
-
     if (match("/guide")) {
       return <div className="container">
         <MarkdownPage path="markdown/guide.md"/>
-      </div>
-    }
-
-    if (match("/faq")) {
-      return <div className="container">
-        <MarkdownPage path="markdown/faq.md"/>
       </div>
     }
 
@@ -115,17 +103,11 @@ const Navbar = (props: { location: Location }) => {
             <NavLink pattern="/panacees*" url="/panacees" location={props.location}>
               PANACÉES
             </NavLink>
-            <NavLink pattern="/adaptation" url="/adaptation" location={props.location}>
-              Vers l'adaptation
-            </NavLink>
-            <NavLink pattern="/liens" url="/liens" location={props.location}>
-              Liens utiles
-            </NavLink>
             <NavLink pattern="/guide" url="/guide" location={props.location}>
               Guide de l'usager
             </NavLink>
-            <NavLink pattern="/faq" url="/faq" location={props.location}>
-              FAQ
+            <NavLink pattern="/adaptation" url="/adaptation" location={props.location}>
+              Vers l'adaptation
             </NavLink>
           </ul>
         </div>
