@@ -1,6 +1,6 @@
-[Insérer une image d’une côte protégée et naturalisée]
+## PANACÉES 
 
-## PANACÉES | Plateforme pour l’Analyse Avantages-Coûts en Érosion Et Submersion 
+### Plateforme pour l’Analyse Avantages-Coûts en Érosion Et Submersion 
 
 PANACÉES est un outil basé sur l’analyse coûts-avantages (ACA) pour supporter la prise de décision en matière d’adaptation
 aux changements climatiques du milieu côtier, tant pour la submersion que pour l'érosion. PANACÉES permet à l’utilisateur
