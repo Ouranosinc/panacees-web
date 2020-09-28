@@ -2,12 +2,14 @@
 
 **Comment concrétiser vos scénarios ?**
 
-PANACÉES offre un cadre simple et flexible qui permet à l’utilisateur de comprendre et d’analyser les mesures d’adaptation qui pourraient être mises en place afin d’atténuer les risques côtiers.
-Les résultats permettent d’appuyer les demandes d’autorisations et peuvent également servir d’argumentaire sur la mesure la plus rentable. 
+PANACÉES offre un cadre simple et flexible qui permet à l’utilisateur de comprendre et d’analyser les mesures d’adaptation
+qui pourraient être mises en place afin d’atténuer les risques côtiers. Les résultats permettent d’appuyer les demandes
+d’autorisations et peuvent également servir d’argumentaire sur la mesure la plus rentable. 
 
 **Pour vous guider dans vos démarches de mise en oeuvre**
 
-Pour vous mettre à jour sur les avancées scientifiques ou vous accompagner dans les démarches d’autorisation et les programmes de financement : 
+Pour vous mettre à jour sur les avancées scientifiques ou vous accompagner dans les démarches d’autorisation et les
+programmes de financement : 
 
 ### Avancées scientifiques et diagnostic
 
