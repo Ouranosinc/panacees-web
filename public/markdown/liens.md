@@ -24,7 +24,7 @@
 
 [Ministère de la Sécurité publique du Québec – Inondations](https://www.securitepublique.gouv.qc.ca/securite-civile/inondation.html)
 
-[Institut national de santé publique – Mon climat, Ma santé – Innondations](http://www.monclimatmasante.qc.ca/public/inondations.aspx)
+[Institut national de santé publique – Mon climat, Ma santé – Inondations](http://www.monclimatmasante.qc.ca/public/inondations.aspx)
 
 ##### Université du Québec à Rimouski (UQAR)
 
