@@ -49,9 +49,21 @@ const App = () => {
       </div>
     }
 
+    if (match("/liens")) {
+      return <div className="container">
+        <MarkdownPage path="markdown/liens.md"/>
+      </div>
+    }
+
     if (match("/guide")) {
       return <div className="container">
         <MarkdownPage path="markdown/guide.md"/>
+      </div>
+    }
+
+    if (match("/faq")) {
+      return <div className="container">
+        <MarkdownPage path="markdown/faq.md"/>
       </div>
     }
 
