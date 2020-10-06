@@ -6,7 +6,7 @@ d’autorisations et peuvent également servir d’argumentaire sur la mesure la
 
 **Pour vous guider dans vos démarches de mise en oeuvre**
 
-<img alt="" src="cycle_adaptation.png" style="max-width: 800px; width: 100%">
+<img alt="" src="cycle_adaptation3a.png" style="max-width: 800px; width: 100%">
 
 Pour vous mettre à jour sur les avancées scientifiques ou vous accompagner dans les démarches d’autorisation et les
 programmes de financement : 
