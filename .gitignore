@@ -1,10 +1,14 @@
 input_data
 public/data
+public/statiques
 
 /node_modules
 
 # production
 /build
+
+# geometry files
+.geojson
 
 # misc
 .DS_Store
