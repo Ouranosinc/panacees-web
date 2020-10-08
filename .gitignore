@@ -1,5 +1,6 @@
 input_data
 public/data
+public/indicateurs
 public/statiques
 
 /node_modules
@@ -9,6 +10,9 @@ public/statiques
 
 # geometry files
 *.geojson
+
+# IDEs
+.idea
 
 # misc
 .DS_Store
