@@ -1,16 +1,10 @@
 input_data
 public/data
-public/indicateurs
-public/statiques
 
 /node_modules
 
 # production
 /build
-
-# geometry files
-*.geojson
-*.zip
 
 # IDEs
 .idea
@@ -21,4 +15,3 @@ public/statiques
 .env.development.local
 .env.test.local
 .env.production.local
-*.save
