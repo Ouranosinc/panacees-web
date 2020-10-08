@@ -10,6 +10,7 @@ public/statiques
 
 # geometry files
 *.geojson
+*.zip
 
 # IDEs
 .idea
@@ -20,3 +21,4 @@ public/statiques
 .env.development.local
 .env.test.local
 .env.production.local
+*.save
