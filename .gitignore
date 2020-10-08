@@ -8,7 +8,7 @@ public/statiques
 /build
 
 # geometry files
-.geojson
+*.geojson
 
 # misc
 .DS_Store
