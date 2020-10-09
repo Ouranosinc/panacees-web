@@ -6,6 +6,9 @@ public/data
 # production
 /build
 
+# IDEs
+.idea
+
 # misc
 .DS_Store
 .env.local
