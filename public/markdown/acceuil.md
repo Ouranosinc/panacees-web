@@ -1,8 +1,8 @@
-[Insérer image]
+<img src="accueil_bandeau3.png" style="max-width: 1255px; width: 100%">
 
 #### Bienvenue sur la Plateforme d’analyse avantage-coût en érosion côtière et submersion
 
-fin d’appuyer les municipalités côtières dans leur prise de décision en matière d’adaptation, Ouranos a amorcé en 2014 des analyses économiques. L’objectif ultime était d’utiliser les analyses coûts-avantages (ACA) pour évaluer la rentabilité et l’intérêt des mesures d’adaptation à l’érosion et la submersion côtière pour cinq régions de l’Est-du-Québec. Pour plus d’information sur le projet des ACA pour cinq régions de l’Est-du-Québec , veuillez consulter les rapports finaux et les fiches synthèses : https://www.ouranos.ca/programmes/evaluation-economique/_.
+Afin d’appuyer les municipalités côtières dans leur prise de décision en matière d’adaptation, Ouranos a amorcé en 2014 des analyses économiques. L’objectif ultime était d’utiliser les analyses coûts-avantages (ACA) pour évaluer la rentabilité et l’intérêt des mesures d’adaptation à l’érosion et la submersion côtière pour cinq régions de l’Est-du-Québec. Pour plus d’information sur le projet des ACA pour cinq régions de l’Est-du-Québec , veuillez consulter les rapports finaux et les fiches synthèses : [https://www.ouranos.ca/programmes/evaluation-economique/](https://www.ouranos.ca/programmes/evaluation-economique/).
 
 Cette initiative a permis de progresser significativement en matière d’adaptation. Sur plusieurs des sites où une ACA a été réalisée, certaines recommandations émises ont été mises en place, notamment pour Percé et Carleton. La pertinence de mettre à disposition un outil d’aide à la décision semblable, pour les décideurs locaux des municipalités n’ayant pas fait l’objet des analyses économiques précédentes s’est confirmée lors d’activités de transfert de connaissances et d’échanges avec les différents intervenants responsables de l’aménagement du territoire de la région du Bas-Saint-Laurent en 2016. 
 

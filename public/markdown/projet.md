@@ -7,12 +7,10 @@ Les données et les résultats présentés dans le cadre du projet PANACÉES son
 
 ### Équipe de projet
 
-**Responsable du projet**
-
+**Responsable du projet**\
 Nathalie Bleau, Coordonnatrice, Ouranos
 
-**Équipe de réalisation**
-
+**Équipe de réalisation**\
 Chantal Quintin, *Géographe, Spécialiste - Mobilisation des Connaissances*, Ouranos\
 Charles-Antoine Gosselin, *Économiste - Analyses socio-économiques*, Ouranos\
 Ursule Boyer-Villemaire, *Chef - Analyses socio-économiques*, Ouranos\
@@ -20,13 +18,11 @@ Trevor James Smith, *Géographe, Spécialiste - Plateformes climatiques, donnée
 Travis Logan, *Chef - Plateformes climatiques, données et opérations*, Ouranos\
 Guillaume Fréchette-Ledoux, *agent de recherche*, UQAM
 
-**Collaborateurs** 
-
+**Collaborateurs**\
 Clayton Grassick, Concepteur de plateformes web\
 Laurent Da Silva, Économiste
 
-**Partenaires** 
-
+**Partenaires**\
 MRC de la Mitis\
 MRC de Rivière-du-Loup\
 Municipalité de Sainte-Flavie\
