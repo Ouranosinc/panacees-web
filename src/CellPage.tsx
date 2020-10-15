@@ -128,12 +128,11 @@ export const CellPage = (props: {
         </a> {props.cellId}
       </div>
       <div style={{ fontSize: 12, color: "#666", paddingLeft: 5, paddingRight: 5 }}>
-        PANACÉES calcul 27 scénarios de submersion et 3 scénario d’érosion selon 27 indicateurs répartis dans 8 secteurs d’activités d’intérêts pour un segment côtier donnée.
-        Pour plus de détails consultez le guide de l'usager
+        PANACÉES calcule 27 scénarios de submersion et 3 scénarios d'érosion selon 20 indicateurs de dommage répartis dans 7 secteurs d'activités d'intérêt pour un segment côtier donné. Pour plus de détails consultez le <a href="#/guide" target="_blank">Guide de l'usager</a>
       </div>
       <NavSelector options={[
         { value: "map", label: [<i className="fa fa-map fa-fw faded-icon"/>," Carte"]},
-        { value: "netCostsByType", label: [<i className="fa fa-bar-chart fa-fw faded-icon"/>," Valeur Actuelle Nette par type"]},
+        { value: "netCostsByType", label: [<i className="fa fa-bar-chart fa-fw faded-icon"/>," Valeur Actuelle Nette indicateur de dommage"]},
         { value: "netCostsBySector", label: [<i className="fa fa-bar-chart fa-fw faded-icon"/>," Valeur Actuelle Nette par secteur"]},
         { value: "netCostsByYear", label: [<i className="fa fa-line-chart fa-fw faded-icon"/>," Coûts Nets Actualisés par Année"]} 
       ]} value={mode} onChange={setMode}/>

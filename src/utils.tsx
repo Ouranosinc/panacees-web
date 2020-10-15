@@ -151,7 +151,7 @@ function csvifyRow(input: any[]) {
 
 /** Download the data as CSV */
 export function downloadData(filename: string, headers: string[], rows: any[][]) {
-  let csv = ''
+  let csv = '\ufeff'
 
   csv += csvifyRow(headers)
   for (const row of rows) {
