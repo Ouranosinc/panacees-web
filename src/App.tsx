@@ -102,7 +102,7 @@ const Navbar = (props: { location: Location }) => {
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
       <div className="container-fluid">
         <a className="navbar-brand" href="#" style={{ width: 90 }}>
-          <img src="ouranos.png" alt="Ouranos" style={{ position: "absolute", top: 17, height: 33, left: 10, cursor: "pointer" }} />
+          <img src="ouranos-color.png" alt="Ouranos" style={{ position: "absolute", top: -1, height: 71, left: -1, cursor: "pointer" }} />
         </a>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
