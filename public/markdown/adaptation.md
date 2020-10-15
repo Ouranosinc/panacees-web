@@ -1,10 +1,6 @@
-PANACÉES offre un cadre simple et flexible qui permet à l’utilisateur de comprendre et d’analyser les mesures d’adaptation
-qui pourraient être mises en place afin d’atténuer les risques côtiers. Les résultats permettent d’appuyer les demandes
-d’autorisations et peuvent également servir d’argumentaire sur la mesure la plus rentable. 
+PANACÉES permet de mieux comprendre les liens existants entre un projet d'intervention en milieu côtier et sa contribution à l'adaptation aux changements climatiques. Dans ce sens, une intervention en milieu côtier fait partie d'un processus itératif qui comporte quatre grandes phases : la reconnaissance des enjeux, la préparation, la mise en œuvre de solutions d'adaptation et l'ajustement. PANACÉES s'inscrit particulièrement dans la phase de préparation du cycle de l'adaptation. L'approche de co-construction en trois étapes a permis de développer un outil représentatif des besoins des usagers et de la réalité terrain. Les résultats permettent d'amorcer l'étape de mise en œuvre du choix de la mesure d'adaptation. 
 
 <br/>
-
-### Pour vous guider dans vos démarches de mise en oeuvre
 
 <img alt="" src="cycle_adaptation3a.png" style="max-width: 800px; width: 100%">
 
