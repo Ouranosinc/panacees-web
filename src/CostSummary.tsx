@@ -54,7 +54,10 @@ export const CostSummary = (props: {
               <td style={{textAlign: "right", minWidth: 90}}>
                 {formatCurrency(props.adaptationCost)}
                 <PopoverHelpComponent>
-                  TODO
+                  Somme des impacts économiques directs (coûts de construction et d'entretien, d'immunisation, 
+                  de démolitions, de transports, d'achat(s) de terrain(s) ou de propriétés et ses frais afférents) et 
+                  indirects (compensations pour les pertes de milieux humides et hydriques, coûts de démantèlement des 
+                  anciennes structures et les pertes d'usages) relatifs au scénario d'adaptation envisagé.
                 </PopoverHelpComponent>
               </td>
             </tr>
