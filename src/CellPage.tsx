@@ -132,9 +132,9 @@ export const CellPage = (props: {
       </div>
       <NavSelector options={[
         { value: "map", label: [<i className="fa fa-map fa-fw faded-icon"/>," Carte"]},
-        { value: "netCostsByType", label: [<i className="fa fa-bar-chart fa-fw faded-icon"/>," Valeur Actuelle Nette indicateur de dommage"]},
+        { value: "netCostsByType", label: [<i className="fa fa-bar-chart fa-fw faded-icon"/>," Valeur Actuelle Nette par indicateur de dommage"]},
         { value: "netCostsBySector", label: [<i className="fa fa-bar-chart fa-fw faded-icon"/>," Valeur Actuelle Nette par secteur"]},
-        { value: "netCostsByYear", label: [<i className="fa fa-line-chart fa-fw faded-icon"/>," Coûts Nets Actualisés par Année"]} 
+        { value: "netCostsByYear", label: [<i className="fa fa-line-chart fa-fw faded-icon"/>," Valeur Actuelle Nette par Année"]} 
       ]} value={mode} onChange={setMode}/>
       <DisplayParamsControls 
         params={params}

@@ -14,7 +14,7 @@ En 2020, PANACÉES est lancée sur deux régions pilotes ayant un potentiel de g
 <h3>Équipe de projet</h3>
 
 **Responsable du projet**\
-Nathalie Bleau, Coordonnatrice, Ouranos
+Nathalie Bleau, *Coordonnatrice, Ouranos*
 
 </div>
 
@@ -32,8 +32,8 @@ Travis Logan, *Chef - Plateformes climatiques, données et opérations*, Ouranos
 Guillaume Fréchette-Ledoux, *agent de recherche*, UQAM
 
 **Collaborateurs**\
-Clayton Grassick, Concepteur de plateformes web\
-Laurent Da Silva, Économiste
+Clayton Grassick, *Concepteur de plateformes web*\
+Laurent Da Silva, *Économiste*
 
 <div class="row">
 <div class="col-md-4">

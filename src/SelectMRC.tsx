@@ -91,7 +91,7 @@ export const SelectMRC = (props: {
             économique sur l’adaptation aux changements climatiques en milieux côtier en comparant différentes options
             d’adaptation à la non intervention en tenant compte de l’ensemble des coûts et avantages sociaux, économiques 
             et environnementaux. Pour débuter l’analyse, sélectionner une MRC. 
-            Pour plus de détails sur son utilisation, consultez le guide de l’usager.
+            Pour plus de détails sur son utilisation, consultez le <a href="#/guide" target="_blank">guide de l’usager</a>.
           </div>
         </div>
         <div style={{ textAlign: "left", color: "#666", fontSize: 18, padding: 5 }}>Sélectionner une MRC</div>
