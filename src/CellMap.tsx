@@ -379,7 +379,7 @@ export const CellMap = (props: {
           <div>Infrastructures routières (2019) - Ministère des Transports du Québec (MTQ)</div>
           <div>Infrastructures souterraines (2019) - MRC de La Mitis et de Rivière-du-Loup</div>
           <div>Biens meubles essentiels  (2019) - Ministère de la Sécurité publique (MSP)</div>
-          <div>Infrastructures de transports informels (2019) - Open Street Map</div>
+          <div>Infrastructures de transport informel (2019) - Open Street Map</div>
         </PopoverHelpComponent>
       </Checkbox>
       <Checkbox value={showEnviro} onChange={setShowEnviro}>

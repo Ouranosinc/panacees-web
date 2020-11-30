@@ -26,9 +26,9 @@ Nathalie Bleau, *Coordonnatrice, Ouranos*
 **Équipe de réalisation**\
 Chantal Quintin, *Géographe, Spécialiste - Mobilisation des Connaissances*, Ouranos\
 Charles-Antoine Gosselin, *Économiste - Analyses socio-économiques*, Ouranos\
-Ursule Boyer-Villemaire, *Chef - Analyses socio-économiques*, Ouranos\
+Ursule Boyer-Villemaire, *Chef d'équipe - Analyses socio-économiques*, Ouranos\
 Trevor James Smith, *Géographe, Spécialiste - Plateformes climatiques, données et opérations*, Ouranos\
-Travis Logan, *Chef - Plateformes climatiques, données et opérations*, Ouranos\
+Travis Logan, *Chef d'équipe - Plateformes climatiques, données et opérations*, Ouranos\
 Guillaume Fréchette-Ledoux, *agent de recherche*, UQAM
 
 **Collaborateurs**\
@@ -42,7 +42,7 @@ Laurent Da Silva, *Économiste*
 <div class="col-md-4">
 
 **Partenaires**\
-MRC de la Mitis\
+MRC de La Mitis\
 MRC de Rivière-du-Loup\
 Municipalité de Sainte-Flavie\
 Municipalité de Sainte-Luce\

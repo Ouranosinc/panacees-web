@@ -201,7 +201,7 @@ const CellSelector = (props: {
 }) => {
   return <div style={{ position: "absolute", top: 10, right: 10, zIndex: 1300, width: 250 }}>
     <ReactSelect
-      placeholder="Sélectionner une cellule"
+      placeholder="Sélectionner un segment côtier"
       options={props.options}
       onChange={option => { if (option) { props.onSelect((option as any).value) }}}
     />

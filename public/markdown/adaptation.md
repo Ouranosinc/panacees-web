@@ -1,4 +1,4 @@
-PANACÉES permet de mieux comprendre les liens existants entre un projet d'intervention en milieu côtier et sa contribution à l'adaptation aux changements climatiques. Dans ce sens, une intervention en milieu côtier fait partie d'un processus itératif qui comporte quatre grandes phases : la reconnaissance des enjeux, la préparation, la mise en œuvre de solutions d'adaptation et l'ajustement. PANACÉES s'inscrit particulièrement dans la phase de préparation du cycle de l'adaptation. L'approche de co-construction en trois étapes a permis de développer un outil représentatif des besoins des usagers et de la réalité terrain. Les résultats permettent d'amorcer l'étape de mise en œuvre du choix de la mesure d'adaptation. 
+PANACÉES permet de mieux comprendre les liens existants entre un projet d'intervention en milieu côtier et sa contribution à l'adaptation aux changements climatiques. Dans ce sens, une intervention en milieu côtier fait partie d'un processus itératif qui comporte quatre grandes phases : la reconnaissance des enjeux, la préparation, la mise en œuvre de solutions d'adaptation et l'ajustement. PANACÉES s'inscrit particulièrement dans la phase de préparation du cycle de l'adaptation. L'approche de co-construction en quatre étapes a permis de développer un outil représentatif des besoins des usagers et de la réalité terrain. Les résultats permettent d'amorcer l'étape de mise en œuvre du choix de la mesure d'adaptation. 
 
 <br/>
 
@@ -41,7 +41,7 @@ programmes de financement : </i>
 
 #### Autorisations
 
-[Pêches et Océans (autorisation)](https://www.dfo-mpo.gc.ca/pnw-ppe/index-fra.html)
+[Pêches et Océans Canada (autorisation)](https://www.dfo-mpo.gc.ca/pnw-ppe/index-fra.html)
 
 [Ministère des Forêts, de la Faune et des Parcs (autorisation)](https://mffp.gouv.qc.ca/faune/formulaires/demande-autorisation-certificat.jsp)
 

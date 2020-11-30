@@ -10,13 +10,10 @@ PANACÉES (Plateforme pour l’Analyse Avantages-Coûts en Érosion Et Submersio
 
 <b>PANACÉES est un outil d'aide à la décision</b>
  
-<i>Qui répond à un besoin</i> ; PANACÉES a été conçue afin de répondre à un besoin exprimé par les intervenants en aménagement du territoire soit de mettre à leur disposition un outil d’aide à la décision basé sur les ACA pour les supporter en matière d’adaptation aux changements climatiques en milieu côtier. Il s'adresse aux décideurs, gestionnaires et professionnels locaux impliqués dans l'adaptation aux changements climatiques
+<i>Qui répond à un besoin</i> ; PANACÉES a été conçue afin de répondre à un besoin exprimé par les intervenants en aménagement du territoire soit de mettre à leur disposition un outil d'aide à la décision basé sur les ACA pour les supporter en matière d'adaptation aux changements climatiques en milieu côtier.
 
-<i>Qui est fondé sur la collaboration</i> ; PANACÉES  repose sur une approche de co-construction et d’accompagnement avec les municipalités et les MRCs et s’appuie sur les avancées scientifiques réalisées au cours des dernières années en matière d’analyse économique et de connaissances du risque. 
+<i>Qui est fondé sur la collaboration</i> ; PANACÉES a été développée par Ouranos, conjointement avec les municipalités des MRCs de Rivière-du-Loup et de La Mitis.
 
-<i>Qui est dynamique</i> ; PANACÉES est une structure informatique interactive qui permet une navigation intuitive à travers un vaste ensemble de bases de données pré-calculées et emmagasinées dans un serveur. Elle permet à l’utilisateur d’ajuster lui-même les hypothèses de scénarios d’érosion et de submersion côtière selon les avancées scientifiques et l’ajout de nouvelle couche d’information assurant ainsi une pérennité de l’outil.
+<i>Qui est dynamique</i> ; PANACÉES a été développée et testée avec les acteurs du milieu sur deux régions pilotes et a un potentiel de généralisation à l'échelle du Québec.
 
-<i>Qui guide dans le processus d'adaptation</i> ; PANACÉES permet d’accompagner différents acteurs municipaux et régionaux dans le processus d’adaptation des zones côtières aux impacts des changements climatiques par :
-La priorisation des zones d’intervention par une projection des dommages futurs anticipés ; 
-L’identification des mesures d’adaptation les plus appropriées et rentables économiquement pour la société ;
-La justification des investissements associés à la gestion du littoral.
+<i>Qui guide dans le processus d'adaptation</i> ; PANACÉES est une structure informatique interactive qui permet une navigation intuitive à travers un vaste ensemble de bases de données précalculées et emmagasinées dans un serveur. PANACÉES permet à l'utilisateur d'ajuster lui-même les hypothèses de scénarios d'érosion et de submersion côtière selon les avancées scientifiques. L'intégration de nouvelle couche d'information requiert toutefois une mise à jour des bases de données sources.

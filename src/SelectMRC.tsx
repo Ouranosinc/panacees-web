@@ -86,9 +86,9 @@ export const SelectMRC = (props: {
       <div className="col">
         <div className="card" style={{ marginTop: 20, marginBottom: 20 }}>
           <div className="card-body">
-            PANACÉES est un outil d’aide à la décision réalisé par Ouranos et conjointement avec les municipalités 
+            PANACÉES est un outil d’aide à la décision réalisé par Ouranos conjointement avec les municipalités
             de la MRC de Rivière-du-Loup et de La Mitis. PANACÉES permet aux décideurs de réaliser une analyse 
-            économique sur l’adaptation aux changements climatiques en milieux côtier en comparant différentes options
+            économique sur l’adaptation aux changements climatiques en milieu côtier en comparant différentes options
             d’adaptation à la non intervention en tenant compte de l’ensemble des coûts et avantages sociaux, économiques 
             et environnementaux. Pour débuter l’analyse, sélectionner une MRC. 
             Pour plus de détails sur son utilisation, consultez le <a href="#/guide" target="_blank">guide de l’usager</a>.
