@@ -49,7 +49,7 @@ export const CostSummary = (props: {
           { props.adaptationCost != null ?
             <tr key="adaptation_costs">
               <td style={{textAlign: "left"}}>
-                <span className="text-muted">Coût d'adaptation:</span>
+                <span className="text-muted">Coût de l'adaptation:</span>
               </td>
               <td style={{textAlign: "right", minWidth: 90}}>
                 {formatCurrency(props.adaptationCost)}

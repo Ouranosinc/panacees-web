@@ -2,7 +2,7 @@
 
 <br/><br/>
 
-### <b>Bienvenue sur la Plateforme d’analyse avantage-coût en érosion côtière et submersion</b>
+### <b>Bienvenue sur PANACÉES<br/>(Plateforme pour l’ANalyse Avantages-Coûts en Érosion Et Submersion)</b>
 
 <br/>
 
