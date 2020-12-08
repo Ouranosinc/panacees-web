@@ -358,7 +358,7 @@ export const CellMap = (props: {
       <Checkbox value={showDamages} onChange={setShowDamages}>
         Dommages
         <PopoverHelpComponent placement="bottom">
-          Visualisation des bâtiments potentiellement touchés par l'érosion et/ou la submersion côtière - Ouranos
+          Visualisation des éléments du rôle foncier potentiellement touchés par l'érosion et/ou la submersion côtière - Ouranos
         </PopoverHelpComponent>
       </Checkbox>
       <Checkbox value={showRolePoints} onChange={setShowRolePoints}>
@@ -388,8 +388,6 @@ export const CellMap = (props: {
           <div>Milieux humides potentiels (2018) - MRC de La Mitis et MRC de Rivière-du-Loup</div>
           <div>Atlas des milieux côtiers d'intéret pour la conservation dans l'estuaire et du golfe du Saint-Laurent (2019) -  Environnement et Changements Climatiques Canada (ECCC)</div>
           <div>Faune et Flore en danger (2018) - Ministère des Forêts, de la Faune et des Parcs du Québec (MFFP)</div>
-          <div>Changement dans le niveau marin (2019) - Ministère des Pêches et Océans Canada (MPO)</div>
-          <div>Usages reliés aux milieux aquatiques (2015) - Ministère des affaires municipales et de l'habitation du Québec (MAMH) </div>
           <div>Environnment (2019) - Open Street Map</div>
         </PopoverHelpComponent>
       </Checkbox>
