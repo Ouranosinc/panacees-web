@@ -199,7 +199,7 @@ const CellSelector = (props: {
   options: { value: string, label: string }[]
   onSelect: (value: string) => void
 }) => {
-  return <div style={{ position: "absolute", top: 10, right: 10, zIndex: 1300, width: 250 }}>
+  return <div style={{ position: "absolute", top: 10, right: 10, zIndex: 1300, width: 300 }}>
     <ReactSelect
       placeholder="Sélectionner un segment côtier"
       options={props.options}
