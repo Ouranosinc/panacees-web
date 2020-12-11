@@ -2,7 +2,7 @@ PANACÉES permet de mieux comprendre les liens existants entre un projet d'inter
 
 <br/>
 
-<img alt="" src="cycle_adaptation4.png" style="max-width: 800px; width: 100%">
+<img alt="" src="cycle_adaptation5.png" style="max-width: 800px; width: 100%">
 
 <br/><br/>
 
