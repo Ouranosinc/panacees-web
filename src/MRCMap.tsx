@@ -118,12 +118,24 @@ export const MRCMap = (props: {
         // Calculate damage per km
         const damagePerKm = (erosionDamage + submersionDamage) / cellLength
 
-        const color = scaleLinear().domain([0, 2000, 3000, 4000]).range(["green", "yellow", "orange", "red"] as any)
+        let color: string
+        if (damagePerKm < 600) {
+          color = "#ffffb2"
+        }
+        else if (damagePerKm < 2000) {
+          color = "#fecc5c"
+        }
+        else if (damagePerKm < 5500) {
+          color = "#fd8d3c"
+        }
+        else { 
+          color = "#e31a1c"
+        }
 
         return {
           fill: false,
           weight: 4,
-          color: color(damagePerKm) as any
+          color: color
         }
       }, 
     } as GeoLayerSpec,
@@ -212,10 +224,10 @@ const CellSelector = (props: {
 const Legend = (props: {}) => {
   return <div style={{ position: "absolute", bottom: 20, right: 10, zIndex: 1000, padding: 10, backgroundColor: "white", borderRadius: 8, fontSize: 14, opacity: 0.9 }}>
     <div className="text-muted">Coût total au mètre linéaire</div>
-    <LegendItem color="red">4000$ / m</LegendItem>
-    <LegendItem color="orange">3000$ / m</LegendItem>
-    <LegendItem color="yellow">2000$ / m</LegendItem>
-    <LegendItem color="green">0$ / m</LegendItem>
+    <LegendItem color="#ffffb2">0 - 600$ / m</LegendItem>
+    <LegendItem color="#fecc5c">600 - 2000$ / m</LegendItem>
+    <LegendItem color="#fd8d3c">2000 - 5500$ / m</LegendItem>
+    <LegendItem color="#e31a1c">5500+$ / m</LegendItem>
   </div>
 }
 

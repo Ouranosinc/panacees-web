@@ -48,12 +48,8 @@ export const DisplayParamsControls = (props: {
   ]
 
   const getSubmersionOptions = (frequence: "h2ans" | "h20ans" | "h100ans") => {
-    if (props.disabled.includes("year")) {
-      return [
-        { value: "min", label: "Bas" },
-        { value: "moy", label: "Moyen" },
-        { value: "max", label: "Élevé" }
-      ]
+    if (!props.heights || props.disabled.includes("year")) {
+      return baseSubmersionOptions
     }
 
     const heightMin = props.heights!.find(row => row.scenario == "min" && row.frequence == frequence && row.year == params.year)!.value
@@ -66,9 +62,9 @@ export const DisplayParamsControls = (props: {
     ]
   }
 
-  const submersion2Options = props.heights ? getSubmersionOptions("h2ans") : baseSubmersionOptions
-  const submersion20Options = props.heights ? getSubmersionOptions("h20ans") : baseSubmersionOptions
-  const submersion100Options = props.heights ? getSubmersionOptions("h100ans") : baseSubmersionOptions
+  const submersion2Options = getSubmersionOptions("h2ans")
+  const submersion20Options = getSubmersionOptions("h20ans")
+  const submersion100Options = getSubmersionOptions("h100ans")
 
   const adaptation = props.adaptations.find(a => a.id == params.adaptation)
 
