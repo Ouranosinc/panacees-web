@@ -37,7 +37,7 @@ export const CellPage = (props: {
 
   // Load heights
   const [heights, heightsLoading] = useLoadCsv(`data/cells/${props.cellId}/hauteur.csv`,
-    row => ({ ...row, value: +row.value })
+    row => ({ ...row, year: +row.year, value: +row.value })
   )
 
   // Load adaptations

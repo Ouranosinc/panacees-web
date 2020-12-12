@@ -43,7 +43,7 @@ export const CellMap = (props: {
 
   // Load heights
   const [heights, heightsLoading] = useLoadCsv(`data/cells/${props.cellId}/hauteur.csv`,
-    row => ({ ...row, value: +row.value })
+    row => ({ ...row, year: +row.year, value: +row.value })
   )
 
   // Load adaptations possible
@@ -140,7 +140,7 @@ export const CellMap = (props: {
   }, [floodHeights])
 
   /** 
-   * Filter to determine if feature is touched by erosion. 
+   * Filter to determine if feature is touched by submersion. 
    * Uses feature property hauteur to calculate
    */
   const submersionFilter = useCallback((feature: Feature) => {

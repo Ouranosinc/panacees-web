@@ -21,6 +21,7 @@ export const DisplayParamsControls = (props: {
   heights?: {
     scenario: "min" | "moy" | "max"
     frequence: "h2ans" | "h20ans" | "h100ans"
+    year: number
     value: number
   }[]
 }) => {
@@ -47,9 +48,17 @@ export const DisplayParamsControls = (props: {
   ]
 
   const getSubmersionOptions = (frequence: "h2ans" | "h20ans" | "h100ans") => {
-    const heightMin = props.heights!.find(row => row.scenario == "min" && row.frequence == frequence)!.value
-    const heightMoy = props.heights!.find(row => row.scenario == "moy" && row.frequence == frequence)!.value
-    const heightMax = props.heights!.find(row => row.scenario == "max" && row.frequence == frequence)!.value
+    if (props.disabled.includes("year")) {
+      return [
+        { value: "min", label: "Bas" },
+        { value: "moy", label: "Moyen" },
+        { value: "max", label: "Élevé" }
+      ]
+    }
+
+    const heightMin = props.heights!.find(row => row.scenario == "min" && row.frequence == frequence && row.year == params.year)!.value
+    const heightMoy = props.heights!.find(row => row.scenario == "moy" && row.frequence == frequence && row.year == params.year)!.value
+    const heightMax = props.heights!.find(row => row.scenario == "max" && row.frequence == frequence && row.year == params.year)!.value
     return [
       { value: "min", label: heightMin.toFixed(2) + "m" },
       { value: "moy", label: heightMoy.toFixed(2) + "m" },

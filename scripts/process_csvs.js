@@ -120,10 +120,10 @@ async function heights() {
 
     // Append to file
     if (!fs.existsSync(filepath)) {
-      fs.writeFileSync(filepath, csvifyRow(['value', 'scenario', 'frequence']))  
+      fs.writeFileSync(filepath, csvifyRow(['value', 'scenario', 'frequence', 'year']))  
     }
   
-    fs.appendFileSync(filepath, csvifyRow([row.value, row.scenario, row.frequence]))
+    fs.appendFileSync(filepath, csvifyRow([row.value, row.scenario, row.frequence, row.year]))
 
     n += 1
   }
