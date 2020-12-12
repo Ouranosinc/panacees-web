@@ -23,6 +23,11 @@
   box-shadow: none !important;
 }
 
+/* Hide brand when narrow */
+@media (max-width: 991px) {
+  .navbar-brand { display: none !important }
+}
+
 .faded-icon {
   opacity: 0.5;
 }
