@@ -2,8 +2,8 @@ En 2020, la **Plateforme d'ANalyse Avantages-Coûts en Érosion côtière Et Sub
 
 Le présent guide a été conçu pour les professionnels en aménagement du territoire afin de présenter de façon claire et concise l'utilisation de PANACÉES. Il vise à renforcer les capacités des intervenants en aménagement du territoire à mener de telles analyses en présentant un cadre simplifié pour la réalisation d'une ACA. Le guide est divisé en trois parties :
 
- - La première partie présente brièvement les fondements théoriques à la base d'une ACA, le détail de la démarche et la méthodologie. [Lien à insérer vers la partie 1]
+ - [La première partie](PANACEES_Guide.de.l.usager_2020-12-10.pdf#page=6) présente brièvement les fondements théoriques à la base d'une ACA, le détail de la démarche et la méthodologie.
 
- - La deuxième partie présente la démarche étape par étape pour la réalisation d'une ACA au sein de PANACÉES. [Lien à insérer vers la partie 2]
+ - [La deuxième partie](PANACEES_Guide.de.l.usager_2020-12-10.pdf#page=10) présente la démarche étape par étape pour la réalisation d'une ACA au sein de PANACÉES.
 
- - La troisième partie explique comment l'usager peut utiliser les résultats générés par PANACÉES afin de mettre en œuvre les scénarios choisis. [Lien à insérer vers la partie 3]
+ - [La troisième partie](PANACEES_Guide.de.l.usager_2020-12-10.pdf#page=18) explique comment l'usager peut utiliser les résultats générés par PANACÉES afin de mettre en œuvre les scénarios choisis.
