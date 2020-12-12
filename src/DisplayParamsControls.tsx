@@ -3,7 +3,7 @@ import React from "react"
 import Slider from "rc-slider"
 import { DisplayParams } from "./DisplayParams"
 import produce from 'immer'
-import { Adaptation } from "./params"
+import { Adaptation, HeightRow } from "./params"
 import { PopoverHelpComponent } from "./PopoverHelp"
 import ReactSelect, { FormatOptionLabelMeta } from 'react-select'
 
@@ -18,12 +18,7 @@ export const DisplayParamsControls = (props: {
   disabled: ("year" | "submersion" | "erosion" | "adaptation")[]
 
   /** Heights to display (optional) */
-  heights?: {
-    scenario: "min" | "moy" | "max"
-    frequence: "h2ans" | "h20ans" | "h100ans"
-    year: number
-    value: number
-  }[]
+  heights?: HeightRow[]
 }) => {
   const params = props.params
 

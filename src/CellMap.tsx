@@ -12,6 +12,7 @@ import { DisplayParams } from "./DisplayParams"
 import LoadingComponent from "./LoadingComponent"
 import { Checkbox, useLoadJson, convertFeatureToCoords, useLoadCsv, convertFeatureToPoint, formatCurrency } from "./utils"
 import { PopoverHelpComponent } from './PopoverHelp'
+import { HeightRow } from './params'
 
 export const CellMap = (props: {
   /** ID of MRC */
@@ -42,7 +43,7 @@ export const CellMap = (props: {
   const [cell, cellLoading] = useLoadJson<FeatureCollection>(`data/cells/${props.cellId}/sub_cellules.geojson`)
 
   // Load heights
-  const [heights, heightsLoading] = useLoadCsv(`data/cells/${props.cellId}/hauteur.csv`,
+  const [heights, heightsLoading] = useLoadCsv<HeightRow>(`data/cells/${props.cellId}/hauteur.csv`,
     row => ({ ...row, year: +row.year, value: +row.value })
   )
 
@@ -79,16 +80,23 @@ export const CellMap = (props: {
     }
   }, [cell])
 
-  // Determine height of flooding
+  // Determine height of flooding indexed by "year:frequency". 
+  // year is rounded to 2020, 2030, etc.
   const floodHeights = useMemo(() => {
     if (heights) {
-      const row2 = heights.find(row => row.scenario == params.submersion2Y && row.frequence == "h2ans")
-      const row20 = heights.find(row => row.scenario == params.submersion20Y && row.frequence == "h20ans")
-      const row100 = heights.find(row => row.scenario == params.submersion100Y && row.frequence == "h100ans")
-      return [row2!.value, row20!.value, row100!.value]
+      const heightMap: {[key: string]: number} = {}
+      for (const row of heights) {
+        // If matches scenario
+        if ((row.scenario == params.submersion2Y && row.frequence == "h2ans")
+          ||(row.scenario == params.submersion20Y && row.frequence == "h20ans")
+          ||(row.scenario == params.submersion100Y && row.frequence == "h100ans")) {
+          heightMap[`${row.year}:${row.frequence}`] = row.value
+        }
+      }
+      return heightMap
     }
-    return [0, 0, 0]
-  }, [heights, params]) 
+    return null
+  }, [heights, params.submersion2Y, params.submersion20Y, params.submersion100Y]) 
 
   /** Create feature collection that is all damageable items */
   const damageableFeatures = useMemo<FeatureCollection>(() => {
@@ -122,22 +130,35 @@ export const CellMap = (props: {
 
   /** Calculate probability of submersion (rough) for the current year */
   const submersionProbability = useCallback((feature: Feature) => {
-    // Probability of flooding (rough)
-    let prob = 0
+    if (!floodHeights) {
+      return 0
+    }
+
     const height = +feature.properties!.hauteur
-    const years = params.year - 2020
     
-    if (height < floodHeights[0]) {
-      prob += (1.0/2) * years
+    // Start with a probability of no flood of 1.0
+    // For each year, multiply by probability of no flood
+    // Finally, 1 - that number is probability of flood
+    let notProb = 1
+    for (let year = 2020 ; year <= params.year ; year++) {
+      // Get decade
+      const decade = Math.floor(year / 10) * 10
+      const height2 = floodHeights[`${decade}:h2ans`]
+      const height20 = floodHeights[`${decade}:h20ans`]
+      const height100 = floodHeights[`${decade}:h100ans`]
+
+      if (height < height2) {
+        notProb *= 1 - (1.0/2)
+      }
+      if (height < height20) {
+        notProb *= 1 - (1.0/20)
+      }
+      if (height < height100) {
+        notProb *= 1 - (1.0/100)
+      }
     }
-    if (height < floodHeights[1]) {
-      prob += (1.0/20) * years
-    }
-    if (height < floodHeights[2]) {
-      prob += (1.0/100) * years
-    }
-    return Math.min(prob, 1)
-  }, [floodHeights])
+    return 1 - notProb
+  }, [floodHeights, params.year])
 
   /** 
    * Filter to determine if feature is touched by submersion. 
@@ -148,7 +169,7 @@ export const CellMap = (props: {
 
     // Fudge to prevent inland depressions from showing up as flooding
     return submersionProbability(feature) > 0 && distance < 200
-  }, [submersionProbability])
+  }, [submersionProbability, params.year])
 
   /** Layer to display red icon for eroded features and blue for submerged */
   const damagesLayer = useMemo(() => {
