@@ -1,9 +1,8 @@
 En 2020, la **Plateforme d'ANalyse Avantages-Coûts en Érosion côtière Et Submersion** (PANACÉES) est lancée sur deux régions pilotes, soit les MRCs de Rivière-du-Loup et de La Mitis, avec un potentiel de généralisation pour d'autres municipalités du Québec, qui font face à ces deux aléas. Basée selon une approche de co-construction avec les acteurs municipaux et régionaux, et sur les avancées scientifiques réalisées au courant des dernières années, PANACÉES permet de visualiser les résultats d'analyses économiques dans une interface graphique que les professionnels en aménagement du territoire peuvent eux-mêmes utiliser pour appuyer une meilleure prise de décisions dans le choix des interventions en zone côtière. PANACÉES est complémentaire aux outils d'aide à la décision déjà existants et permet d'ajuster les scénarios d'adaptation selon les avancées scientifiques et les avis d'experts.
 
-Le présent guide a été conçu pour les professionnels en aménagement du territoire afin de présenter de façon claire et concise l'utilisation de PANACÉES. Il vise à renforcer les capacités des intervenants en aménagement du territoire à mener de telles analyses en présentant un cadre simplifié pour la réalisation d'une ACA. Le guide est divisé en trois parties :
+Le présent guide a été conçu pour les professionnels en aménagement du territoire afin de présenter de façon claire et concise l'utilisation de PANACÉES. Il vise à renforcer les capacités des intervenants en aménagement du territoire à mener de telles analyses en présentant un cadre simplifié pour la réalisation d'une ACA. Le guide est divisé en trois parties : <br>
+La première partie présente brièvement les fondements théoriques à la base d'une ACA, le détail de la démarche et la méthodologie. <br>
+La deuxième partie présente la démarche étape par étape pour la réalisation d'une ACA au sein de PANACÉES. <br>
+La troisième partie explique comment l'usager peut utiliser les résultats générés par PANACÉES afin de mettre en œuvre les scénarios choisis.
 
- - [La première partie](PANACEES_Guide.de.l.usager_2020-12-10.pdf#page=6) présente brièvement les fondements théoriques à la base d'une ACA, le détail de la démarche et la méthodologie.
-
- - [La deuxième partie](PANACEES_Guide.de.l.usager_2020-12-10.pdf#page=10) présente la démarche étape par étape pour la réalisation d'une ACA au sein de PANACÉES.
-
- - [La troisième partie](PANACEES_Guide.de.l.usager_2020-12-10.pdf#page=18) explique comment l'usager peut utiliser les résultats générés par PANACÉES afin de mettre en œuvre les scénarios choisis.
+<a href="PANACEES_Guide.de.l.usager_2020-12-10.pdf" class="btn btn-primary btn-lg"> <i class="fa fa-arrow-right"></i> Débuter votre lecture</a>
