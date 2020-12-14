@@ -119,13 +119,13 @@ export const MRCMap = (props: {
         const damagePerKm = (erosionDamage + submersionDamage) / cellLength
 
         let color: string
-        if (damagePerKm < 600) {
+        if (damagePerKm < 250) {
           color = "#ffffb2"
         }
-        else if (damagePerKm < 2000) {
+        else if (damagePerKm < 1000) {
           color = "#fecc5c"
         }
-        else if (damagePerKm < 5500) {
+        else if (damagePerKm < 3500) {
           color = "#fd8d3c"
         }
         else { 
@@ -224,10 +224,10 @@ const CellSelector = (props: {
 const Legend = (props: {}) => {
   return <div style={{ position: "absolute", bottom: 20, right: 10, zIndex: 1000, padding: 10, backgroundColor: "white", borderRadius: 8, fontSize: 14, opacity: 0.9 }}>
     <div className="text-muted">Coût total au mètre linéaire</div>
-    <LegendItem color="#ffffb2">0 - 600$ / m</LegendItem>
-    <LegendItem color="#fecc5c">600 - 2000$ / m</LegendItem>
-    <LegendItem color="#fd8d3c">2000 - 5500$ / m</LegendItem>
-    <LegendItem color="#e31a1c">5500+$ / m</LegendItem>
+    <LegendItem color="#ffffb2">0 - 250$ / m</LegendItem>
+    <LegendItem color="#fecc5c">250 - 1000$ / m</LegendItem>
+    <LegendItem color="#fd8d3c">1000 - 3500$ / m</LegendItem>
+    <LegendItem color="#e31a1c">3500$+ / m</LegendItem>
   </div>
 }
 
