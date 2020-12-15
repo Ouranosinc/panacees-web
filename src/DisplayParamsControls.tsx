@@ -90,7 +90,7 @@ export const DisplayParamsControls = (props: {
     <CellControl
       disabled={props.disabled.includes("adaptation")}
       title={<span>
-        Mesure d'Adaptation:
+        Mesure d'adaptation:
         <PopoverHelpComponent>
           { adaptation ? adaptation.description : "Selectionner une adaptation"}
         </PopoverHelpComponent>
@@ -111,7 +111,7 @@ export const DisplayParamsControls = (props: {
 
     <CellControl
       disabled={props.disabled.includes("erosion")}
-      title="Erosion:">
+      title="Érosion:">
         <div style={{ display: "inline-block", paddingLeft: 5 }}>
           <select 
             value={params.erosion} 

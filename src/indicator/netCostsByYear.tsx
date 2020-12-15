@@ -66,7 +66,7 @@ export const NetCostsByYearChart = (props: {
       type: "line"
     },
     title: {
-      text: "Valeur Actuelle Nette par année"
+      text: "Valeur actuelle nette par année"
     },
     plotOptions: {
       series: {

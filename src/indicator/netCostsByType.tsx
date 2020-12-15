@@ -76,7 +76,7 @@ export const NetCostsByTypeChart = (props: {
       type: "bar"
     },
     title: {
-      text: "Valeur Actuelle Nette par indicateur de dommage"
+      text: "Valeur actuelle nette par indicateurs de dommage"
     },
     xAxis: {
       categories: props.adaptations.map(adaptation => adaptation.nom)
