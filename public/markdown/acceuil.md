@@ -23,4 +23,4 @@ Ouranos, 550 rue Sherbrooke Ouest, 19e étage\
 Montréal, Québec, Canada\
 H3A 1B9
 
-<img src="partner-logos.png" style="max-width: 955px; width: 100%">
+<img src="partner-logos2.png" style="max-width: 955px; width: 100%">

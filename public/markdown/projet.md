@@ -73,4 +73,4 @@ Le Ministère de l’Environnement et de la Lutte aux Changements climatiques (M
 
 Ce projet a été exécuté avec l’aide du gouvernement du Canada et de la Fédération canadienne des municipalités, dans le cadre de son programme de subventions aux partenaires dans le cadre d’un projet d’adaptation aux changements climatiques. Malgré ce soutien, les opinions exprimées sont celles de leurs auteurs, et la Fédération canadienne des municipalités et le gouvernement du Canada rejettent toute responsabilité à cet égard.
 
-Ce projet a également été financé par le Fonds vert dans le cadre du Plan d’action 2013-2020 sur les changements climatiques du gouvernement du Québec.
+Ce projet a également été financé par le Plan d’action 2013-2020 sur les changements climatiques du gouvernement du Québec.
