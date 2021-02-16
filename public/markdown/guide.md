@@ -5,4 +5,4 @@ La première partie présente brièvement les fondements théoriques à la base 
 La deuxième partie présente la démarche étape par étape pour la réalisation d'une ACA au sein de PANACÉES. <br>
 La troisième partie explique comment l'usager peut utiliser les résultats générés par PANACÉES afin de mettre en œuvre les scénarios choisis.
 
-<a href="PANACEES_Guide.de.l.usager_2020-12-10.pdf" class="btn btn-primary btn-lg"> <i class="fa fa-arrow-right"></i> Débuter votre lecture</a>
+<a href="PANACEES_Guide.de.l.usager_2020-12-17.pdf" class="btn btn-primary btn-lg"> <i class="fa fa-arrow-right"></i> Débuter votre lecture</a>
