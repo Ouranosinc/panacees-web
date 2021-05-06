@@ -18,7 +18,7 @@
     "d3": "^5.16.0",
     "file-saver": "^2.0.2",
     "font-awesome": "^4.7.0",
-    "highcharts": "^7.2.1",
+    "highcharts": "^9.0.0",
     "history": "^4.10.1",
     "immer": "^5.2.1",
     "jquery": "^3.4.1",
