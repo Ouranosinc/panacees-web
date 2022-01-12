@@ -24,7 +24,7 @@
     "jquery": "^3.4.1",
     "leaflet": "^1.5.1",
     "lodash": "^4.17.15",
-    "markdown-it": "^10.0.0",
+    "markdown-it": "^12.3.2",
     "querystring": "^0.2.0",
     "rc-slider": "^8.7.1",
     "react": "^16.9.0",
